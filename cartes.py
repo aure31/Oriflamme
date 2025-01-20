@@ -1,9 +1,13 @@
 import pygame as p
 
-class Carte:
+class Types:
+    def __init__(self, nom, capacite, img_recto):
+        self.nom = nom
+        self.img_recto = img_recto
+        self.capa = capacite
+
+class Carte(p.sprite.Sprite):
     def __init__(self, couleur, type):
-        super().__init__()
         self.couleur = couleur
         self.type = type
-        self.img_recto = 
-        self.img_verso =  
+        self.img = type
