@@ -4,12 +4,12 @@ import random
 
 states={}
 
-full_deck=[Carte()]
+
 
 class Game:
     def __init__(self,players:list):
         self.file_influance :list[list[Carte]] = [[]]
-        self.players:list[Joueur] = players
+        self.players:dict[int:Joueur] = players
         self.state = "start"
 
     def start_game(self):
@@ -32,6 +32,9 @@ class Game:
 
     def end_turn(self):
         self.state = "end"
+
+    def get_player(self,idPlayer):
+        self.players[idPlayer]
 
 
     def gen_deck(player:Joueur):
