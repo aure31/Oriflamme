@@ -17,13 +17,23 @@ background.fill(p.Color('#000000'))
 def main():
     clock = p.time.Clock()
     is_running = True
+    game_begin = True
+    game_playing = False
+    game_over = False
     while is_running:
         clock.tick()
         for event in p.event.get():
             if event.type == p.QUIT:
                 is_running = False
         
+        if game_begin:
+            pass
 
+        if game_playing:
+            pass
+
+        if game_over:
+            pass
 
 
         window_surface.blit(background, (0, 0))
