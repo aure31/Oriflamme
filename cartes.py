@@ -7,7 +7,14 @@ class Types:
         self.capa = capacite
 
 class Carte(p.sprite.Sprite):
-    def __init__(self, couleur, type):
-        self.couleur = couleur
+    def __init__(self, type):
+        self.couleur = None
         self.type = type
         self.img = type
+        self.idPlayer = -1
+    
+    def set_player(self,joueur):
+        self.idPlayer = joueur.id
+        self.couleur = joueur.couleur
+        return self
+    
