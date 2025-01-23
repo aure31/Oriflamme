@@ -13,3 +13,5 @@
 	- un attribut couleur (int)
 
 Les cartes seront en 150p par 235p.
+
+https://www.reddit.com/r/Python/comments/1hs1muw/roomconnect_simplified_networking_for_pygame_games/?tl=fr&rdt=38288
