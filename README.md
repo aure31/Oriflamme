@@ -11,3 +11,5 @@
 	- un attribut capacité (int)
 	- un attribut état (retourné ou pas) (bool)
 	- un attribut couleur (int)
+
+Les cartes seront en 150p par 235p.
