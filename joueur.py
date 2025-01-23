@@ -1,5 +1,10 @@
 import pygame as p
 from cartes import Carte
+import random
+
+class Action:
+    def run():
+        return
 
 class Joueur:
     def __init__(self, nom, couleur):
@@ -13,5 +18,9 @@ class Joueur:
         self.id = id
         return self
 
-    def play_card(self,card:Carte):
+    def play_card(self,card:Carte,action:fn):
         self.cartes.remove(card)
+    
+    def action(self):
+        input_rdm = random.randint(0,1)
+        return input_rdm
