@@ -25,6 +25,15 @@ class Game:
             self.file_influance[slot].append(card)
         else:
             raise ValueError
+        
+    def get_top_card(self):
+        result = []
+        for lst in self.file_influance:
+            result.append(lst[-1])
+        return result
+    
+    def get_card(self,index) -> Carte :
+        return self.file_influance[index][-1]
 
     def play_round(self):
         for lst in self.file_influance:
