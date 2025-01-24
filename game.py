@@ -7,14 +7,20 @@ states={}
 
 
 class Game:
-    def __init__(self,players:list):
+    def __init__(self):
         self.file_influance :list[list[Carte]] = [[]]
-        self.players:dict[int:Joueur] = players
-        self.state = "start"
+        self.players:list[Joueur] = []
+        self.state = "waiting"
+        self.color()
+
+    def join_player(self,):
+        if self.state == "waiting":
+            self.players.append(Joueur())
+
 
     def start_game(self):
         for p in self.players :
-            self.gen_deck(self.players[p])
+            self.gen_deck(p)
 
     def add_card(self,idPlayer,card,slot):
         if slot == -1:
@@ -26,7 +32,7 @@ class Game:
         else:
             raise ValueError
         
-    def get_top_card(self):
+    def get_top_cards(self):
         result = []
         for lst in self.file_influance:
             result.append(lst[-1])
@@ -35,16 +41,24 @@ class Game:
     def get_card(self,index) -> Carte :
         return self.file_influance[index][-1]
 
+    #phase a la fin du tours
     def play_round(self):
         for lst in self.file_influance:
             card = lst[-1]
             if card.shown:
                 card.capacite(self)
                 continue
+            #retourne ou non la carte
             player = self.get_player(card.idPlayer)
             act = player.action()
             if act:
                 card.capacite(self)
+                player.ptsinflu += card.ptsinflu
+            else :
+                card.ptsinflu+=1
+            
+    def get_file_size(self):
+        return len(self.file_influance)
 
     def end_turn(self):
         self.state = "end"
@@ -53,8 +67,15 @@ class Game:
         return self.players[idPlayer]
     
 
-    def discard(self, cardPos):
-        self.file_influance.pop(cardPos)
+    def discard(self, cardPos : int):
+        sous_lst=len(self.file_influance[cardPos])
+        card = None
+        if sous_lst == 1:
+            card = self.file_influance.pop(cardPos)[0]
+        else :
+            card = self.file_influance[cardPos].pop()
+        player = self.get_player(card.idPlayer)
+        player.defausse.append(card)
 
     def gen_deck(player:Joueur):
         out = full_deck(player)

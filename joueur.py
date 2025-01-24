@@ -18,9 +18,9 @@ class Joueur:
         self.id = id
         return self
 
-    def play_card(self,card:Carte,action:fn):
+    def play_card(self,card:Carte):
         self.cartes.remove(card)
     
     def action(self):
-        input_rdm = random.randint(0,1)
+        input_rdm = bool(random.randint(0,1))
         return input_rdm

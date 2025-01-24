@@ -1,7 +1,7 @@
 import pygame as p
 import random
 
-
+colors = {"red":0,"blue":1,"green":2,"black":3,"yellow":4}
 
 class Types:
     def __init__(self,id, nom,description):
