@@ -24,3 +24,9 @@ class Joueur:
     def action(self):
         input_rdm = bool(random.randint(0,1))
         return input_rdm
+    
+    def choiceAjd(self):
+        return random.choice[-1, 1] 
+    
+    def choiceEvrywhere(self, Game):
+        return random.randint(0, Game.get_file_size())
