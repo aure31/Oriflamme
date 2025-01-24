@@ -1,5 +1,5 @@
 from joueur import Joueur
-from cartes import Carte,full_deck
+from cartes import Carte,full_deck,colors
 import random
 
 states={}
@@ -11,11 +11,11 @@ class Game:
         self.file_influance :list[list[Carte]] = [[]]
         self.players:list[Joueur] = []
         self.state = "waiting"
-        self.color()
+        self.color = colors.copy()
 
-    def join_player(self,):
+    def join_player(self,nom):
         if self.state == "waiting":
-            self.players.append(Joueur())
+            self.players.append(Joueur(nom,self.color.pop(random.randint(0,len(self.color)))))
 
 
     def start_game(self):
