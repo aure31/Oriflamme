@@ -41,7 +41,10 @@ class Game:
 
     def get_player(self,idPlayer) -> Joueur:
         return self.players[idPlayer]
+    
 
+    def discard(self, cardPos):
+        self.file_influance.pop(cardPos)
 
     def gen_deck(player:Joueur):
         out = full_deck(player)

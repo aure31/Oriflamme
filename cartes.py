@@ -25,8 +25,9 @@ class Soldat(Types):
         super().__init__(1, "Soldat", "Eliminez une carte adjacente")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
+        file = Game.file_influance
+        ajdCard = random.choice([file[Carte.pos-1], file[Carte.pos+1]])  
+        Game.discard(ajdCard)
     
 class Espion(Types):
     def __init__(self):
@@ -92,7 +93,7 @@ class Embuscade(Types):
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
         file = Game.file_influance
-        file.pop(Carte.pos) ## à vérifier la position de la carte
+        Game.discard(Carte.pos)
 
     def onDeath():
         return 
@@ -103,11 +104,8 @@ class Complot(Types):
         super().__init__(9, "Complot", "Gagnez le double de point d'influence présents sur le Complot. Défaussez le Complot")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
-
-
-        
+        Player.ptsinflu += (Carte.ptsinflu*2)
+        Game.discard(Carte.pos)
 
 class Carte(p.sprite.Sprite):
     def __init__(self, type:Types):
