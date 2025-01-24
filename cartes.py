@@ -17,24 +17,26 @@ class Archer(Types):
         super().__init__(0, "Archer", "Eliminez la première ou la dernière carte de la File")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
+        file = Game.get_top_cards()
+        ajdCard = random.choice([file[0], file[-1]])
+        Game.discard(ajdCard.pos)
+
     
 class Soldat(Types):
     def __init__(self):
         super().__init__(1, "Soldat", "Eliminez une carte adjacente")
 
     def capacite(self,Player,Game, Carte):
-        file = Game.file_influance
+        file = Game.get_top_cards()
         ajdCard = random.choice([file[Carte.pos-1], file[Carte.pos+1]])  
-        Game.discard(ajdCard)
+        Game.discard(ajdCard.pos)
     
 class Espion(Types):
     def __init__(self):
         super().__init__(2, "Espion", "Volez 1 point d'influence à un joueur dont l'une des cartes est adjacente")
 
     def capacite(self,Player,Game, Carte):
-        file = Game.file_influance
+        file = Game.get_top_cards()
         ajdCard = random.choice([file[Carte.pos-1], file[Carte.pos+1]])  
         Game.getPlayer(ajdCard.idPlayer).ptsinflu -= 1
         Player.ptsinflu += 1
@@ -44,16 +46,26 @@ class Heritier(Types):
         super().__init__(3, "Héritier", "S'il n'y a pas de d'atre carte révélée du même nom gagnez 2 points d'influence")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
+        file = Game.get_top_cards()
+        for card in file:
+            if(card.shown is True and card.pos != Carte.pos and card.type != 3): Player.ptsinflu += 2 
+
     
 class Changeforme(Types):
     def __init__(self):
         super().__init__(4, "Changeforme", "Copiez la capacité d'un personnage révélé adjacent")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
+        file = Game.get_top_cards()
+        leftCheck = (file[Carte.pos-1].shown == True and file[Carte.pos+1].shown == False)
+        rightCheck = (file[Carte.pos-1].shown == False and file[Carte.pos+1].shown == True)
+        if(leftCheck):
+            if(file[Carte.pos-1].type != 4): file[Carte.pos-1].capacite()
+        if(rightCheck): 
+            if(file[Carte.pos-1].type != 4): file[Carte.pos+1].capacite()       
+        if(file[Carte.pos-1].shown == True or file[Carte.pos+1].shown == True):
+            choice = Player.askAjd() 
+            if(file[Carte.pos-1].type != 4): file[Carte.pos+choice].capacite()
 
 class Seigneur(Types):
     def __init__(self):
@@ -61,8 +73,8 @@ class Seigneur(Types):
 
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
-        file = Game.file_influance
-        try:
+        file = Game.get_top_cards()
+        try: 
             if (file[Carte.pos-1].couleur == Carte.couleur): Player.ptsinflu += 1
         except: pass
 
@@ -75,16 +87,20 @@ class Assassinat(Types):
         super().__init__(6, "Assassinat", "Eliminez une carte n'importe pù dans la File. Défaussez l'Assassinat")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
-    
+        file = Game.get_top_cards()
+        Game.discard(random.randint(0, Game.get_file_size()))
+        if(Carte not in Player.defausse):
+            Game.discard(Carte.pos)    
+
 class DecretRoyal(Types):
     def __init__(self):
         super().__init__(7, "Décret Royal", "Déplacez une carte n'importe où dans la File sauf sur une autre carte. Défaussez le Décret royal")
 
     def capacite(self,Player,Game, Carte):
-        #Todo
-        return
+        file = Game.get_top_cards()
+        choice = Player.choiceEvrywhere()
+        file.insert(choice, Carte)
+        Game.discard(Carte.pos)
 
 class Embuscade(Types):
     def __init__(self):
@@ -92,7 +108,7 @@ class Embuscade(Types):
 
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
-        file = Game.file_influance
+        file = Game.get_top_cards()
         Game.discard(Carte.pos)
 
     def onDeath():
@@ -104,7 +120,7 @@ class Complot(Types):
         super().__init__(9, "Complot", "Gagnez le double de point d'influence présents sur le Complot. Défaussez le Complot")
 
     def capacite(self,Player,Game, Carte):
-        Player.ptsinflu += (Carte.ptsinflu*2)
+        Player.ptsinflu += (Carte.ptsinflu)
         Game.discard(Carte.pos)
 
 class Carte(p.sprite.Sprite):
