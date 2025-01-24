@@ -114,3 +114,12 @@ class Carte(p.sprite.Sprite):
     def capacite(self,game):
         player = game.get_player(self.idPlayer)
         self.type.capacite(player,game)
+
+types : list[Types] = []
+
+def full_deck(joueur):
+    out = []
+    for e in types:
+        out.append(Carte(e).set_player(joueur))
+    return out
+    
