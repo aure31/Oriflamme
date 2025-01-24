@@ -117,6 +117,7 @@ class Carte(p.sprite.Sprite):
         self.idPlayer = -1
         self.pos = -1
         self.ptsinflu = 0
+        self.shown = False
     
     def set_player(self,joueur):
         self.idPlayer = joueur.id
@@ -124,6 +125,9 @@ class Carte(p.sprite.Sprite):
         return self
     
     def capacite(self,game):
+        if self.pos == -1 or not self.shown:
+            print("can't use card ")
+            return 
         player = game.get_player(self.idPlayer)
         self.type.capacite(player,game)
 

@@ -16,25 +16,26 @@ class Game:
         for p in self.players :
             self.gen_deck(self.players[p])
 
-    def add_end(self,idPlayer,card):
-        self.file_influance.append(card)
-        self.players[idPlayer].play_card(card)
-    
-    def add_start(self,idPlayer,card):
-        self.file_influance.insert(0,card)
-        self.players[idPlayer].play_card(card)
-    
-    def add_on_top(self,idPlayer,card,index):
-        if index not in range(len(self.file_influance)) or self.file_influance[index][0].idPlayer != idPlayer:
-            return
-        self.file_influance[index].append(card)
-        self.players[idPlayer].play_card(card)
+    def add_card(self,idPlayer,card,slot):
+        if slot == -1:
+            self.file_influance.append(card)
+        elif slot == -2:
+            self.file_influance.insert(0,card)
+        elif slot in range(len(self.file_influance)) and self.file_influance[slot][0].idPlayer == idPlayer:
+            self.file_influance[slot].append(card)
+        else:
+            raise ValueError
 
     def play_round(self):
         for lst in self.file_influance:
             card = lst[-1]
+            if card.shown:
+                card.capacite(self)
+                continue
             player = self.get_player(card.idPlayer)
-            player.action()
+            act = player.action()
+            if act:
+                card.capacite(self)
 
     def end_turn(self):
         self.state = "end"
