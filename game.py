@@ -57,7 +57,7 @@ class Game:
     
     def placement(self):
         for p in self.players:
-            print("A "+p.nom+" de joué !")
+            print("A "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
             self.add_card(p.id,card,slot)
         time.sleep(1)
