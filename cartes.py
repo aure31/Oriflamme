@@ -104,14 +104,14 @@ class DecretRoyal(Types):
 
 class Embuscade(Types):
     def __init__(self):
-        super().__init__(8, "Embuscade", "Défaussez les points d'influences présents sur l'Embuscade puis gagnez 1 point d'influence. Défaussez l'Embuscade")
+        super().__init__(8, "Embuscade", "Défaussez les points d'influences présents sur l'Embuscade puis gagnez 1 point d'influence. Défaussez l'Embuscade ou ")
 
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
         file = Game.get_top_cards()
         Game.discard(Carte.pos)
 
-    def onDeath():
+    def onDeath(self, Player, Game, Carte):
         return 
     
     
@@ -137,6 +137,9 @@ class Carte(p.sprite.Sprite):
         self.idPlayer = joueur.id
         self.couleur = joueur.couleur
         return self
+    
+    def get_carte(self):
+        return "Shown :", self.shown,"Couleur : ", self.couleur,"Type : " ,  self.type
     
     def capacite(self,game):
         if self.pos == -1 or not self.shown:
