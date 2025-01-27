@@ -7,22 +7,28 @@ class Action:
         return
 
 class Joueur:
-    def __init__(self, nom, couleur):
+    def __init__(self, nom, couleur,id):
         self.nom = nom
         self.couleur = couleur
-        self.cartes = []
+        self.id = id
+        self.cartes : list[Carte] = []
         self.defausse = []
         self.ptsinflu = 1
+        
+    
 
-    def set_id(self,id):
-        self.id = id
-        return self
+    def play_card(self,game) -> tuple[Carte,int]:
+        cards = ", ".join([str(e.type) for e in self.cartes ])
+        index = eval(input("choisisez une carte parmis \n"+cards+"\n choix : "))
+        carte= self.cartes.pop(index)
+        cards : list[str] =[str(e) for e in game.get_top_cards()]
 
-    def play_card(self,card:Carte):
-        self.cartes.remove(card)
+        slot = eval(input("plateau : \n"+"\n".join(cards)+"\n"))
+        return carte,slot
+
     
     def action(self):
-        input_rdm = bool(random.randint(0,1))
+        input_rdm = bool(input("retourné ou pas (true or false) : "))
         return input_rdm
     
     def choiceAjd(self):

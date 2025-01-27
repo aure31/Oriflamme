@@ -1,6 +1,7 @@
 from joueur import Joueur
 from cartes import Carte,full_deck,colors
 import random
+import time
 
 states={}
 
@@ -11,16 +12,29 @@ class Game:
         self.file_influence :list[list[Carte]] = [[]]
         self.players:list[Joueur] = []
         self.state = "waiting"
+        self.first_player = -1
         self.color = colors.copy()
+
+    def random_color(self):
+        return self.color.pop(random.randint(0,len(self.color)))
 
     def join_player(self,nom):
         if self.state == "waiting":
-            self.players.append(Joueur(nom,self.color.pop(random.randint(0,len(self.color)))))
-
+            self.players.append(
+                Joueur(nom,self.random_color(),len(self.players)))
+            print(f"{nom} join the game")
 
     def start_game(self):
         for p in self.players :
             self.gen_deck(p)
+        self.first_player = random.randint(0,len(self.players))
+        self.state="start"
+        print("game started")
+        time.sleep(1)
+        self.placement()
+            
+
+
 
     def add_card(self,idPlayer,card,slot):
         if slot == -1:
@@ -40,9 +54,18 @@ class Game:
     
     def get_card(self,index) -> Carte :
         return self.file_influence[index][-1]
-
+    
+    def placement(self):
+        for p in self.players:
+            print("A "+p.nom+" de joué !")
+            card ,slot = p.play_card(self)
+            self.add_card(p.id,card,slot)
+        time.sleep(1)
+        self.end_round()
+            
+ 
     #phase a la fin du tours
-    def play_round(self):
+    def end_round(self):
         for lst in self.file_influence:
             card = lst[-1]
             if card.shown:

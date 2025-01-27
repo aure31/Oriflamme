@@ -3,6 +3,8 @@ import random
 
 colors = ["red","blue","green","black","yellow"]
 
+
+
 class Types:
     def __init__(self,id, nom,description):
         self.id = id

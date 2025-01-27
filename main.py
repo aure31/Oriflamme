@@ -1,12 +1,13 @@
 import pygame as p
-import game
+from game import Game
+import time
 
-p.init()
+#p.init()
 
 
-p.display.set_caption('Oriflamme')
+#p.display.set_caption('Oriflamme')
 
-window_surface = p.display.set_mode((800, 600))
+#window_surface = p.display.set_mode((800, 600))
 
 
 background = p.Surface((0,0), p.FULLSCREEN)
@@ -20,12 +21,20 @@ def main():
     game_begin = True
     game_playing = False
     game_over = False
+    game = Game()
+    game.join_player("j1")
+    game.join_player("j2")
+    game.join_player("j3")
     while is_running:
-        clock.tick()
-        for event in p.event.get():
+        time.sleep(2)
+        game.start_game()
+                
+        '''for event in p.event.get():
             if event.type == p.QUIT:
                 is_running = False
-        
+            if event.type == p.KEYDOWN:
+                event.key 
+        '''
         if game_begin:
             pass
 
@@ -35,9 +44,8 @@ def main():
         if game_over:
             pass
 
-
-        window_surface.blit(background, (0, 0))
-        p.display.update()
+        #window_surface.blit(background, (0, 0))
+        #p.display.update()
 
 if __name__ == "main":
     main()
