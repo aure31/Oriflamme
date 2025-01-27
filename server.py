@@ -16,6 +16,7 @@ s.listen(5)
 print("En attente de connexion...")
 
 def threaded_client(conn):
+    conn.send(str.encode("Connecté"))
     reply = ""
     while True:
         try:
