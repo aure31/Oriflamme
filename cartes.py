@@ -147,7 +147,7 @@ class Carte(p.sprite.Sprite):
         return self
     
     def __str__(self):
-        return "Shown : "+ str(self.shown)+", Couleur : "+ self.couleur,", Type : " +  self.type
+        return "Shown : "+ str(self.shown)+", Couleur : "+ self.couleur+", Type : " +  str(self.type)
     
     def capacite(self,game):
         if self.pos == -1 or not self.shown:

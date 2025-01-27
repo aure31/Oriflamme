@@ -1,4 +1,4 @@
-import pygame as p
+#import pygame as p
 from game import Game
 import time
 
@@ -10,13 +10,14 @@ import time
 #window_surface = p.display.set_mode((800, 600))
 
 
-background = p.Surface((0,0), p.FULLSCREEN)
+#background = p.Surface((0,0), p.FULLSCREEN)
 
-background.fill(p.Color('#000000'))
+#background.fill(p.Color('#000000'))
  
 
 def main():
-    clock = p.time.Clock()
+    print("main")
+    
     is_running = True
     game_begin = True
     game_playing = False
@@ -25,16 +26,19 @@ def main():
     game.join_player("j1")
     game.join_player("j2")
     game.join_player("j3")
+    print("start")
+    game.start_game()
+    '''
+    clock = p.time.Clock()
     while is_running:
-        time.sleep(2)
-        game.start_game()
+        
+        
                 
-        '''for event in p.event.get():
+        for event in p.event.get():
             if event.type == p.QUIT:
                 is_running = False
             if event.type == p.KEYDOWN:
                 event.key 
-        '''
         if game_begin:
             pass
 
@@ -44,8 +48,9 @@ def main():
         if game_over:
             pass
 
-        #window_surface.blit(background, (0, 0))
-        #p.display.update()
+        window_surface.blit(background, (0, 0))
+        p.display.update()
+        '''
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()

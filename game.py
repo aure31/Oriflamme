@@ -9,7 +9,7 @@ states={}
 
 class Game:
     def __init__(self):
-        self.file_influence :list[list[Carte]] = [[]]
+        self.file_influence :list[list[Carte]] = []
         self.players:list[Joueur] = []
         self.state = "waiting"
         self.first_player = -1
@@ -17,7 +17,8 @@ class Game:
         self.tour = 0
 
     def random_color(self):
-        return self.color.pop(random.randint(0,len(self.color)))
+        print(" ".join(self.color))
+        return self.color.pop(random.randint(0,len(self.color)-1))
 
     def join_player(self,nom):
         if self.state == "waiting":
@@ -39,9 +40,9 @@ class Game:
 
     def add_card(self,idPlayer,card,slot):
         if slot == -1:
-            self.file_influence.append(card)
+            self.file_influence.append([card])
         elif slot == -2:
-            self.file_influence.insert(0,card)
+            self.file_influence.insert(0,[card])
         elif slot in range(len(self.file_influence)) and self.file_influence[slot][0].idPlayer == idPlayer:
             self.file_influence[slot].append(card)
         else:
@@ -110,10 +111,10 @@ class Game:
         player.defausse.append(card)
         if(card.type.id == 8): Carte.type.onDeath(Game.get_player(card.idPlayer), Game, Carte, card)
 
-    def gen_deck(player:Joueur):
+    def gen_deck(self,player:Joueur):
         out = full_deck(player)
         defausse = []
         for i in range(3):
-            defausse.append(out.pop(random.randrange(len(out))))
+            defausse.append(out.pop(random.randint(0,len(out)-1)))
         player.cartes = out
         player.defausse = defausse
