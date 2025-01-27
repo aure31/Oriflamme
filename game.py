@@ -14,6 +14,7 @@ class Game:
         self.state = "waiting"
         self.first_player = -1
         self.color = colors.copy()
+        self.tour = 0
 
     def random_color(self):
         return self.color.pop(random.randint(0,len(self.color)))
@@ -56,6 +57,7 @@ class Game:
         return self.file_influence[index][-1]
     
     def placement(self):
+        self.tour +=1
         for p in self.players:
             print("A "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
@@ -79,6 +81,13 @@ class Game:
                 player.ptsinflu += card.ptsinflu
             else :
                 card.ptsinflu+=1
+        if self.tour == 6:
+            self.end_partie()
+        else:
+            self.placement()
+
+    def end_partie(self):
+        print("end")
             
     def get_file_size(self):
         return len(self.file_influence)
