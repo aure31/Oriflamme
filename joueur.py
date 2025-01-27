@@ -36,3 +36,6 @@ class Joueur:
     
     def choiceEvrywhere(self, Game):
         return random.randint(0, Game.get_file_size())
+
+    def ask(self,text:str):
+        return input(text)

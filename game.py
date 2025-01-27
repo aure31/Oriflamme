@@ -32,21 +32,27 @@ class Game:
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("game started")
-        time.sleep(1)
+        
         self.placement()
             
 
 
 
-    def add_card(self,idPlayer,card,slot):
+    def add_card(self,idPlayer:int,card:Carte,slot:int):
+        index = 0
         if slot == -1:
             self.file_influence.append([card])
+            index = len(self.file_influence)-1
         elif slot == -2:
             self.file_influence.insert(0,[card])
+            index = 0
         elif slot in range(len(self.file_influence)) and self.file_influence[slot][0].idPlayer == idPlayer:
             self.file_influence[slot].append(card)
+            index = slot
         else:
-            raise ValueError
+            return False
+        card.pos = index
+        return True
         
     def get_top_cards(self):
         result = []
@@ -63,7 +69,7 @@ class Game:
             print("A "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
             self.add_card(p.id,card,slot)
-        time.sleep(1)
+        
         self.end_round()
             
  
@@ -78,6 +84,7 @@ class Game:
             player = self.get_player(card.idPlayer)
             act = player.action()
             if act:
+                card.shown = True
                 card.capacite(self)
                 player.ptsinflu += card.ptsinflu
             else :
@@ -85,6 +92,7 @@ class Game:
         if self.tour == 6:
             self.end_partie()
         else:
+            print("fin du tour "+str(self.tour))
             self.placement()
 
     def end_partie(self):

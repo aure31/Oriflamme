@@ -11,7 +11,7 @@ class Types:
         self.nom = nom
         self.description = description
 
-    def capacite(self):
+    def capacite(self,Player,Game, Carte):
         raise NotImplementedError("The method not implemented")
     
     def __str__(self): 
@@ -22,9 +22,10 @@ class Archer(Types):
         super().__init__(0, "Archer", "Eliminez la première ou la dernière carte de la File")
 
     def capacite(self,Player,Game, Carte):
+        print("archer")
         file = Game.get_top_cards()
-        ajdCard = random.choice([file[0], file[-1]])
-        Game.discard(ajdCard.pos)
+        ajdCard = eval(Player.ask("choisir entre 1 et -1 (debut/fin)"))
+        Game.discard(ajdCard)
 
     
 class Soldat(Types):
@@ -33,8 +34,10 @@ class Soldat(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        ajdCard = random.choice([file[Carte.pos-1], file[Carte.pos+1]])  
-        Game.discard(ajdCard.pos)
+        pos = Carte.get_pos(Game)
+        index = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)"))
+        ajdCard = file[pos+index]
+        Game.discard(ajdCard)
     
 class Espion(Types):
     def __init__(self):
@@ -52,8 +55,13 @@ class Heritier(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
+        get_money = True
         for card in file:
-            if(card.shown is True and card.pos != Carte.pos and card.type != 3): Player.ptsinflu += 2 
+            if(card.shown and card is not Carte and card.type == 3):
+                get_money = False
+                break 
+        if get_money:
+            Player.ptsinflu += 2 
 
     
 class Changeforme(Types):
@@ -62,15 +70,21 @@ class Changeforme(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        leftCheck = (file[Carte.pos-1].shown == True and file[Carte.pos+1].shown == False)
-        rightCheck = (file[Carte.pos-1].shown == False and file[Carte.pos+1].shown == True)
-        if(leftCheck):
-            if(file[Carte.pos-1].type != 4): file[Carte.pos-1].capacite()
-        if(rightCheck): 
-            if(file[Carte.pos-1].type != 4): file[Carte.pos+1].capacite()       
-        if(file[Carte.pos-1].shown == True or file[Carte.pos+1].shown == True):
-            choice = Player.askAjd() 
-            if(file[Carte.pos-1].type != 4): file[Carte.pos+choice].capacite()
+        pos = Carte.get_pos(Game)
+        leftCard = file[pos-1]
+        rightCard = file[pos+1]
+        selCard = None
+        if(not leftCard.shown and not rightCard.shown):
+            return
+        if(leftCard.shown and not rightCard.shown):
+            selCard = leftCard
+        elif(not leftCard.shown and rightCard.shown): 
+            selCard = rightCard
+        else:
+            index = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)"))
+            selCard = file[pos+index] 
+        if(selCard.type != 4): selCard.capacite()
+    
 
 class Seigneur(Types):
     def __init__(self):
@@ -137,7 +151,6 @@ class Carte(p.sprite.Sprite):
         self.type = type
         self.img = type
         self.idPlayer = -1
-        self.pos = -1
         self.ptsinflu = 0
         self.shown = False
     
@@ -146,15 +159,18 @@ class Carte(p.sprite.Sprite):
         self.couleur = joueur.couleur
         return self
     
+    def get_pos(self,game) -> int:
+        return game.get_top_cards().index(self)
+    
     def __str__(self):
         return "Shown : "+ str(self.shown)+", Couleur : "+ self.couleur+", Type : " +  str(self.type)
     
     def capacite(self,game):
-        if self.pos == -1 or not self.shown:
+        if self.get_pos(game) == -1 or not self.shown:
             print("can't use card ")
             return 
         player = game.get_player(self.idPlayer)
-        self.type.capacite(player,game)
+        self.type.capacite(player,game,self)
 
 types : list[Types] = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
                        Embuscade(), Complot(), Changeforme(), Seigneur()]
