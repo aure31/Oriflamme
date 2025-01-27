@@ -156,7 +156,8 @@ class Carte(p.sprite.Sprite):
         player = game.get_player(self.idPlayer)
         self.type.capacite(player,game)
 
-types : list[Types] = []
+types : list[Types] = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
+                       Embuscade(), Complot(), Changeforme(), Seigneur()]
 
 def full_deck(joueur):
     out = []
