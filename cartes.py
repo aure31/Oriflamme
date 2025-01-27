@@ -12,6 +12,9 @@ class Types:
     def capacite(self):
         raise NotImplementedError("The method not implemented")
     
+    def __str__(self): 
+        return self.nom
+    
 class Archer(Types):
     def __init__(self):
         super().__init__(0, "Archer", "Eliminez la première ou la dernière carte de la File")
@@ -88,7 +91,8 @@ class Assassinat(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        Game.discard(random.randint(0, Game.get_file_size()))
+        rndCardPos = random.randint(0, Game.get_file_size())
+        Game.discard(rndCardPos)
         if(Carte not in Player.defausse):
             Game.discard(Carte.pos)    
 
@@ -111,8 +115,10 @@ class Embuscade(Types):
         file = Game.get_top_cards()
         Game.discard(Carte.pos)
 
-    def onDeath(self, Player, Game, Carte):
-        return 
+    def onDeath(self, Player, Game, CarteWhoKill, Carte):
+        Game.discard(CarteWhoKill.pos)
+        Game.discard(Carte.pos)
+        Player.ptsinflu += 4
     
     
 class Complot(Types):
@@ -138,8 +144,8 @@ class Carte(p.sprite.Sprite):
         self.couleur = joueur.couleur
         return self
     
-    def get_carte(self):
-        return "Shown :", self.shown,"Couleur : ", self.couleur,"Type : " ,  self.type
+    def __str__(self):
+        return "Shown : "+ str(self.shown)+", Couleur : "+ self.couleur,", Type : " +  self.type
     
     def capacite(self,game):
         if self.pos == -1 or not self.shown:

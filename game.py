@@ -76,6 +76,7 @@ class Game:
             card = self.file_influance[cardPos].pop()
         player = self.get_player(card.idPlayer)
         player.defausse.append(card)
+        if(card.type.id == 8): Carte.type.onDeath(Game.get_player(card.idPlayer), Game, Carte, card)
 
     def gen_deck(player:Joueur):
         out = full_deck(player)
