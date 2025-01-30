@@ -6,8 +6,8 @@ p.init()
 
 p.display.set_caption('Oriflamme')
 
-window_surface = p.display.set_mode((0,0), p.FULLSCREEN)
-screen_width, screen_height = window_surface.get_size()
+window = p.display.set_mode((0,0), p.FULLSCREEN)
+screen_width, screen_height = window.get_size()
 background = p.image.load("../assets/bg_lobby.png").convert
 background_image = p.transform.scale(background, (screen_width, screen_height))
 
@@ -21,7 +21,7 @@ def main():
             if event.type == p.KEYDOWN:
                 event.key 
 
-        window_surface.blit(background, (0, 0))
+        window.blit(background, (0, 0))
         p.display.update()
 
 if __name__ == "__main__":
