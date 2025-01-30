@@ -4,21 +4,17 @@ import time
 
 p.init()
 
-
 p.display.set_caption('Oriflamme')
 
-window_surface = p.display.set_mode((800, 600))
+window_surface = p.display.set_mode((0,0), p.FULLSCREEN)
+screen_width, screen_height = window_surface.get_size()
+background = p.image.load("../assets/bg_lobby.png").convert
+background_image = p.transform.scale(background, (screen_width, screen_height))
 
-
-background = p.Surface((0,0), p.FULLSCREEN)
-
-background.fill(p.Color('#000000'))
 def main():
     clock = p.time.Clock()
     while is_running:
-        
-        
-                
+            
         for event in p.event.get():
             if event.type == p.QUIT:
                 is_running = False
