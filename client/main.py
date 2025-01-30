@@ -1,6 +1,10 @@
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pygame as p
 from server.game import Game
-import time
 
 p.init()
 
@@ -12,6 +16,7 @@ background = p.image.load("../assets/bg_lobby.png").convert
 background_image = p.transform.scale(background, (screen_width, screen_height))
 
 def main():
+    game = Game()
     clock = p.time.Clock()
     while is_running:
             
