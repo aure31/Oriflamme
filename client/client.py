@@ -1,10 +1,10 @@
 import socket
-
+import time
 
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "10.0.1.22"
+        self.server = "192.168.139.238"
         self.port = 5555
         self.addr = (self.server, self.port)
         self.id = self.connect()
@@ -26,4 +26,5 @@ class Network:
 
 n = Network()
 print(n.send("Hello"))
+time.sleep(2)
 print(n.send("Working"))

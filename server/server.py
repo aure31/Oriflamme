@@ -2,7 +2,7 @@ import socket
 from _thread import *
 import sys 
 
-server = "10.0.1.22"
+server = "192.168.139.238"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,7 +12,7 @@ try:
 except socket.error as e:
     str(e)
 
-s.listen(5)
+s.listen(2)
 print("En attente de connexion...")
 
 def threaded_client(conn):
@@ -30,6 +30,7 @@ def threaded_client(conn):
                 print("Reçu : ", reply)
                 print("Envoi : ", reply)
                 conn.sendall(str.encode(reply))
+            print("boucle")
         except:
             break
     

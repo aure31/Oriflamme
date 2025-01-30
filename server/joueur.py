@@ -1,5 +1,5 @@
 import pygame as p
-from cartes import Carte
+from server.cartes import Carte
 import random
 
 class Action:
@@ -29,6 +29,7 @@ class Joueur:
     
     def action(self):
         input_rdm = bool(input("retourné ou pas (true or false) : "))
+        
         return input_rdm
     
     def choiceAjd(self):
@@ -36,6 +37,9 @@ class Joueur:
     
     def choiceEvrywhere(self, Game):
         return random.randint(0, Game.get_file_size())
+    
+    def choiceCard(self,Game):
+        return eval(input("choisisé une carte parmis :\n"+", ".join(Game.get_top_cards())+" : "))
 
     def ask(self,text:str):
         return input(text)

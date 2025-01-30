@@ -1,5 +1,5 @@
-from joueur import Joueur
-from cartes import Carte,full_deck,colors
+from server.joueur import Joueur
+from server.cartes import Carte,full_deck,colors
 import random
 import time
 

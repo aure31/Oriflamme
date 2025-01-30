@@ -45,13 +45,13 @@ class Espion(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        ajdCard = random.choice([file[Carte.pos-1], file[Carte.pos+1]])  
+        ajdCard = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)")) 
         Game.getPlayer(ajdCard.idPlayer).ptsinflu -= 1
         Player.ptsinflu += 1
            
 class Heritier(Types):
     def __init__(self):
-        super().__init__(3, "Héritier", "S'il n'y a pas de d'atre carte révélée du même nom gagnez 2 points d'influence")
+        super().__init__(3, "Héritier", "S'il n'y a pas de d'autre carte révélée du même nom gagnez 2 points d'influence")
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
@@ -93,12 +93,13 @@ class Seigneur(Types):
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
         file = Game.get_top_cards()
+        pos = Carte.get_pos(Game)
         try: 
-            if (file[Carte.pos-1].couleur == Carte.couleur): Player.ptsinflu += 1
+            if (file[pos-1].couleur == Carte.couleur): Player.ptsinflu += 1
         except: pass
 
         try: 
-            if(file[Carte.pos+1].couleur == Carte.couleur): Player.ptsinflu += 1
+            if(file[pos+1].couleur == Carte.couleur): Player.ptsinflu += 1
         except: pass
     
 class Assassinat(Types):
@@ -106,11 +107,10 @@ class Assassinat(Types):
         super().__init__(6, "Assassinat", "Eliminez une carte n'importe pù dans la File. Défaussez l'Assassinat")
 
     def capacite(self,Player,Game, Carte):
-        file = Game.get_top_cards()
-        rndCardPos = random.randint(0, Game.get_file_size())
+        rndCardPos = Player.ChoiceCard()
         Game.discard(rndCardPos)
         if(Carte not in Player.defausse):
-            Game.discard(Carte.pos)    
+            Game.discard(Carte.get_pos(Game))    
 
 class DecretRoyal(Types):
     def __init__(self):
@@ -124,16 +124,16 @@ class DecretRoyal(Types):
 
 class Embuscade(Types):
     def __init__(self):
-        super().__init__(8, "Embuscade", "Défaussez les points d'influences présents sur l'Embuscade puis gagnez 1 point d'influence. Défaussez l'Embuscade ou ")
+        super().__init__(8, "Embuscade", "Défaussez les points d'influences présents sur l'Embuscade puis gagnez 1 point d'influence. Défaussez l'Embuscade ou si l'embuscade est éliminée par une carte adverse, défaussez la carte adverse et gagnez 4 points d'influence")
 
     def capacite(self,Player,Game, Carte):
         Player.ptsinflu += 1
-        file = Game.get_top_cards()
-        Game.discard(Carte.pos)
+        Player.ptsinflu -= Carte.ptsinflu
+        Game.discard(Carte.get_pos(Game))
 
     def onDeath(self, Player, Game, CarteWhoKill, Carte):
-        Game.discard(CarteWhoKill.pos)
-        Game.discard(Carte.pos)
+        Game.discard(CarteWhoKill.get_pos(Game))
+        Game.discard(Carte.get_pos(Game))
         Player.ptsinflu += 4
     
     
@@ -142,8 +142,8 @@ class Complot(Types):
         super().__init__(9, "Complot", "Gagnez le double de point d'influence présents sur le Complot. Défaussez le Complot")
 
     def capacite(self,Player,Game, Carte):
-        Player.ptsinflu += (Carte.ptsinflu)
-        Game.discard(Carte.pos)
+        Player.ptsinflu += Carte.ptsinflu
+        Game.discard(Carte.get_pos(Game))
 
 class Carte(p.sprite.Sprite):
     def __init__(self, type:Types):
