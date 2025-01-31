@@ -89,7 +89,7 @@ def main():
             pass
 
         if cred:
-            pass
+            pass 
             #background = p.image.load("client/assets/bg_credits.png").convert()
             #background_image = p.transform.scale(background, (screen_width, screen_height))
         p.display.update()
