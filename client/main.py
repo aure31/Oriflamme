@@ -6,10 +6,10 @@ import pygame as p
 from server.game import Game
 
 p.init()
-p.mixer.init()  # Initialize the mixer
-p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")  # Load the music file
-p.mixer.music.set_volume(0.3)  # Set volume (0.0 to 1.0)
-p.mixer.music.play(-1)  # Play the music in a loop
+p.mixer.init()
+p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
+p.mixer.music.set_volume(0.3)
+p.mixer.music.play(-1)
 
 p.display.set_caption('Oriflamme')
 
@@ -17,9 +17,9 @@ window = p.display.set_mode((0,0), p.FULLSCREEN)
 screen_width, screen_height = window.get_size()
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
-join = p.image.load("client/assets/boutons/join.png")#.convert_alpha()
+join = p.image.load("client/assets/boutons/join.png")
 join_touched = p.image.load("client/assets/boutons/join_touched.png")
-new_game = p.image.load("client/assets/boutons/new_game.png")#.convert_alpha()
+new_game = p.image.load("client/assets/boutons/new_game.png")
 new_game_touched = p.image.load("client/assets/boutons/new_game_touched.png")
 settings = p.image.load("client/assets/boutons/settings.png")
 settings_touched = p.image.load("client/assets/boutons/settings_touched.png")
@@ -27,6 +27,8 @@ credits = p.image.load("client/assets/boutons/credits.png")
 credits_touched = p.image.load("client/assets/boutons/credits_touched.png")
 quitter = p.image.load("client/assets/boutons/quit.png")
 quitter_touched = p.image.load("client/assets/boutons/quit_touched.png")
+back = p.image.load("client/assets/boutons/back.png")
+back_touched = p.image.load("client/assets/boutons/back_touched.png")
 
 def main():
     is_running = True
@@ -82,15 +84,39 @@ def main():
         
         if lobby_2:
             window.blit(background_image, (0, 0))
+            window.blit(back, (25, 25))
+            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
+                window.blit(back_touched, (25, 25))
+                if p.mouse.get_pressed()[0]:
+                    lobby_2 = False
+                    lobby_1 = True
         
         if lobby_3:
             window.blit(background_image, (0, 0))
+            window.blit(back, (25, 25))
+            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
+                window.blit(back_touched, (25, 25))
+                if p.mouse.get_pressed()[0]:
+                    lobby_3 = False
+                    lobby_1 = True
         
         if lobby_4:
             window.blit(background_image, (0, 0))
+            window.blit(back, (25, 25)) 
+            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
+                window.blit(back_touched, (25, 25)) 
+                if p.mouse.get_pressed()[0]:
+                    lobby_4 = False
+                    lobby_1 = True
 
         if sett:
             window.blit(background_image, (0, 0))
+            window.blit(back, (25, 25)) 
+            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos): 
+                window.blit(back_touched, (25, 25)) 
+                if p.mouse.get_pressed()[0]:
+                    sett = False
+                    lobby_1 = True
 
         if playing:
             pass
