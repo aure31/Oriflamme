@@ -42,6 +42,7 @@ def main():
     game = Game()
     clock = p.time.Clock()
     while is_running:
+        window.blit(background_image, (0, 0))
         mouse_pos = p.mouse.get_pos()
         for event in p.event.get():
             if event.type == p.QUIT:
@@ -51,7 +52,6 @@ def main():
                     is_running = False
         
         if lobby_1:
-            window.blit(background_image, (0, 0))
             window.blit(join, (1000, 100))
             window.blit(new_game, (1000, 250))
             window.blit(settings, (1000, 400))
@@ -83,7 +83,6 @@ def main():
                     is_running = False
         
         if lobby_2:
-            window.blit(background_image, (0, 0))
             window.blit(back, (25, 25))
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
@@ -92,7 +91,6 @@ def main():
                     lobby_1 = True
         
         if lobby_3:
-            window.blit(background_image, (0, 0))
             window.blit(back, (25, 25))
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
@@ -101,7 +99,6 @@ def main():
                     lobby_1 = True
         
         if lobby_4:
-            window.blit(background_image, (0, 0))
             window.blit(back, (25, 25)) 
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25)) 
@@ -110,7 +107,6 @@ def main():
                     lobby_1 = True
 
         if sett:
-            window.blit(background_image, (0, 0))
             window.blit(back, (25, 25)) 
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos): 
                 window.blit(back_touched, (25, 25)) 
@@ -124,9 +120,9 @@ def main():
         if cred:
             cred = False
             lobby_1 = True
-            #background = p.image.load("client/assets/bg_credits.png").convert()
-            #background_image = p.transform.scale(background, (screen_width, screen_height))
+
         p.display.update()
+        
 
 if __name__ == "__main__":
     main()
