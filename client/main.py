@@ -32,23 +32,23 @@ quitter = p.image.load("client/assets/boutons/quit.png")
 quitter_touched = p.image.load("client/assets/boutons/quit_touched.png")
 back = p.image.load("client/assets/boutons/back.png")
 back_touched = p.image.load("client/assets/boutons/back_touched.png")
-entre_txt = tools.text_saisie(screen_width/2,screen_height/2,2)
-
 
 class Menu(enum.Enum):
     ACUEIL = 0
-    REJOINDRE =1
+    REJOINDRE = 1
     SERVER = 2
     ATTENTE = 3
-    PARAMETRE =4
+    PARAMETRE = 4
     CREDIT = 5
     JEU = 6
 
-text_enter = t.text_saisie(100, 100, 1)
+ask_port_create = t.TextInput(500, 200, window)
+ask_ip_join = t.TextInput(500, 200, window)
+ask_port_join = t.TextInput(500, 400, window)
 
 def main():
     is_running = True
-    menu = "main"
+    menu = Menu.ACUEIL
     playing = False
     #game = Game()
     clock = p.time.Clock()
@@ -61,6 +61,9 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     is_running = False
+            ask_ip_join.handle_event(event)
+            ask_port_join.handle_event(event)
+            ask_port_create.handle_event(event)
         
         if menu == Menu.ACUEIL:
             window.blit(join, (1000, 100))
@@ -91,7 +94,8 @@ def main():
         
         if menu == Menu.REJOINDRE:
             window.blit(back, (25, 25))
-            
+            ask_ip_join.draw()
+            ask_port_join.draw()
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
                 if p.mouse.get_pressed()[0]:
