@@ -3,6 +3,8 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
+import enum
+import tools
 #from server.game import Game
 import tools as t
 
@@ -30,16 +32,23 @@ quitter = p.image.load("client/assets/boutons/quit.png")
 quitter_touched = p.image.load("client/assets/boutons/quit_touched.png")
 back = p.image.load("client/assets/boutons/back.png")
 back_touched = p.image.load("client/assets/boutons/back_touched.png")
+entre_txt = tools.text_saisie(screen_width/2,screen_height/2,2)
+
+
+class Menu(enum.Enum):
+    ACUEIL = 0
+    REJOINDRE =1
+    SERVER = 2
+    ATTENTE = 3
+    PARAMETRE =4
+    CREDIT = 5
+    JEU = 6
+
 text_enter = t.text_saisie(100, 100, 1)
 
 def main():
     is_running = True
-    lobby_1 = True
-    lobby_2 = False
-    lobby_3 = False
-    lobby_4 = False
-    sett = False
-    cred = False
+    menu = "main"
     playing = False
     #game = Game()
     clock = p.time.Clock()
@@ -53,7 +62,7 @@ def main():
                 if event.key == p.K_ESCAPE:
                     is_running = False
         
-        if lobby_1:
+        if menu == Menu.ACUEIL:
             window.blit(join, (1000, 100))
             window.blit(new_game, (1000, 250))
             window.blit(settings, (1000, 400))
@@ -62,66 +71,59 @@ def main():
             if join.get_rect(topleft=(1000, 100)).collidepoint(mouse_pos):
                 window.blit(join_touched, (1000, 100))
                 if p.mouse.get_pressed()[0]:
-                    lobby_1 = False
-                    lobby_2 = True 
+                    menu = Menu.REJOINDRE
             if new_game.get_rect(topleft=(1000, 250)).collidepoint(mouse_pos):
                 window.blit(new_game_touched, (1000, 250))
                 if p.mouse.get_pressed()[0]:
-                    lobby_1 = False
-                    lobby_3 = True
+                    menu = Menu.SERVER
             if settings.get_rect(topleft=(1000, 400)).collidepoint(mouse_pos):
                 window.blit(settings_touched, (1000, 400))
                 if p.mouse.get_pressed()[0]:
-                    lobby_1 = False
-                    sett = True
+                    menu = Menu.PARAMETRE
             if credits.get_rect(topleft=(1000, 550)).collidepoint(mouse_pos):
                 window.blit(credits_touched, (1000, 550))
                 if p.mouse.get_pressed()[0]:
-                    lobby_1 = False
-                    cred = True
+                    menu = Menu.CREDIT
             if quitter.get_rect(topleft=(1000, 700)).collidepoint(mouse_pos):
                 window.blit(quitter_touched, (1000, 700))
                 if p.mouse.get_pressed()[0]:
                     is_running = False
         
-        if lobby_2:
+        if menu == Menu.REJOINDRE:
             window.blit(back, (25, 25))
+            
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
                 if p.mouse.get_pressed()[0]:
-                    lobby_2 = False
-                    lobby_1 = True
+                    menu = Menu.ACUEIL
         
-        if lobby_3:
+        if menu == Menu.SERVER:
             window.blit(back, (25, 25))
+
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
                 if p.mouse.get_pressed()[0]:
-                    lobby_3 = False
-                    lobby_1 = True
+                    menu = Menu.ACUEIL
         
-        if lobby_4:
+        if menu == Menu.ATTENTE:
             window.blit(back, (25, 25)) 
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25)) 
                 if p.mouse.get_pressed()[0]:
-                    lobby_4 = False
-                    lobby_1 = True
+                    menu = Menu.ACUEIL
 
-        if sett:
+        if menu == Menu.PARAMETRE:
             window.blit(back, (25, 25)) 
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos): 
                 window.blit(back_touched, (25, 25)) 
                 if p.mouse.get_pressed()[0]:
-                    sett = False
-                    lobby_1 = True
+                    menu = Menu.ACUEIL
 
-        if playing:
+        if menu == Menu.JEU:
             pass
 
-        if cred:
-            cred = False
-            lobby_1 = True
+        if menu == Menu.CREDIT:
+            menu = Menu.ACUEIL
 
         p.display.update()
         
