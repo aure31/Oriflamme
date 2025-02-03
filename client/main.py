@@ -5,7 +5,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pygame as p
 import enum
 import tools
-from server.game import Game
+#from server.game import Game
+import tools as t
 
 p.init()
 p.mixer.init()
@@ -43,12 +44,13 @@ class Menu(enum.Enum):
     CREDIT = 5
     JEU = 6
 
+text_enter = t.text_saisie(100, 100, 1)
 
 def main():
     is_running = True
     menu = "main"
     playing = False
-    game = Game()
+    #game = Game()
     clock = p.time.Clock()
     while is_running:
         window.blit(background_image, (0, 0))
