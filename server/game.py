@@ -36,8 +36,6 @@ class Game:
         self.placement()
             
 
-
-
     def add_card(self,idPlayer:int,card:Carte,slot:int):
         index = 0
         if slot == -1:

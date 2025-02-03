@@ -84,6 +84,8 @@ def main():
         
         if lobby_2:
             window.blit(back, (25, 25))
+            ip = input("Entrez l'adresse ip du serveur")
+            port = input("entrez le port du serveur")
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
                 if p.mouse.get_pressed()[0]:
