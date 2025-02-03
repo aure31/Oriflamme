@@ -22,7 +22,6 @@ class Archer(Types):
         super().__init__(0, "Archer", "Eliminez la première ou la dernière carte de la File")
 
     def capacite(self,Player,Game, Carte):
-        print("archer")
         file = Game.get_top_cards()
         ajdCard = eval(Player.ask("choisir entre 1 et -1 (debut/fin)"))
         Game.discard(ajdCard)
@@ -36,8 +35,7 @@ class Soldat(Types):
         file = Game.get_top_cards()
         pos = Carte.get_pos(Game)
         index = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)"))
-        ajdCard = file[pos+index]
-        Game.discard(ajdCard)
+        Game.discard(pos+index)
     
 class Espion(Types):
     def __init__(self):
@@ -120,7 +118,7 @@ class DecretRoyal(Types):
         file = Game.get_top_cards()
         choice = Player.choiceEvrywhere()
         file.insert(choice, Carte)
-        Game.discard(Carte.pos)
+        Game.discard(Carte.get_pos(Game))
 
 class Embuscade(Types):
     def __init__(self):

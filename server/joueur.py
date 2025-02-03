@@ -1,5 +1,4 @@
-import pygame as p
-from server.cartes import Carte
+from cartes import Carte
 import random
 
 class Action:
