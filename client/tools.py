@@ -339,40 +339,36 @@ class TextInput:
         self.border_color = (200, 200, 200)  # Couleur de bordure grise
         self.text = ''
         self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
-        self.font = pygame.font.Font(None, 32)  # Police par défaut
+        self.font = pygame.font.Font(None, 32)
         self.screen = screen
-        self.active = False  # Indique si le champ est actif
+        self.active = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
-                # Si le champ est déjà actif, on ne change pas son état
                 self.active = True
             else:
-                self.active = False  # Désactiver si on clique ailleurs
+                self.active = False
 
         if event.type == pygame.KEYDOWN:
             if self.active:
-                if event.key == pygame.K_RETURN:  # Valider avec la touche Entrée
+                if event.key == pygame.K_RETURN:
                     print(f'Texte validé : {self.text}')
-                    self.last_valid_text = self.text  # Stocker le dernier texte validé
-                    self.clear()  # Vider le champ de texte
-                elif event.key == pygame.K_BACKSPACE:  # Supprimer le dernier caractère
+                    self.last_valid_text = self.text
+                    self.clear()
+                elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
-                    self.text += event.unicode  # Ajouter le caractère
+                    self.text += event.unicode
 
     def clear(self):
-        self.text = ''  # Vider le champ de texte
+        self.text = ''
 
     def get_last_valid_text(self):
-        return self.last_valid_text  # Retourner le dernier texte validé
+        return self.last_valid_text
 
     def draw(self):
-        # Dessiner le fond de la barre d'entrée
         pygame.draw.rect(self.screen, self.bg_color, self.rect)
-        # Dessiner la bordure
         pygame.draw.rect(self.screen, self.border_color, self.rect, 2)
-        # Dessiner le texte
-        text_surface = self.font.render(self.text, True, (0, 0, 0))  # Texte noir
+        text_surface = self.font.render(self.text, True, (0, 0, 0))
         self.screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))

@@ -27,7 +27,6 @@ class Network:
         except socket.error as e:
             print(e)
 
-
 n = Network()
 print(n.send("Hello"))
 time.sleep(2)
