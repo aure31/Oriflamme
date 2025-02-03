@@ -343,6 +343,7 @@ class text_saisie(texte) :
         self.text_font = pygame.font.SysFont('comicsans',self.scale)
         self.use_input = [pygame.key.get_pressed()[i] for i in range(512)]
         self.entre = False
+        self.answer = ""
       
     def affiche(self,WIN):
       texte.affiche(self,WIN)
@@ -352,6 +353,7 @@ class text_saisie(texte) :
       keys=pygame.key.get_pressed()
       for key in range(len(keys)):
         if keys[key] and not self.use_input[key]:
+          print(chr(key))
           #print(ord("."))
           self.use_input[key] = True
           if key == 8:
@@ -361,10 +363,6 @@ class text_saisie(texte) :
             self.clear_text()
             self.entre = True
           elif len(self.key_limit) == 2 and (key >= self.key_limit[0] and key <= self.key_limit[1]):
-            if key == 59 :
-              key = 46
-            self.add_text(chr(key))
-          elif key in self.key_limit:
             if key == 59 :
               key = 46
             self.add_text(chr(key))
