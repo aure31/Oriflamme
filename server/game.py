@@ -66,6 +66,7 @@ class Game:
         for p in self.players:
             print("A "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
+            print("Choisiez la position entre -2 et -1")
             self.add_card(p.id,card,slot)
         
         self.end_round()
@@ -90,7 +91,7 @@ class Game:
         if self.tour == 6:
             self.end_partie()
         else:
-            print("fin du tour "+str(self.tour))
+            print("----- Fin du tour " +str(self.tour) + "-----")
             self.placement()
 
     def end_partie(self):
