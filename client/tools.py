@@ -332,52 +332,47 @@ class number_selector(button_template):
   def get_value(self) -> int:
     return self.number
       
-class text_saisie(texte) :
-    def __init__(self,x,y,scale,color=(0,0,0),key_limit=(0,512)):
-        texte.__init__(self,[""],x,y,scale,color)
-        self.key_limit = key_limit
-        self.text_font = pygame.font.SysFont('comicsans',self.scale)
-        self.use_input = [pygame.key.get_pressed()[i] for i in range(512)]
-        self.entre = False
-        self.answer = ""
-      
-    def affiche(self,WIN):
-      texte.affiche(self,WIN)
-      self.get_key()
-      
-    def get_key(self) -> str:
-      keys=pygame.key.get_pressed()
-      for key in range(len(keys)):
-        if keys[key] and not self.use_input[key]:
-          print(chr(key))
-          #print(ord("."))
-          self.use_input[key] = True
-          if key == 8:
-            self.delete_text()
-          elif key == 13:
-            self.answer = self.text[0]
-            self.clear_text()
-            self.entre = True
-          elif len(self.key_limit) == 2 and (key >= self.key_limit[0] and key <= self.key_limit[1]):
-            if key == 59 :
-              key = 46
-            self.add_text(chr(key))
-              
-        if self.use_input[key] and not keys[key]:
-          self.use_input[key] = False
-          
-    def add_text(self,letter):
-      self.text[0] += letter
-      #print(self.text)
-      
-    def delete_text(self):
-      self.text[0] = self.text[0][:-1]
-      
-    def clear_text(self):
-      self.text[0] = ""
-    
-    def get_text(self):
-      return self.text[0]
-    
-    def get_answer(self):
-      return self.answer
+class TextInput:
+    def __init__(self, x, y, screen):
+        self.rect = pygame.Rect(x, y, 500, 40)  # Taille fixe de 500x300
+        self.bg_color = (255, 255, 255)  # Couleur de fond blanche
+        self.border_color = (200, 200, 200)  # Couleur de bordure grise
+        self.text = ''
+        self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
+        self.font = pygame.font.Font(None, 32)  # Police par défaut
+        self.screen = screen
+        self.active = False  # Indique si le champ est actif
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                # Si le champ est déjà actif, on ne change pas son état
+                self.active = True
+            else:
+                self.active = False  # Désactiver si on clique ailleurs
+
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:  # Valider avec la touche Entrée
+                    print(f'Texte validé : {self.text}')
+                    self.last_valid_text = self.text  # Stocker le dernier texte validé
+                    self.clear()  # Vider le champ de texte
+                elif event.key == pygame.K_BACKSPACE:  # Supprimer le dernier caractère
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode  # Ajouter le caractère
+
+    def clear(self):
+        self.text = ''  # Vider le champ de texte
+
+    def get_last_valid_text(self):
+        return self.last_valid_text  # Retourner le dernier texte validé
+
+    def draw(self):
+        # Dessiner le fond de la barre d'entrée
+        pygame.draw.rect(self.screen, self.bg_color, self.rect)
+        # Dessiner la bordure
+        pygame.draw.rect(self.screen, self.border_color, self.rect, 2)
+        # Dessiner le texte
+        text_surface = self.font.render(self.text, True, (0, 0, 0))  # Texte noir
+        self.screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
