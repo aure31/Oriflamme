@@ -3,7 +3,8 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
-from server.game import Game
+#from server.game import Game
+import tools as t
 
 p.init()
 p.mixer.init()
@@ -29,6 +30,7 @@ quitter = p.image.load("client/assets/boutons/quit.png")
 quitter_touched = p.image.load("client/assets/boutons/quit_touched.png")
 back = p.image.load("client/assets/boutons/back.png")
 back_touched = p.image.load("client/assets/boutons/back_touched.png")
+text_enter = t.text_saisie(100, 100, 1)
 
 def main():
     is_running = True
@@ -39,7 +41,7 @@ def main():
     sett = False
     cred = False
     playing = False
-    game = Game()
+    #game = Game()
     clock = p.time.Clock()
     while is_running:
         window.blit(background_image, (0, 0))
@@ -84,8 +86,6 @@ def main():
         
         if lobby_2:
             window.blit(back, (25, 25))
-            ip = input("Entrez l'adresse ip du serveur")
-            port = input("entrez le port du serveur")
             if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
                 window.blit(back_touched, (25, 25))
                 if p.mouse.get_pressed()[0]:

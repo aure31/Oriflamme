@@ -2,10 +2,8 @@ import pygame
 import math
 import os
 WHITE = (255,255,255)
-
+pygame.init()
 pygame.mixer.init()
-click_sound = pygame.mixer.Sound(os.path.join('Assets', 'click2.ogg'))
-click_sound.set_volume(0.8)
 #all class for graphique elements
 
 #class for put somme text in the screen
@@ -109,7 +107,6 @@ class cir_button(button_template):
   def click(self) -> bool:
     if self.mouseHover() and pygame.mouse.get_pressed()[0] and self.can_click:
       button_template.can_click = False
-      click_sound.play()
       return True
     return False
     
@@ -153,7 +150,6 @@ class rect_button(button_template):
       if self.mouseHover() and pygame.mouse.get_pressed()[0] and self.can_click:
         rect_button.can_click = False
         self.is_click = True
-        click_sound.play()
         return True
       else : return False
       

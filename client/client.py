@@ -1,5 +1,8 @@
 import socket
 import time
+import pygame as p
+
+p.init()
 
 class Network:
     def __init__(self):
@@ -23,8 +26,6 @@ class Network:
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
-
-
 
 n = Network()
 print(n.send("Hello"))
