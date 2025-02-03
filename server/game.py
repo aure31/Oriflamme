@@ -90,7 +90,7 @@ class Game:
         if self.tour == 6:
             self.end_partie()
         else:
-            print("fin du tour "+str(self.tour))
+            print("----- Fin du tour " +str(self.tour) + "-----")
             self.placement()
 
     def end_partie(self):

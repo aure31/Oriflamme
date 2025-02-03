@@ -23,7 +23,7 @@ class Archer(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        ajdCard = eval(Player.ask("choisir entre 1 et -1 (debut/fin)"))
+        ajdCard = eval(Player.ask(str(Carte.type) + "Choisir entre 1 et -1 (debut/fin)"))
         Game.discard(ajdCard)
 
     
@@ -34,7 +34,7 @@ class Soldat(Types):
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
         pos = Carte.get_pos(Game)
-        index = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)"))
+        index = eval(Player.ask(str(Carte.type) + "choisir entre -1 et 1 (gauche/droite)"))
         Game.discard(pos+index)
     
 class Espion(Types):
@@ -43,7 +43,7 @@ class Espion(Types):
 
     def capacite(self,Player,Game, Carte):
         file = Game.get_top_cards()
-        ajdCard = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)")) 
+        ajdCard = eval(Player.ask(str(Carte.type) + "Choisir entre -1 et 1 (gauche/droite)")) 
         Game.getPlayer(ajdCard.idPlayer).ptsinflu -= 1
         Player.ptsinflu += 1
            
@@ -79,7 +79,7 @@ class Changeforme(Types):
         elif(not leftCard.shown and rightCard.shown): 
             selCard = rightCard
         else:
-            index = eval(Player.ask("choisir entre -1 et 1 (gauche/droite)"))
+            index = eval(Player.ask(str(Carte.type) + "Choisir entre -1 et 1 (gauche/droite)"))
             selCard = file[pos+index] 
         if(selCard.type != 4): selCard.capacite()
     
