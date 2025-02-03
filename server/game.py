@@ -1,5 +1,5 @@
-from server.joueur import Joueur
-from server.cartes import Carte,full_deck,colors
+from joueur import Joueur
+from cartes import Carte,full_deck,colors
 import random
 import time
 
@@ -107,6 +107,7 @@ class Game:
     
 
     def discard(self, cardPos : int):
+        print(cardPos)
         sous_lst=len(self.file_influence[cardPos])
         card = None
         if sous_lst == 1:

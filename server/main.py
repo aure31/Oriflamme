@@ -1,5 +1,5 @@
 
-from server.game import Game
+from game import Game
 import time
  
 
