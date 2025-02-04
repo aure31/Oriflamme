@@ -1,11 +1,6 @@
 import pygame
 import socket
 
-pygame.init()
-pygame.mixer.init()
-
-import pygame
-
 class TextInput:
     def __init__(self):
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
@@ -55,6 +50,8 @@ class TextInput:
         surface.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
 
 class Bouton:
+    pressed = False
+
     def __init__(self, image1, image2):
         self.image1 = pygame.image.load(image1)
         self.image2 = pygame.image.load(image2)
@@ -69,10 +66,17 @@ class Bouton:
 
     def est_clique(self):
         from main import click
-        retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos())
+        retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()) and not Bouton.pressed 
+        Bouton.presse()
         if retour:
             click.play()
         return retour
+    
+    def presse():
+        if not pygame.mouse.get_pressed()[0]:
+            Bouton.pressed = False
+        else : 
+            Bouton.pressed = True 
     
 class Texte:
     def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, taille=32):

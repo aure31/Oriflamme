@@ -116,15 +116,12 @@ def main():
         if menu == Menu.ATTENTE:
             back.affiche(window, 25, 25)
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
 
         if menu == Menu.PARAMETRE:
             back.affiche(window, 25, 25) 
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
-
         if menu == Menu.JEU:
             pass
 
