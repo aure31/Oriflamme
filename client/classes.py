@@ -68,7 +68,11 @@ class Bouton:
             surface.blit(self.image1, self.rect.topleft)
 
     def est_clique(self):
-        return pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos())
+        from main import click
+        retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos())
+        if retour:
+            click.play()
+        return retour
     
 class Texte:
     def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, taille=32):
