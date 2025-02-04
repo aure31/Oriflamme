@@ -67,15 +67,16 @@ class Bouton:
     def est_clique(self):
         from main import click
         retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()) and not Bouton.pressed 
-        Bouton.presse()
+        Bouton.presse(retour)
         if retour:
             click.play()
         return retour
     
-    def presse():
+    def presse(retour):
+        print(Bouton.pressed)
         if not pygame.mouse.get_pressed()[0]:
             Bouton.pressed = False
-        else : 
+        elif retour : 
             Bouton.pressed = True 
     
 class Texte:

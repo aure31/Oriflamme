@@ -15,7 +15,7 @@ click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
 
-window = p.display.set_mode((0,0), p.FULLSCREEN)
+window = p.display.set_mode((1600,900))
 screen_width, screen_height = window.get_size()
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
