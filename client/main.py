@@ -69,19 +69,19 @@ def main():
             credits.affiche(window, 1000, 550)
             quitter.affiche(window, 1000, 700)
             if join.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.REJOINDRE
             if new_game.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.SERVER
             if settings.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.PARAMETRE
             if credits.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.CREDIT
             if quitter.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 is_running = False
         
         if menu == Menu.REJOINDRE:
@@ -94,10 +94,10 @@ def main():
             window.blit(fleche, (790, 295))
             window.blit(fleche, (790, 495))
             if back.est_clique():
-                click.play()  # Play click sound
+                click.play()
                 menu = Menu.ACUEIL
             if join.est_clique():
-                click.play()  # Play click sound
+                click.play()
                 menu = Menu.ATTENTE
         
         if menu == Menu.SERVER:
@@ -107,10 +107,10 @@ def main():
             ask_port_create.draw(900, 300, window)
             window.blit(fleche, (790, 295))
             if back.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.ACUEIL
             if create.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 frefr = t.Texte(ask_port_create.get_last_valid_text())
                 if len(ask_port_create.get_last_valid_text()) == 5:
                     frefr.affiche(window, 900, 500)
@@ -118,13 +118,13 @@ def main():
         if menu == Menu.ATTENTE:
             back.affiche(window, 25, 25)
             if back.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.ACUEIL
 
         if menu == Menu.PARAMETRE:
             back.affiche(window, 25, 25) 
             if back.est_clique():
-                click.play()  # Play click sound
+                click.play()   
                 menu = Menu.ACUEIL
 
         if menu == Menu.JEU:
