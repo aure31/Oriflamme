@@ -1,11 +1,6 @@
 import pygame
 import socket
 
-pygame.init()
-pygame.mixer.init()
-
-import pygame
-
 class TextInput:
     def __init__(self):
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche

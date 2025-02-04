@@ -107,10 +107,8 @@ def main():
             ask_port_create.draw(900, 300, window)
             window.blit(fleche, (790, 295))
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
             if create.est_clique():
-                
                 frefr = t.Texte(ask_port_create.get_last_valid_text())
                 if len(ask_port_create.get_last_valid_text()) == 5:
                     frefr.affiche(window, 900, 500)
@@ -118,15 +116,12 @@ def main():
         if menu == Menu.ATTENTE:
             back.affiche(window, 25, 25)
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
 
         if menu == Menu.PARAMETRE:
             back.affiche(window, 25, 25) 
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
-
         if menu == Menu.JEU:
             pass
 
