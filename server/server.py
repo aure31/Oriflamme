@@ -11,20 +11,29 @@ def get_ip_address():
         s.close()
     return ip_address
 
-server = get_ip_address()
-port = 5555
+def start_server():
+    server = get_ip_address()
+    port = 5555
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-try:
-    s.bind((server, port))
-except socket.error as e:
-    str(e)
+    try:
+        s.bind((server, port))
+    except socket.error as e:
+        str(e)
 
-s.listen(2)
-print("En attente de connexion...")
+    s.listen(2)
+    print("En attente de connexion...")
 
-def threaded_client(conn):
+    server_alive = True
+
+    while server_alive:
+        conn, addr = s.accept()
+        print("Connecté à : ", addr)
+
+        start_new_thread(threaded_client, (conn,))
+
+def threaded_client(conn:socket.socket):
     conn.send(str.encode("Connecté"))
     reply = ""
     while True:
@@ -46,8 +55,3 @@ def threaded_client(conn):
     print("Connexion perdue")
     conn.close()
 
-while True:
-    conn, addr = s.accept()
-    print("Connecté à : ", addr)
-
-    start_new_thread(threaded_client, (conn,))
