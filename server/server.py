@@ -2,7 +2,16 @@ import socket
 from _thread import *
 import sys 
 
-server = "192.168.139.238"
+def get_ip_address():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip_address = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip_address
+
+server = get_ip_address()
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

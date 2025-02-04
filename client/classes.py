@@ -4,6 +4,8 @@ import socket
 pygame.init()
 pygame.mixer.init()
 
+import pygame
+
 class TextInput:
     def __init__(self):
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
@@ -32,12 +34,14 @@ class TextInput:
                     self.active = False  # Désactiver le champ de texte
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
+                    self.last_valid_text = self.text  # Mettre à jour le dernier texte validé après suppression
                 else:
                     self.text += event.unicode
                     self.last_valid_text = self.text  # Mettre à jour le dernier texte validé
 
     def clear(self):
         self.text = ''
+        self.last_valid_text = ''  # Réinitialiser le dernier texte validé
 
     def get_last_valid_text(self):
         return self.last_valid_text
@@ -57,23 +61,21 @@ class Bouton:
         self.rect = self.image1.get_rect()  # Initialiser le rectangle sans position
 
     def affiche(self, surface, x, y):
-        self.rect.topleft = (x, y)  # Mettre à jour la position du bouton
-        # Vérifie si le curseur est sur le bouton
+        self.rect.topleft = (x, y)
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             surface.blit(self.image2, self.rect.topleft)
         else:
             surface.blit(self.image1, self.rect.topleft)
 
     def est_clique(self):
-        # Vérifie si le bouton est cliqué
         return pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos())
     
 class Texte:
-    def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, police="Arial", taille=32):
+    def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, taille=32):
         self.texte = texte
         self.couleur = couleur
-        self.bg_color = bg_color  # Couleur de fond par défaut à None
-        self.font = pygame.font.Font(police, taille)  # Utiliser Arial par défaut
+        self.bg_color = bg_color
+        self.font = pygame.font.Font("client/assets/Algerian.ttf", taille)
 
     def affiche(self, surface, x, y):
         # Rendre le texte

@@ -4,14 +4,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
 import enum
-#from server.game import Game
-import client.classes as t
+import classes as t
 
 p.init()
 p.mixer.init()
 p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
 p.mixer.music.set_volume(0.3)
 p.mixer.music.play(-1)
+click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
 
@@ -25,11 +25,14 @@ settings = t.Bouton("client/assets/boutons/settings.png", "client/assets/boutons
 credits = t.Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
 quitter = t.Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
 back = t.Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
+launch = t.Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch_touched.png")
+create = t.Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
 ask_port_create = t.TextInput() # (900, 200)
-ask_ip_join = t.TextInput() # (900, 300)
-ask_port_join = t.TextInput() # (900, 500)
-demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
-demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
+ask_ip_join = t.TextInput()
+ask_port_join = t.TextInput()
+demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45)
+demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
+nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
 fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
@@ -45,7 +48,6 @@ def main():
     is_running = True
     menu = Menu.ACUEIL
     playing = False
-    #game = Game()
     clock = p.time.Clock()
     while is_running:
         window.blit(background_image, (0, 0))
@@ -67,14 +69,19 @@ def main():
             credits.affiche(window, 1000, 550)
             quitter.affiche(window, 1000, 700)
             if join.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.REJOINDRE
             if new_game.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.SERVER
             if settings.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.PARAMETRE
             if credits.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.CREDIT
             if quitter.est_clique():
+                click.play()  # Play click sound
                 is_running = False
         
         if menu == Menu.REJOINDRE:
@@ -87,24 +94,37 @@ def main():
             window.blit(fleche, (790, 295))
             window.blit(fleche, (790, 495))
             if back.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.ACUEIL
             if join.est_clique():
-                #serveur = t.Network(ask_ip_join.get_last_valid_text(), int(ask_port_join.get_last_valid_text()))
+                click.play()  # Play click sound
                 menu = Menu.ATTENTE
         
         if menu == Menu.SERVER:
             back.affiche(window, 25, 25)
+            create.affiche(window, 950, 400)
+            nouv_port.affiche(window, 790, 240)
+            ask_port_create.draw(900, 300, window)
+            window.blit(fleche, (790, 295))
             if back.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.ACUEIL
+            if create.est_clique():
+                click.play()  # Play click sound
+                frefr = t.Texte(ask_port_create.get_last_valid_text())
+                if len(ask_port_create.get_last_valid_text()) == 5:
+                    frefr.affiche(window, 900, 500)
         
         if menu == Menu.ATTENTE:
             back.affiche(window, 25, 25)
             if back.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.ACUEIL
 
         if menu == Menu.PARAMETRE:
             back.affiche(window, 25, 25) 
             if back.est_clique():
+                click.play()  # Play click sound
                 menu = Menu.ACUEIL
 
         if menu == Menu.JEU:
