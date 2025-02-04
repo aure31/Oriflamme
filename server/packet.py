@@ -1,7 +1,7 @@
 import socket
 
-client_bound # server -> client
-server_bound # client -> server
+#client_bound server -> client
+#server_bound client -> server
 class packet:
     def send(self,conn:socket.socket):
         pass
