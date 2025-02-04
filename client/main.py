@@ -5,6 +5,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pygame as p
 import enum
 import classes as t
+import server.server as s
+
+
 
 p.init()
 p.mixer.init()

@@ -55,3 +55,7 @@ def threaded_client(conn:socket.socket):
     print("Connexion perdue")
     conn.close()
 
+
+def test():
+    print("test")
+

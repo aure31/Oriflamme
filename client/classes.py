@@ -73,7 +73,6 @@ class Bouton:
         return retour
     
     def presse(retour):
-        print(Bouton.pressed)
         if not pygame.mouse.get_pressed()[0]:
             Bouton.pressed = False
         elif retour : 
