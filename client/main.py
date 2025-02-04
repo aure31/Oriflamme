@@ -4,9 +4,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
 import enum
-import tools
 #from server.game import Game
-import tools as t
+import client.classes as t
 
 p.init()
 p.mixer.init()
@@ -26,9 +25,9 @@ settings = t.Bouton("client/assets/boutons/settings.png", "client/assets/boutons
 credits = t.Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
 quitter = t.Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
 back = t.Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
-ask_port_create = t.TextInput(900, 200, window)
-ask_ip_join = t.TextInput(900, 300, window)
-ask_port_join = t.TextInput(900, 500, window)
+ask_port_create = t.TextInput() # (900, 200)
+ask_ip_join = t.TextInput() # (900, 300)
+ask_port_join = t.TextInput() # (900, 500)
 demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
 demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
 fleche = p.image.load("client/assets/sens.png")
@@ -83,13 +82,14 @@ def main():
             back.affiche(window, 25, 25)
             demande_ip.affiche(window, 800, 240)
             demande_port.affiche(window, 800, 440)
-            ask_ip_join.draw()
-            ask_port_join.draw()
+            ask_ip_join.draw(900, 300, window)
+            ask_port_join.draw(900, 500, window)
             window.blit(fleche, (790, 295))
             window.blit(fleche, (790, 495))
             if back.est_clique():
                 menu = Menu.ACUEIL
             if join.est_clique():
+                #serveur = t.Network(ask_ip_join.get_last_valid_text(), int(ask_port_join.get_last_valid_text()))
                 menu = Menu.ATTENTE
         
         if menu == Menu.SERVER:

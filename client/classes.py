@@ -1,22 +1,21 @@
 import pygame
-import math
-import os
-WHITE = (255,255,255)
+import socket
+
 pygame.init()
 pygame.mixer.init()
-#all class for graphique elements
-      
+
 class TextInput:
-    def __init__(self, x, y, screen):
-        self.rect = pygame.Rect(x, y, 500, 40)  # Taille fixe de 500x40
+    def __init__(self):
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
         self.border_color = (200, 200, 200)  # Couleur de bordure grise
         self.active_border_color = (0, 0, 0)  # Couleur de bordure noire quand active
         self.text = ''
         self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
         self.font = pygame.font.Font(None, 32)
-        self.screen = screen
         self.active = False
+        self.width = 500
+        self.height = 40
+        self.rect = pygame.Rect(0, 0, self.width, self.height)  # Initialiser self.rect
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -35,6 +34,7 @@ class TextInput:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
+                    self.last_valid_text = self.text  # Mettre à jour le dernier texte validé
 
     def clear(self):
         self.text = ''
@@ -42,13 +42,13 @@ class TextInput:
     def get_last_valid_text(self):
         return self.last_valid_text
 
-    def draw(self):
-        pygame.draw.rect(self.screen, self.bg_color, self.rect)
-        # Change la couleur de la bordure en fonction de l'état actif
+    def draw(self, x, y, surface):
+        self.rect.topleft = (x, y)  # Mettre à jour la position de self.rect
+        pygame.draw.rect(surface, self.bg_color, self.rect)
         border_color = self.active_border_color if self.active else self.border_color
-        pygame.draw.rect(self.screen, border_color, self.rect, 2)
+        pygame.draw.rect(surface, border_color, self.rect, 2)
         text_surface = self.font.render(self.text, True, (0, 0, 0))
-        self.screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
+        surface.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
 
 class Bouton:
     def __init__(self, image1, image2):
@@ -73,7 +73,7 @@ class Texte:
         self.texte = texte
         self.couleur = couleur
         self.bg_color = bg_color  # Couleur de fond par défaut à None
-        self.font = pygame.font.Font(pygame.font.match_font(police), taille)  # Utiliser Arial par défaut
+        self.font = pygame.font.Font(police, taille)  # Utiliser Arial par défaut
 
     def affiche(self, surface, x, y):
         # Rendre le texte
@@ -81,50 +81,25 @@ class Texte:
         # Afficher le texte à la position (x, y)
         surface.blit(text_surface, (x, y))
 
-#class TextInput:
-#    def __init__(self, screen):
-#        self.bg_color = (255, 255, 255)  # Couleur de fond blanche
-#        self.border_color = (200, 200, 200)  # Couleur de bordure grise
-#        self.active_border_color = (0, 0, 0)  # Couleur de bordure noire quand active
-#        self.text = ''
-#        self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
-#        self.font = pygame.font.Font(None, 32)
-#        self.screen = screen
-#        self.active = False
-#        self.width = 500
-#        self.height = 40
+class Network:
+    def __init__(self, ip, port):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server = ip
+        self.port = port
+        self.addr = (self.server, self.port)
+        self.id = self.connect()
+        print(self.id)
 
-#    def handle_event(self, event):
-#        if event.type == pygame.MOUSEBUTTONDOWN:
-#            if self.rect.collidepoint(event.pos):
-#                self.active = True
-#            else:
-#                self.active = False
+    def connect(self):
+        try:
+            self.client.connect(self.addr)
+            return self.client.recv(2048).decode()
+        except:
+            pass
 
-#        if event.type == pygame.KEYDOWN:
-#            if self.active:
-#                if event.key == pygame.K_RETURN:
-#                    print(f'Texte validé : {self.text}')
-#                    self.last_valid_text = self.text
-#                    self.active = False  # Désactiver le champ de texte
-#                elif event.key == pygame.K_BACKSPACE:
-#                    self.text = self.text[:-1]
-#                else:
-#                    self.text += event.unicode
-
-#    def clear(self):
-#        self.text = ''
-
-#    def get_last_valid_text(self):
-#        return self.last_valid_text
-
-#    def draw(self, x, y):
-        # Met à jour la position du rectangle
-#        self.rect = pygame.Rect(x, y, self.width, self.height)
-        
-#        pygame.draw.rect(self.screen, self.bg_color, self.rect)
-        # Change la couleur de la bordure en fonction de l'état actif
-#        border_color = self.active_border_color if self.active else self.border_color
-#        pygame.draw.rect(self.screen, border_color, self.rect, 2)
-#        text_surface = self.font.render(self.text, True, (0, 0, 0))
-#        self.screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
+    def send(self, data):
+        try:
+            self.client.send(str.encode(data))
+            return self.client.recv(2048).decode()
+        except socket.error as e:
+            print(e)

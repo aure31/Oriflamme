@@ -5,10 +5,10 @@ import pygame as p
 p.init()
 
 class Network:
-    def __init__(self):
+    def __init__(self, ip, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "192.168.139.238"
-        self.port = 5555
+        self.server = ip
+        self.port = port
         self.addr = (self.server, self.port)
         self.id = self.connect()
         print(self.id)
@@ -26,8 +26,3 @@ class Network:
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
-
-n = Network()
-print(n.send("Hello"))
-time.sleep(2)
-print(n.send("Working"))
