@@ -32,8 +32,8 @@ class Game:
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("game started")
-        
         self.placement()
+        
             
 
     def add_card(self,idPlayer:int,card:Carte,slot:int):
@@ -66,7 +66,6 @@ class Game:
         for p in self.players:
             print("A "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
-            print("Choisiez la position entre -2 et -1")
             self.add_card(p.id,card,slot)
         
         self.end_round()

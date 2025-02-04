@@ -21,7 +21,7 @@ class Joueur:
         index = eval(input("Choisissez une carte parmis :\n"+cards+"\nChoix : "))
         carte= self.cartes.pop(index)
         cards : list[str] =[str(e) for e in game.get_top_cards()]
-        slot = eval(input("Plateau : \n"+"\n".join(cards)+"\n"))
+        slot = eval(input("Plateau : \n"+"\n".join(cards)+"\n" + "Choisissez la position entre -2 et -1 (Gauche / Droite)"+ "\n"))
         return carte,slot
 
     
