@@ -20,35 +20,31 @@ window = p.display.set_mode((0,0), p.FULLSCREEN)
 screen_width, screen_height = window.get_size()
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
-join = p.image.load("client/assets/boutons/join.png")
-join_touched = p.image.load("client/assets/boutons/join_touched.png")
-new_game = p.image.load("client/assets/boutons/new_game.png")
-new_game_touched = p.image.load("client/assets/boutons/new_game_touched.png")
-settings = p.image.load("client/assets/boutons/settings.png")
-settings_touched = p.image.load("client/assets/boutons/settings_touched.png")
-credits = p.image.load("client/assets/boutons/credits.png")
-credits_touched = p.image.load("client/assets/boutons/credits_touched.png")
-quitter = p.image.load("client/assets/boutons/quit.png")
-quitter_touched = p.image.load("client/assets/boutons/quit_touched.png")
-back = p.image.load("client/assets/boutons/back.png")
-back_touched = p.image.load("client/assets/boutons/back_touched.png")
-entre_txt = tools.text_saisie(screen_width/2,screen_height/2,2)
-
+join = t.Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
+new_game = t.Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
+settings = t.Bouton("client/assets/boutons/settings.png", "client/assets/boutons/settings_touched.png")
+credits = t.Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
+quitter = t.Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
+back = t.Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
+ask_port_create = t.TextInput(900, 200, window)
+ask_ip_join = t.TextInput(900, 300, window)
+ask_port_join = t.TextInput(900, 500, window)
+demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
+demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, "client/assets/Algerian.ttf", 45)
+fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
     ACUEIL = 0
-    REJOINDRE =1
+    REJOINDRE = 1
     SERVER = 2
     ATTENTE = 3
-    PARAMETRE =4
+    PARAMETRE = 4
     CREDIT = 5
     JEU = 6
 
-text_enter = t.text_saisie(100, 100, 1)
-
 def main():
     is_running = True
-    menu = "main"
+    menu = Menu.ACUEIL
     playing = False
     #game = Game()
     clock = p.time.Clock()
@@ -61,63 +57,55 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     is_running = False
+            ask_ip_join.handle_event(event)
+            ask_port_join.handle_event(event)
+            ask_port_create.handle_event(event)
         
         if menu == Menu.ACUEIL:
-            window.blit(join, (1000, 100))
-            window.blit(new_game, (1000, 250))
-            window.blit(settings, (1000, 400))
-            window.blit(credits, (1000, 550))
-            window.blit(quitter, (1000, 700))
-            if join.get_rect(topleft=(1000, 100)).collidepoint(mouse_pos):
-                window.blit(join_touched, (1000, 100))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.REJOINDRE
-            if new_game.get_rect(topleft=(1000, 250)).collidepoint(mouse_pos):
-                window.blit(new_game_touched, (1000, 250))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.SERVER
-            if settings.get_rect(topleft=(1000, 400)).collidepoint(mouse_pos):
-                window.blit(settings_touched, (1000, 400))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.PARAMETRE
-            if credits.get_rect(topleft=(1000, 550)).collidepoint(mouse_pos):
-                window.blit(credits_touched, (1000, 550))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.CREDIT
-            if quitter.get_rect(topleft=(1000, 700)).collidepoint(mouse_pos):
-                window.blit(quitter_touched, (1000, 700))
-                if p.mouse.get_pressed()[0]:
-                    is_running = False
+            join.affiche(window, 1000, 100)
+            new_game.affiche(window, 1000, 250)
+            settings.affiche(window, 1000, 400)
+            credits.affiche(window, 1000, 550)
+            quitter.affiche(window, 1000, 700)
+            if join.est_clique():
+                menu = Menu.REJOINDRE
+            if new_game.est_clique():
+                menu = Menu.SERVER
+            if settings.est_clique():
+                menu = Menu.PARAMETRE
+            if credits.est_clique():
+                menu = Menu.CREDIT
+            if quitter.est_clique():
+                is_running = False
         
         if menu == Menu.REJOINDRE:
-            window.blit(back, (25, 25))
-            
-            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
-                window.blit(back_touched, (25, 25))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.ACUEIL
+            join.affiche(window, 950, 600)
+            back.affiche(window, 25, 25)
+            demande_ip.affiche(window, 800, 240)
+            demande_port.affiche(window, 800, 440)
+            ask_ip_join.draw()
+            ask_port_join.draw()
+            window.blit(fleche, (790, 295))
+            window.blit(fleche, (790, 495))
+            if back.est_clique():
+                menu = Menu.ACUEIL
+            if join.est_clique():
+                menu = Menu.ATTENTE
         
         if menu == Menu.SERVER:
-            window.blit(back, (25, 25))
-
-            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
-                window.blit(back_touched, (25, 25))
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.ACUEIL
+            back.affiche(window, 25, 25)
+            if back.est_clique():
+                menu = Menu.ACUEIL
         
         if menu == Menu.ATTENTE:
-            window.blit(back, (25, 25)) 
-            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos):
-                window.blit(back_touched, (25, 25)) 
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.ACUEIL
+            back.affiche(window, 25, 25)
+            if back.est_clique():
+                menu = Menu.ACUEIL
 
         if menu == Menu.PARAMETRE:
-            window.blit(back, (25, 25)) 
-            if back.get_rect(topleft=(25, 25)).collidepoint(mouse_pos): 
-                window.blit(back_touched, (25, 25)) 
-                if p.mouse.get_pressed()[0]:
-                    menu = Menu.ACUEIL
+            back.affiche(window, 25, 25) 
+            if back.est_clique():
+                menu = Menu.ACUEIL
 
         if menu == Menu.JEU:
             pass
