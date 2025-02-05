@@ -29,10 +29,11 @@ launch = t.Bouton("client/assets/boutons/launch.png", "client/assets/boutons/lau
 create = t.Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
 ask_ip_join = t.TextInput()
 ask_port_join = t.TextInput()
-demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45)
-demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
-nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
+demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
+demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
+nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 entry_error = t.Texte("Les infos entrées ne sont pas valides", (0,0,0), None, 30)
+server_error = t.Texte("Impossible de trouver ce serveur", (0,0,0), None, 30)
 fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
@@ -46,7 +47,7 @@ class Menu(enum.Enum):
 
 def main():
     is_running = True
-    error = False
+    error = None
     menu = Menu.ACUEIL
     playing = False
     clock = p.time.Clock()
@@ -92,12 +93,14 @@ def main():
                 menu = Menu.ACUEIL
             if join.est_clique():
                 if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
-                    error = False
-                    menu = Menu.ATTENTE
+                    error = "server"
+                    #menu = Menu.ATTENTE
                 else:
-                    error = True
-            if error:
-                entry_error.affiche(window, 850, 750)
+                    error = "values"
+            if error == "values":
+                entry_error.affiche(window, 900, 750)
+            if error == "server":
+                server_error.affiche(window, 950, 750)
         
         if menu == Menu.SERVER:
             menu = Menu.ATTENTE

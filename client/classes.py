@@ -81,11 +81,11 @@ class Bouton:
             Bouton.pressed = True 
     
 class Texte:
-    def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, taille=32):
+    def __init__(self, texte, couleur=(0, 0, 0), bg_color=None, taille=32, police = "client/assets/arial.ttf"):
         self.texte = texte
         self.couleur = couleur
         self.bg_color = bg_color
-        self.font = pygame.font.Font("client/assets/Algerian.ttf", taille)
+        self.font = pygame.font.Font(police, taille)
 
     def affiche(self, surface, x, y):
         # Rendre le texte
