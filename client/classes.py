@@ -102,7 +102,6 @@ class Network:
         self.port = port
         self.addr = (self.server, self.port)
         self.id = self.connect()
-        print(self.id)
 
     def connect(self):
         print("Connexion à "+self.server)

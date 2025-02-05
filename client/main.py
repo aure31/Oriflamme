@@ -94,17 +94,19 @@ def main():
                         error = 'pseudo'
                     else:
                         error = None
-                        joueur = j.Joueur(name.get_text, None, None)
+                        joueur = j.Joueur(name.get_text(), None, None)
                         menu = Menu.REJOINDRE
                 if new_game.est_clique():
                     if name.get_text() == "":
                         error = 'pseudo'
                     else:
                         error = None
+                        joueur = j.Joueur(name.get_text(), None, None)
                         chat_.envoyer("/Serveur ouvert")
-                        chat_.envoyer("@"+name.get_text()+" a rejoint la partie")
-                        menu = Menu.ATTENTE
+                        chat_.envoyer("/Vous avez rejoint la partie")
                         start_new_thread(s.start_server,())
+                        reseau = Network(s.get_ip_address(), 5555)
+                        menu = Menu.ATTENTE
                 if settings.est_clique():
                     error = None
                     menu = Menu.PARAMETRE
@@ -130,6 +132,8 @@ def main():
                         try:
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                             menu = Menu.ATTENTE
+                            reseau.send("@"+joueur.nom+" a rejoint la partie")
+                            chat_.envoyer("/Vous avez rejoint la partie")
                         except:
                             error = "server"
                     else:
@@ -142,6 +146,8 @@ def main():
                 back.affiche(window, 25, 25)
                 if back.est_clique():
                     menu = Menu.ACCUEIL
+                if reseau.send("123"):
+                    chat_.envoyer("nouveau message")
                 
 
             case Menu.PARAMETRE:

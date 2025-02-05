@@ -49,8 +49,6 @@ def threaded_client(conn:socket.socket):
                 print("Déconnecté")
                 break
             else:
-                print("Reçu : ", reply)
-                print("Envoi : ", reply)
                 conn.sendall(str.encode(reply))
         except:
             break
