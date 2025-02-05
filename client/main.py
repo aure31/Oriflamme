@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
 import enum
-import classes as t
+from classes import *
 import server.server as s
 from _thread import *
 
@@ -20,24 +20,24 @@ screen_width, screen_height = window.get_size()
 r = screen_width//1600
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
-join = t.Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
-new_game = t.Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
-settings = t.Bouton("client/assets/boutons/settings.png", "client/assets/boutons/settings_touched.png")
-credits = t.Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
-quitter = t.Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
-back = t.Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
-launch = t.Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch_touched.png")
-create = t.Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
-ask_ip_join = t.TextInput()
-ask_port_join = t.TextInput()
-demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
-demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
-nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
-entry_error = t.Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
-server_error = t.Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
+join =Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
+new_game =Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
+settings =Bouton("client/assets/boutons/settings.png", "client/assets/boutons/settings_touched.png")
+credits =Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
+quitter =Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
+back =Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
+launch =Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch_touched.png")
+create =Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
+ask_ip_join =TextInput()
+ask_port_join =TextInput()
+demande_ip =Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
+demande_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
+nouv_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
+entry_error =Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
+server_error =Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 fleche = p.image.load("client/assets/sens.png")
-chat_ = t.Chat()
-entree_chat = t.TextInput()
+chat_ =Chat()
+entree_chat =TextInput()
 
 class Menu(enum.Enum):
     ACUEIL = 0
@@ -105,12 +105,10 @@ def main():
                 if back.est_clique():
                     menu = Menu.ACUEIL
                 if join.est_clique():
-                    if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
-                        reseau = t.Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                        if reseau.connect() == 'Connecté':
-                            menu = Menu.ATTENTE
-                        else:
-                            error = "server"
+                    if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
+                        reseau =Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
+                        reseau.connect()
+                        menu = Menu.ATTENTE
                     else:
                         error = "values"
                 if error == "values":
