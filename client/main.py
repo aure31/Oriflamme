@@ -11,13 +11,9 @@ import server.server as s
 
 p.init()
 p.mixer.init()
-p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
-p.mixer.music.set_volume(0.3)
-p.mixer.music.play(-1)
 click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
-
 window = p.display.set_mode((0,0), p.FULLSCREEN)
 screen_width, screen_height = window.get_size()
 r = screen_width//1600
@@ -31,12 +27,12 @@ quitter = t.Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit
 back = t.Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
 launch = t.Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch_touched.png")
 create = t.Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
-ask_port_create = t.TextInput() # (900, 200)
 ask_ip_join = t.TextInput()
 ask_port_join = t.TextInput()
 demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45)
 demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
 nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45)
+entry_error = t.Texte("Les infos entrées ne sont pas valides", (0,0,0), None, 30)
 fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
@@ -50,6 +46,7 @@ class Menu(enum.Enum):
 
 def main():
     is_running = True
+    error = False
     menu = Menu.ACUEIL
     playing = False
     clock = p.time.Clock()
@@ -64,7 +61,6 @@ def main():
                     is_running = False
             ask_ip_join.handle_event(event)
             ask_port_join.handle_event(event)
-            ask_port_create.handle_event(event)
         
         if menu == Menu.ACUEIL:
             join.affiche(window, 1000, 100)
@@ -95,7 +91,13 @@ def main():
             if back.est_clique():
                 menu = Menu.ACUEIL
             if join.est_clique():
-                menu = Menu.ATTENTE
+                if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
+                    error = False
+                    menu = Menu.ATTENTE
+                else:
+                    error = True
+            if error:
+                entry_error.affiche(window, 850, 750)
         
         if menu == Menu.SERVER:
             menu = Menu.ATTENTE
@@ -120,4 +122,7 @@ def main():
         
 
 if __name__ == "__main__":
+    p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
+    p.mixer.music.set_volume(0.3)
+    p.mixer.music.play(-1)
     main()

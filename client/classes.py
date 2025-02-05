@@ -38,7 +38,7 @@ class TextInput:
         self.text = ''
         self.last_valid_text = ''  # Réinitialiser le dernier texte validé
 
-    def get_last_valid_text(self):
+    def get_text(self):
         return self.last_valid_text
 
     def draw(self, x, y, surface):
@@ -48,6 +48,8 @@ class TextInput:
         pygame.draw.rect(surface, border_color, self.rect, 2)
         text_surface = self.font.render(self.text, True, (0, 0, 0))
         surface.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
+
+
 
 class Bouton:
     pressed = False
@@ -113,3 +115,15 @@ class Network:
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
+
+def is_valid_ip(ip_str):
+    parts = ip_str.split('.')
+    if len(parts) != 4:
+        return False
+    for part in parts:
+        if not part.isdigit() or not 0 <= int(part) <= 255:
+            return False
+    return True
+
+def is_port(num_str):
+    return num_str.isdigit() and len(num_str) == 5
