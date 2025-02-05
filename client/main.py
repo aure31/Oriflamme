@@ -140,6 +140,7 @@ def main():
                 back.affiche(window, 25, 25)
                 if back.est_clique():
                     menu = Menu.ACUEIL
+                
 
             case Menu.PARAMETRE:
                 back.affiche(window, 25, 25) 

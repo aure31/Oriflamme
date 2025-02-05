@@ -52,7 +52,6 @@ def threaded_client(conn:socket.socket):
                 print("Reçu : ", reply)
                 print("Envoi : ", reply)
                 conn.sendall(str.encode(reply))
-            print("boucle")
         except:
             break
     

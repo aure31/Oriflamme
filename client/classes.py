@@ -105,9 +105,9 @@ class Network:
         print(self.id)
 
     def connect(self):
-        print("connecting...")
+        print("Connexion à "+self.server)
         self.client.connect(self.addr)
-        print("connected")
+        print("Connexion réussie")
         return self.client.recv(2048).decode()
 
     def send(self, data):
