@@ -35,6 +35,8 @@ nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/as
 entry_error = t.Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
 server_error = t.Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 fleche = p.image.load("client/assets/sens.png")
+chat_ = t.Chat()
+entree_chat = t.TextInput()
 
 class Menu(enum.Enum):
     ACUEIL = 0
@@ -48,6 +50,7 @@ class Menu(enum.Enum):
 def main():
     is_running = True
     error = None
+    chat = True
     menu = Menu.ACUEIL
     playing = False
     clock = p.time.Clock()
@@ -60,8 +63,15 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     is_running = False
+                if event.key == p.K_t:
+                    if not entree_chat.active:
+                        chat = not chat
+                if (event.key == p.K_KP_ENTER or event.key == p.K_RETURN) and chat :
+                    chat_.envoyer(entree_chat.get_text())
+                    entree_chat.clear()
             ask_ip_join.handle_event(event)
             ask_port_join.handle_event(event)
+            entree_chat.handle_event(event)
         
         if menu == Menu.ACUEIL:
             join.affiche(window, 1000, 100)
@@ -103,10 +113,14 @@ def main():
                 server_error.affiche(window, 950, 750)
         
         if menu == Menu.SERVER:
+            chat_.envoyer("/Serveur ouvert")
             menu = Menu.ATTENTE
             #s.start_server()
         
         if menu == Menu.ATTENTE:
+            if chat:
+                chat_.affiche(window)
+                entree_chat.draw(0, 860, window)
             back.affiche(window, 25, 25)
             if back.est_clique():
                 menu = Menu.ACUEIL

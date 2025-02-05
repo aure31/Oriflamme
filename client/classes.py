@@ -1,6 +1,8 @@
 import pygame
 import socket
 
+chat_img = pygame.image.load("client/assets/chat.png")
+
 class TextInput:
     def __init__(self):
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
@@ -42,7 +44,7 @@ class TextInput:
         return self.last_valid_text
 
     def draw(self, x, y, surface):
-        self.rect.topleft = (x, y)  # Mettre à jour la position de self.rect
+        self.rect.topleft = (x, y)
         pygame.draw.rect(surface, self.bg_color, self.rect)
         border_color = self.active_border_color if self.active else self.border_color
         pygame.draw.rect(surface, border_color, self.rect, 2)
@@ -115,6 +117,23 @@ class Network:
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
+
+class Chat:
+    def __init__(self):
+        self.messages = []
+
+    def affiche(self, surface):
+        surface.blit(chat_img, (0,290))
+        for mess in self.messages:
+            mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+
+    def envoyer(self, message):
+        if message[0] == '/':
+            self.messages.insert(0, Texte(message, (255,247,0), None, 20))
+        else:
+            self.messages.insert(0, Texte(message, (255,255,255), None, 20))
+        if len(self.messages) > 19:
+            self.messages.pop()
 
 def is_valid_ip(ip_str):
     parts = ip_str.split('.')
