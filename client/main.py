@@ -118,7 +118,7 @@ def main():
                 if chat:
                     chat_.affiche(window)
                     entree_chat.draw(0, 860, window)
-                    back.affiche(window, 25, 25)
+                back.affiche(window, 25, 25)
                 if back.est_clique():
                     menu = Menu.ACUEIL
             case Menu.PARAMETRE:
