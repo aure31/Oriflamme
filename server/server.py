@@ -14,7 +14,8 @@ def get_ip_address():
 server_alive = True
 
 def start_server():
-    if server_alive:
+    global server_alive
+    if not server_alive:
         print("Server already running")
         return
     server = get_ip_address()
