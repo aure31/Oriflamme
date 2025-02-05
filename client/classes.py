@@ -105,11 +105,8 @@ class Network:
         print(self.id)
 
     def connect(self):
-        try:
-            self.client.connect(self.addr)
-            return self.client.recv(2048).decode()
-        except:
-            return "erreur"
+        self.client.connect(self.addr)
+        return self.client.recv(2048).decode()
 
     def send(self, data):
         try:

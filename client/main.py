@@ -106,9 +106,12 @@ def main():
                     menu = Menu.ACUEIL
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
-                        reseau =Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                        reseau.connect()
-                        menu = Menu.ATTENTE
+                        reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
+                        try:
+                            reseau.connect()
+                            menu = Menu.ATTENTE
+                        except:
+                            error = "server"
                     else:
                         error = "values"
                 if error == "values":
