@@ -83,7 +83,10 @@ def main():
             if join.est_clique():
                 menu = Menu.REJOINDRE
             if new_game.est_clique():
-                menu = Menu.SERVER
+                chat_.envoyer("/Serveur ouvert")
+                menu = Menu.ATTENTE
+                start_new_thread(s.start_server)
+                #s.start_server()
             if settings.est_clique():
                 menu = Menu.PARAMETRE
             if credits.est_clique():
@@ -112,13 +115,7 @@ def main():
                 entry_error.affiche(window, 900, 750)
             if error == "server":
                 server_error.affiche(window, 950, 750)
-        
-        if menu == Menu.SERVER:
-            chat_.envoyer("/Serveur ouvert")
-            menu = Menu.ATTENTE
-            start_new_thread(s.start_server)
-            #s.start_server()
-        
+
         if menu == Menu.ATTENTE:
             if chat:
                 chat_.affiche(window)
