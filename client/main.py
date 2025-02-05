@@ -6,6 +6,7 @@ import pygame as p
 import enum
 import classes as t
 import server.server as s
+from _thread import *
 
 
 
@@ -115,6 +116,7 @@ def main():
         if menu == Menu.SERVER:
             chat_.envoyer("/Serveur ouvert")
             menu = Menu.ATTENTE
+            start_new_thread(s.start_server)
             #s.start_server()
         
         if menu == Menu.ATTENTE:
