@@ -127,7 +127,9 @@ class Chat:
             mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
 
     def envoyer(self, message):
-        if message[0] == '/':
+        if message == "":
+            pass
+        elif message[0] == '/':
             self.messages.insert(0, Texte(message, (255,247,0), None, 20))
         else:
             self.messages.insert(0, Texte(message, (255,255,255), None, 20))
