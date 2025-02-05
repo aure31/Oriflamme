@@ -18,8 +18,9 @@ click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
 
-window = p.display.set_mode((1600,900))
+window = p.display.set_mode((0,0), p.FULLSCREEN)
 screen_width, screen_height = window.get_size()
+r = screen_width//1600
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
 join = t.Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
@@ -72,19 +73,14 @@ def main():
             credits.affiche(window, 1000, 550)
             quitter.affiche(window, 1000, 700)
             if join.est_clique():
-                
                 menu = Menu.REJOINDRE
             if new_game.est_clique():
-                
                 menu = Menu.SERVER
             if settings.est_clique():
-                
                 menu = Menu.PARAMETRE
             if credits.est_clique():
-                
                 menu = Menu.CREDIT
             if quitter.est_clique():
-                
                 is_running = False
         
         if menu == Menu.REJOINDRE:
@@ -97,24 +93,13 @@ def main():
             window.blit(fleche, (790, 295))
             window.blit(fleche, (790, 495))
             if back.est_clique():
-                
                 menu = Menu.ACUEIL
             if join.est_clique():
-                
                 menu = Menu.ATTENTE
         
         if menu == Menu.SERVER:
-            back.affiche(window, 25, 25)
-            create.affiche(window, 950, 400)
-            nouv_port.affiche(window, 790, 240)
-            ask_port_create.draw(900, 300, window)
-            window.blit(fleche, (790, 295))
-            if back.est_clique():
-                menu = Menu.ACUEIL
-            if create.est_clique():
-                frefr = t.Texte(ask_port_create.get_last_valid_text())
-                if len(ask_port_create.get_last_valid_text()) == 5:
-                    frefr.affiche(window, 900, 500)
+            menu = Menu.ATTENTE
+            #s.start_server()
         
         if menu == Menu.ATTENTE:
             back.affiche(window, 25, 25)

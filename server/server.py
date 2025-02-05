@@ -14,23 +14,18 @@ def get_ip_address():
 def start_server():
     server = get_ip_address()
     port = 5555
-
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     try:
         s.bind((server, port))
     except socket.error as e:
         str(e)
 
-    s.listen(2)
+    s.listen(5)
     print("En attente de connexion...")
-
     server_alive = True
-
     while server_alive:
         conn, addr = s.accept()
         print("Connecté à : ", addr)
-
         start_new_thread(threaded_client, (conn,))
 
 def threaded_client(conn:socket.socket):
