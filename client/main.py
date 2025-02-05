@@ -15,7 +15,7 @@ p.mixer.init()
 click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
-window = p.display.set_mode((0,0), p.FULLSCREEN)
+window = p.display.set_mode((1600,900))
 screen_width, screen_height = window.get_size()
 r = screen_width//1600
 background = p.image.load("client/assets/background/bg_lobby.png").convert()
@@ -86,7 +86,7 @@ def main():
                 if new_game.est_clique():
                     chat_.envoyer("/Serveur ouvert")
                     menu = Menu.ATTENTE
-                    start_new_thread(s.start_server)
+                    start_new_thread(s.start_server,())
                 if settings.est_clique():
                     menu = Menu.PARAMETRE
                 if credits.est_clique():
