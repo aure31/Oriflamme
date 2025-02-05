@@ -1,4 +1,4 @@
-from cartes import Carte
+from server.cartes import Carte
 import random
 
 class Action:
@@ -14,7 +14,8 @@ class Joueur:
         self.defausse = []
         self.ptsinflu = 1
         
-    
+    def get_name(self):
+        return self.nom
 
     def play_card(self,game) -> tuple[Carte,int]:
         cards = ", ".join([str(e.type) for e in self.cartes ])

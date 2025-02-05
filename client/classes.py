@@ -131,6 +131,8 @@ class Chat:
             pass
         elif message[0] == '/':
             self.messages.insert(0, Texte(message, (255,247,0), None, 20))
+        elif message[0] == '@':
+            self.messages.insert(0, Texte(message, (43,185,0), None, 20))
         else:
             self.messages.insert(0, Texte(message, (255,255,255), None, 20))
         if len(self.messages) > 19:

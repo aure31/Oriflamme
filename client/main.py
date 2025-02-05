@@ -6,6 +6,7 @@ import pygame as p
 import enum
 from classes import *
 import server.server as s
+import server.joueur as j
 from _thread import *
 
 
@@ -30,11 +31,14 @@ launch =Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch
 create =Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
 ask_ip_join =TextInput()
 ask_port_join =TextInput()
+name = TextInput()
+pseudo = Texte("Votre nom :", (254, 215, 32), None, 50, "client/assets/Algerian.ttf")
 demande_ip =Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 demande_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 nouv_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 entry_error =Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
 server_error =Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
+pseudo_error = Texte("Entrez un pseudo", (255,0,0), None, 30)
 fleche = p.image.load("client/assets/sens.png")
 chat_ =Chat()
 entree_chat =TextInput()
@@ -73,26 +77,41 @@ def main():
             ask_ip_join.handle_event(event)
             ask_port_join.handle_event(event)
             entree_chat.handle_event(event)
+            name.handle_event(event)
         
         match menu:
+
             case Menu.ACUEIL:
+                name.draw(170, 500, window)
+                pseudo.affiche(window, 170, 420)
                 join.affiche(window, 1000, 100)
                 new_game.affiche(window, 1000, 250)
                 settings.affiche(window, 1000, 400)
                 credits.affiche(window, 1000, 550)
                 quitter.affiche(window, 1000, 700)
                 if join.est_clique():
-                    menu = Menu.REJOINDRE
+                    if name.get_text() == "":
+                        error = 'pseudo'
+                    else:
+                        error = None
+                        joueur = j.Joueur(name.get_text, None, None)
+                        menu = Menu.REJOINDRE
                 if new_game.est_clique():
-                    chat_.envoyer("/Serveur ouvert")
-                    menu = Menu.ATTENTE
-                    start_new_thread(s.start_server,())
+                    if name.get_text() == "":
+                        error = 'pseudo'
+                    else:
+                        error = None
+                        chat_.envoyer("/Serveur ouvert")
+                        chat_.envoyer("@"+name.get_text()+" a rejoint la partie")
+                        menu = Menu.ATTENTE
+                        start_new_thread(s.start_server,())
                 if settings.est_clique():
                     menu = Menu.PARAMETRE
                 if credits.est_clique():
                     menu = Menu.CREDIT
                 if quitter.est_clique():
                     is_running = False
+
             case Menu.REJOINDRE:
                 join.affiche(window, 950, 600)
                 back.affiche(window, 25, 25)
@@ -106,18 +125,14 @@ def main():
                     menu = Menu.ACUEIL
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
-                        reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                         try:
-                            reseau.connect()
+                            reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                             menu = Menu.ATTENTE
                         except:
                             error = "server"
                     else:
                         error = "values"
-                if error == "values":
-                    entry_error.affiche(window, 900, 750)
-                if error == "server":
-                    server_error.affiche(window, 950, 750)
+
             case Menu.ATTENTE:
                 if chat:
                     chat_.affiche(window)
@@ -125,15 +140,24 @@ def main():
                 back.affiche(window, 25, 25)
                 if back.est_clique():
                     menu = Menu.ACUEIL
+
             case Menu.PARAMETRE:
                 back.affiche(window, 25, 25) 
                 if back.est_clique():
                     menu = Menu.ACUEIL
+
             case Menu.JEU:
                 pass
 
             case Menu.CREDIT:
                 pass
+
+        if error == "values":
+            entry_error.affiche(window, 900, 750)
+        if error == "server":
+            server_error.affiche(window, 950, 750)
+        if error == 'pseudo':
+            pseudo_error.affiche(window, 170, 550)
 
         p.display.update()
         
