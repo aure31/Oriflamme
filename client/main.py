@@ -108,7 +108,7 @@ def main():
                     if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
                         reseau = t.Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                         reseau.connect()
-                        #menu = Menu.ATTENTE
+                        menu = Menu.ATTENTE
                     else:
                         error = "values"
                 if error == "values":
