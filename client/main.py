@@ -42,11 +42,11 @@ entree_chat = t.TextInput()
 class Menu(enum.Enum):
     ACUEIL = 0
     REJOINDRE = 1
-    SERVER = 2
+    JEU = 2
     ATTENTE = 3
     PARAMETRE = 4
     CREDIT = 5
-    JEU = 6
+    
 
 def main():
     is_running = True
@@ -74,65 +74,62 @@ def main():
             ask_port_join.handle_event(event)
             entree_chat.handle_event(event)
         
-        if menu == Menu.ACUEIL:
-            join.affiche(window, 1000, 100)
-            new_game.affiche(window, 1000, 250)
-            settings.affiche(window, 1000, 400)
-            credits.affiche(window, 1000, 550)
-            quitter.affiche(window, 1000, 700)
-            if join.est_clique():
-                menu = Menu.REJOINDRE
-            if new_game.est_clique():
-                chat_.envoyer("/Serveur ouvert")
-                menu = Menu.ATTENTE
-                start_new_thread(s.start_server)
-                #s.start_server()
-            if settings.est_clique():
-                menu = Menu.PARAMETRE
-            if credits.est_clique():
-                menu = Menu.CREDIT
-            if quitter.est_clique():
-                is_running = False
-        
-        if menu == Menu.REJOINDRE:
-            join.affiche(window, 950, 600)
-            back.affiche(window, 25, 25)
-            demande_ip.affiche(window, 800, 240)
-            demande_port.affiche(window, 800, 440)
-            ask_ip_join.draw(900, 300, window)
-            ask_port_join.draw(900, 500, window)
-            window.blit(fleche, (790, 295))
-            window.blit(fleche, (790, 495))
-            if back.est_clique():
-                menu = Menu.ACUEIL
-            if join.est_clique():
-                if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
-                    error = "server"
-                    #menu = Menu.ATTENTE
-                else:
-                    error = "values"
-            if error == "values":
-                entry_error.affiche(window, 900, 750)
-            if error == "server":
-                server_error.affiche(window, 950, 750)
+        match menu:
+            case Menu.ACUEIL:
+                join.affiche(window, 1000, 100)
+                new_game.affiche(window, 1000, 250)
+                settings.affiche(window, 1000, 400)
+                credits.affiche(window, 1000, 550)
+                quitter.affiche(window, 1000, 700)
+                if join.est_clique():
+                    menu = Menu.REJOINDRE
+                if new_game.est_clique():
+                    chat_.envoyer("/Serveur ouvert")
+                    menu = Menu.ATTENTE
+                    start_new_thread(s.start_server)
+                if settings.est_clique():
+                    menu = Menu.PARAMETRE
+                if credits.est_clique():
+                    menu = Menu.CREDIT
+                if quitter.est_clique():
+                    is_running = False
+            case Menu.REJOINDRE:
+                join.affiche(window, 950, 600)
+                back.affiche(window, 25, 25)
+                demande_ip.affiche(window, 800, 240)
+                demande_port.affiche(window, 800, 440)
+                ask_ip_join.draw(900, 300, window)
+                ask_port_join.draw(900, 500, window)
+                window.blit(fleche, (790, 295))
+                window.blit(fleche, (790, 495))
+                if back.est_clique():
+                    menu = Menu.ACUEIL
+                if join.est_clique():
+                    if t.is_valid_ip(ask_ip_join.get_text()) and t.is_port(ask_port_join.get_text()):
+                        error = "server"
+                        #menu = Menu.ATTENTE
+                    else:
+                        error = "values"
+                if error == "values":
+                    entry_error.affiche(window, 900, 750)
+                if error == "server":
+                    server_error.affiche(window, 950, 750)
+            case Menu.ATTENTE:
+                if chat:
+                    chat_.affiche(window)
+                    entree_chat.draw(0, 860, window)
+                    back.affiche(window, 25, 25)
+                if back.est_clique():
+                    menu = Menu.ACUEIL
+            case Menu.PARAMETRE:
+                back.affiche(window, 25, 25) 
+                if back.est_clique():
+                    menu = Menu.ACUEIL
+            case Menu.JEU:
+                pass
 
-        if menu == Menu.ATTENTE:
-            if chat:
-                chat_.affiche(window)
-                entree_chat.draw(0, 860, window)
-            back.affiche(window, 25, 25)
-            if back.est_clique():
-                menu = Menu.ACUEIL
-
-        if menu == Menu.PARAMETRE:
-            back.affiche(window, 25, 25) 
-            if back.est_clique():
-                menu = Menu.ACUEIL
-        if menu == Menu.JEU:
-            pass
-
-        if menu == Menu.CREDIT:
-            menu = Menu.ACUEIL
+            case Menu.CREDIT:
+                pass
 
         p.display.update()
         
