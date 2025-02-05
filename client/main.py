@@ -32,8 +32,8 @@ ask_port_join = t.TextInput()
 demande_ip = t.Texte("Entrez l'adresse IP du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 demande_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
 nouv_port = t.Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/assets/Algerian.ttf")
-entry_error = t.Texte("Les infos entrées ne sont pas valides", (0,0,0), None, 30)
-server_error = t.Texte("Impossible de trouver ce serveur", (0,0,0), None, 30)
+entry_error = t.Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
+server_error = t.Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
