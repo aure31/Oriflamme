@@ -44,7 +44,7 @@ chat_ =Chat()
 entree_chat =TextInput()
 
 class Menu(enum.Enum):
-    ACUEIL = 0
+    ACCUEIL = 0
     REJOINDRE = 1
     JEU = 2
     ATTENTE = 3
@@ -56,7 +56,7 @@ def main():
     is_running = True
     error = None
     chat = False
-    menu = Menu.ACUEIL
+    menu = Menu.ACCUEIL
     playing = False
     clock = p.time.Clock()
     while is_running:
@@ -81,7 +81,7 @@ def main():
         
         match menu:
 
-            case Menu.ACUEIL:
+            case Menu.ACCUEIL:
                 name.draw(170, 500, window)
                 pseudo.affiche(window, 170, 420)
                 join.affiche(window, 1000, 100)
@@ -106,8 +106,10 @@ def main():
                         menu = Menu.ATTENTE
                         start_new_thread(s.start_server,())
                 if settings.est_clique():
+                    error = None
                     menu = Menu.PARAMETRE
                 if credits.est_clique():
+                    error = None
                     menu = Menu.CREDIT
                 if quitter.est_clique():
                     is_running = False
@@ -122,7 +124,7 @@ def main():
                 window.blit(fleche, (790, 295))
                 window.blit(fleche, (790, 495))
                 if back.est_clique():
-                    menu = Menu.ACUEIL
+                    menu = Menu.ACCUEIL
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
                         try:
@@ -139,19 +141,19 @@ def main():
                     entree_chat.draw(0, 860, window)
                 back.affiche(window, 25, 25)
                 if back.est_clique():
-                    menu = Menu.ACUEIL
+                    menu = Menu.ACCUEIL
                 
 
             case Menu.PARAMETRE:
                 back.affiche(window, 25, 25) 
                 if back.est_clique():
-                    menu = Menu.ACUEIL
+                    menu = Menu.ACCUEIL
 
             case Menu.JEU:
                 pass
 
             case Menu.CREDIT:
-                pass
+                menu = Menu.ACCUEIL
 
         if error == "values":
             entry_error.affiche(window, 900, 750)
