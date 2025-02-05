@@ -105,7 +105,9 @@ class Network:
         print(self.id)
 
     def connect(self):
+        print("connecting...")
         self.client.connect(self.addr)
+        print("connected")
         return self.client.recv(2048).decode()
 
     def send(self, data):
@@ -142,4 +144,4 @@ def is_valid_ip(ip_str):
     return True
 
 def is_port(num_str):
-    return num_str.isdigit() and len(num_str) == 5
+    return num_str.isdigit() and len(num_str) == 4
