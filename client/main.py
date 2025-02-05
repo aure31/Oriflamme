@@ -50,7 +50,7 @@ class Menu(enum.Enum):
 def main():
     is_running = True
     error = None
-    chat = True
+    chat = False
     menu = Menu.ACUEIL
     playing = False
     clock = p.time.Clock()
