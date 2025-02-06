@@ -39,7 +39,6 @@ def start_server():
         conn, addr = s.accept()
         print("Connecté à : ", addr)
         start_new_thread(threaded_client, (conn,))
-        return ("Welcome")
 
 
 
@@ -48,13 +47,16 @@ def start_server():
 
 def threaded_client(conn:socket.socket):
     conn.send(str.encode("Connecté"))
-    
+
     reply = ""
     while True:
         try:
             data = conn.recv(2048)
+            print(1)
             reply = data.decode("utf-8")
+            print(2)
             print(data, reply)
+            print(3)
 
             if not data:
                 pass
@@ -63,7 +65,8 @@ def threaded_client(conn:socket.socket):
             else:
                 conn.sendall(str.encode(reply+" has join the game"))
         except:
-            break
+            print("pas de données")
+            #break
     
     print("Connexion perdue")
     conn.close()

@@ -135,6 +135,7 @@ def main():
                 if back.est_clique():
                     #reseau.send("quit")
                     menu = Menu.ACCUEIL
+                reseau.send("nothing")
                 
 
             case Menu.PARAMETRE:
