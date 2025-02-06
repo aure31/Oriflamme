@@ -12,6 +12,12 @@ def get_ip_address():
     return ip_address
 
 server_alive = True
+list_joueurs = []
+
+
+
+
+
 
 def start_server():
     global server_alive
@@ -33,23 +39,29 @@ def start_server():
         conn, addr = s.accept()
         print("Connecté à : ", addr)
         start_new_thread(threaded_client, (conn,))
+        return ("Welcome")
 
-def stop_server():
-    server_alive = False
+
+
+
+
 
 def threaded_client(conn:socket.socket):
     conn.send(str.encode("Connecté"))
+    
     reply = ""
     while True:
         try:
             data = conn.recv(2048)
             reply = data.decode("utf-8")
+            print(data, reply)
 
             if not data:
-                print("Déconnecté")
+                pass
+            if reply == "quit":
                 break
             else:
-                conn.sendall(str.encode(reply))
+                conn.sendall(str.encode(reply+" has join the game"))
         except:
             break
     
@@ -57,6 +69,15 @@ def threaded_client(conn:socket.socket):
     conn.close()
 
 
+
+
+
+
+
 def test():
     print("test")
+
+def stop_server():
+    server_alive = False
+
 

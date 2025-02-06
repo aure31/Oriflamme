@@ -19,7 +19,7 @@ p.display.set_caption('Oriflamme')
 window = p.display.set_mode((1600,900))
 screen_width, screen_height = window.get_size()
 r = screen_width//1600
-background = p.image.load("client/assets/background/bg_lobby.png").convert()
+background = p.image.load("client/assets/background/new_bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
 join =Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
 new_game =Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
@@ -85,16 +85,15 @@ def main():
                         error = 'pseudo'
                     else:
                         error = None
-                        joueur = j.Joueur(name.get_text(), None, None)
                         menu = Menu.REJOINDRE
                 if new_game.est_clique():
                     if name.get_text() == "":
                         error = 'pseudo'
                     else:
                         error = None
-                        joueur = j.Joueur(name.get_text(), None, None)
                         start_new_thread(s.start_server,())
                         reseau = Network(s.get_ip_address(), 5555)
+                        reseau.send(name.get_text())
                         menu = Menu.ATTENTE
                 if settings.est_clique():
                     error = None
@@ -119,18 +118,22 @@ def main():
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
                         try:
-                            reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                             error = None
+                            reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
+                            print(1)
+                            reseau.send(name.get_text)
+                            print(2)
                             menu = Menu.ATTENTE
-                            reseau.send("@"+joueur.nom+" a rejoint la partie")
                         except:
                             error = "server"
                     else:
-                        error = "values"
+                        print("Connexion échouée")
+                        error = "values" 
 
             case Menu.ATTENTE:
                 back.affiche(window, 25, 25)
                 if back.est_clique():
+                    #reseau.send("quit")
                     menu = Menu.ACCUEIL
                 
 

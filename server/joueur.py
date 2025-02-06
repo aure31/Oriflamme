@@ -23,6 +23,7 @@ class Joueur:
         self.cartes : list[Carte] = []
         self.defausse = []
         self.ptsinflu = 1
+        self.chat = Chat()
         
     def get_name(self):
         return self.nom
