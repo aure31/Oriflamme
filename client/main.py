@@ -40,8 +40,6 @@ entry_error =Texte("Les infos entrées ne sont pas valides", (255,255,255), None
 server_error =Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 pseudo_error = Texte("Entrez un pseudo", (255,0,0), None, 30)
 fleche = p.image.load("client/assets/sens.png")
-chat_ =Chat()
-entree_chat =TextInput()
 
 class Menu(enum.Enum):
     ACCUEIL = 0
@@ -68,15 +66,8 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     is_running = False
-                if event.key == p.K_t:
-                    if not entree_chat.active:
-                        chat = not chat
-                if (event.key == p.K_KP_ENTER or event.key == p.K_RETURN) and chat :
-                    chat_.envoyer(entree_chat.get_text())
-                    entree_chat.clear()
             ask_ip_join.handle_event(event)
             ask_port_join.handle_event(event)
-            entree_chat.handle_event(event)
             name.handle_event(event)
         
         match menu:
@@ -102,8 +93,6 @@ def main():
                     else:
                         error = None
                         joueur = j.Joueur(name.get_text(), None, None)
-                        chat_.envoyer("/Serveur ouvert")
-                        chat_.envoyer("/Vous avez rejoint la partie")
                         start_new_thread(s.start_server,())
                         reseau = Network(s.get_ip_address(), 5555)
                         menu = Menu.ATTENTE
@@ -131,23 +120,18 @@ def main():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
                         try:
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
+                            error = None
                             menu = Menu.ATTENTE
                             reseau.send("@"+joueur.nom+" a rejoint la partie")
-                            chat_.envoyer("/Vous avez rejoint la partie")
                         except:
                             error = "server"
                     else:
                         error = "values"
 
             case Menu.ATTENTE:
-                if chat:
-                    chat_.affiche(window)
-                    entree_chat.draw(0, 860, window)
                 back.affiche(window, 25, 25)
                 if back.est_clique():
                     menu = Menu.ACCUEIL
-                if reseau.send("123"):
-                    chat_.envoyer("nouveau message")
                 
 
             case Menu.PARAMETRE:
