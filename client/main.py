@@ -123,7 +123,7 @@ def main():
                             error = None
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
                             print(1)
-                            reseau.send(name.get_text)
+                            reseau.send(name.get_text())
                             print(2)
                             menu = Menu.ATTENTE
                         except:
@@ -138,7 +138,7 @@ def main():
                 if back.est_clique():
                     #reseau.send("quit")
                     menu = Menu.ACCUEIL
-                reseau.send("nothing")
+                #reseau.send("nothing")
                 
 
             case Menu.PARAMETRE:

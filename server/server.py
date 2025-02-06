@@ -55,6 +55,7 @@ def threaded_client(conn:socket.socket):
             if reply == "quit":
                 break
             else:
+                print("Recu : ", reply)
                 conn.sendall(str.encode(reply+" has join the game"))
         except:
             print("server : pas de données")
@@ -74,7 +75,5 @@ def test():
 
 def stop_server():
     server_alive = False
-    for thread in server_thread:
-        thread.join()
 
 
