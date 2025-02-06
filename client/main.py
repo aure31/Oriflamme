@@ -57,6 +57,7 @@ def main():
     menu = Menu.ACCUEIL
     playing = False
     clock = p.time.Clock()
+    network = None
     while is_running:
         window.blit(background_image, (0, 0))
         mouse_pos = p.mouse.get_pos()
@@ -126,6 +127,7 @@ def main():
                             menu = Menu.ATTENTE
                         except:
                             error = "server"
+                        menu = Menu.ATTENTE
                     else:
                         print("Connexion échouée")
                         error = "values" 
@@ -160,7 +162,7 @@ def main():
         
 
 if __name__ == "__main__":
-    p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
-    p.mixer.music.set_volume(0.3)
-    p.mixer.music.play(-1)
+    #p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
+    #p.mixer.music.set_volume(0.3)
+    #p.mixer.music.play(-1)
     main()

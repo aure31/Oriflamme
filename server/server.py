@@ -11,17 +11,11 @@ def get_ip_address():
         s.close()
     return ip_address
 
-server_alive = True
-list_joueurs = []
-
-
-
-
-
+server_alive = False
 
 def start_server():
     global server_alive
-    if not server_alive:
+    if server_alive:
         print("Server already running")
         return
     server = get_ip_address()
@@ -33,17 +27,18 @@ def start_server():
         str(e)
 
     s.listen(5)
-    print("En attente de connexion...")
+   
     server_alive = True
     while server_alive:
+        print("En attente de nouvelle connexion...")
         conn, addr = s.accept()
         print("Connecté à : ", addr)
         start_new_thread(threaded_client, (conn,))
+    stop_server()
 
-
-
-
-
+def stop_server():
+    global server_alive
+    server_alive = False
 
 def threaded_client(conn:socket.socket):
     conn.send(str.encode("Connecté"))
