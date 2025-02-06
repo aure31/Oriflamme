@@ -1,8 +1,4 @@
 import socket
-import time
-import pygame as p
-
-p.init()
 
 class Network:
     def __init__(self, ip, port):
@@ -11,14 +7,12 @@ class Network:
         self.port = port
         self.addr = (self.server, self.port)
         self.id = self.connect()
-        print(self.id)
 
     def connect(self):
-        try:
-            self.client.connect(self.addr)
-            self.client.recv(2048).decode('utf-8')
-        except:
-            pass
+        print("client : Connexion à "+self.server)
+        self.client.connect(self.addr)
+        print("client : Connexion réussie")
+        return self.client.recv(2048).decode()
 
     def send(self, data):
         try:
@@ -27,4 +21,16 @@ class Network:
         except socket.error as e:
             print(e)
 
-net = Network("")
+
+
+def is_valid_ip(ip_str):
+    parts = ip_str.split('.')
+    if len(parts) != 4:
+        return False
+    for part in parts:
+        if not part.isdigit() or not 0 <= int(part) <= 255:
+            return False
+    return True
+
+def is_port(num_str):
+    return num_str.isdigit() and len(num_str) == 4

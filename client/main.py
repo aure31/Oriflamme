@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pygame as p
 import enum
 from classes import *
+from network import Network, is_valid_ip, is_port
 import server.server as s
 import server.joueur as j
 from _thread import *
@@ -129,7 +130,7 @@ def main():
                             error = "server"
                         menu = Menu.ATTENTE
                     else:
-                        print("Connexion échouée")
+                        print("client : Connexion échouée")
                         error = "values" 
 
             case Menu.ATTENTE:

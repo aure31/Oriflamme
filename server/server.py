@@ -12,6 +12,7 @@ def get_ip_address():
     return ip_address
 
 server_alive = False
+server_thread:list[int] = []
 
 def start_server():
     global server_alive
@@ -33,7 +34,7 @@ def start_server():
         print("En attente de nouvelle connexion...")
         conn, addr = s.accept()
         print("Connecté à : ", addr)
-        start_new_thread(threaded_client, (conn,))
+        server_thread.append(start_new_thread(threaded_client, (conn,)))
     stop_server()
 
 def stop_server():
@@ -47,11 +48,7 @@ def threaded_client(conn:socket.socket):
     while True:
         try:
             data = conn.recv(2048)
-            print(1)
             reply = data.decode("utf-8")
-            print(2)
-            print(data, reply)
-            print(3)
 
             if not data:
                 pass
@@ -60,10 +57,10 @@ def threaded_client(conn:socket.socket):
             else:
                 conn.sendall(str.encode(reply+" has join the game"))
         except:
-            print("pas de données")
+            print("server : pas de données")
             #break
     
-    print("Connexion perdue")
+    print("server : Connexion perdue")
     conn.close()
 
 
@@ -77,5 +74,7 @@ def test():
 
 def stop_server():
     server_alive = False
+    for thread in server_thread:
+        thread.join()
 
 
