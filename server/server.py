@@ -1,5 +1,5 @@
 import socket
-import game as g
+import server.game as g
 from _thread import *
 import sys 
 

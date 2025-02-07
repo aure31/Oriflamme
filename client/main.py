@@ -8,7 +8,6 @@ from classes import *
 from network import Network, is_valid_ip, is_port
 import server.server as s
 import server.joueur as j
-import server.game as g
 from _thread import *
 
 
@@ -23,7 +22,7 @@ screen_width, screen_height = window.get_size()
 r = screen_width//1600
 background = p.image.load("client/assets/background/new_bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
-join =Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
+join =Bouton("client/assets/new_button/join_button.png", "client/assets/new_button/hover_join_button.png")
 new_game =Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
 settings =Bouton("client/assets/boutons/settings.png", "client/assets/boutons/settings_touched.png")
 credits =Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
