@@ -2,21 +2,48 @@ import socket
 from _thread import *
 import sys 
 
-server = "192.168.139.238"
-port = 5555
+def get_ip_address():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip_address = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip_address
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_alive = False
+server_thread:list[int] = []
 
-try:
-    s.bind((server, port))
-except socket.error as e:
-    str(e)
+def start_server():
+    global server_alive
+    if server_alive:
+        print("Server already running")
+        return
+    server = get_ip_address()
+    port = 5555
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((server, port))
+    except socket.error as e:
+        str(e)
 
-s.listen(2)
-print("En attente de connexion...")
+    s.listen(5)
+   
+    server_alive = True
+    while server_alive:
+        print("En attente de nouvelle connexion...")
+        conn, addr = s.accept()
+        print("Connecté à : ", addr)
+        server_thread.append(start_new_thread(threaded_client, (conn,)))
+    stop_server()
 
-def threaded_client(conn):
+def stop_server():
+    global server_alive
+    server_alive = False
+
+def threaded_client(conn:socket.socket):
     conn.send(str.encode("Connecté"))
+
     reply = ""
     while True:
         try:
@@ -24,21 +51,29 @@ def threaded_client(conn):
             reply = data.decode("utf-8")
 
             if not data:
-                print("Déconnecté")
+                pass
+            if reply == "quit":
                 break
             else:
-                print("Reçu : ", reply)
-                print("Envoi : ", reply)
-                conn.sendall(str.encode(reply))
-            print("boucle")
+                print("Recu : ", reply)
+                conn.sendall(str.encode(reply+" has join the game"))
         except:
-            break
+            print("server : pas de données")
+            #break
     
-    print("Connexion perdue")
+    print("server : Connexion perdue")
     conn.close()
 
-while True:
-    conn, addr = s.accept()
-    print("Connecté à : ", addr)
 
-    start_new_thread(threaded_client, (conn,))
+
+
+
+
+
+def test():
+    print("test")
+
+def stop_server():
+    server_alive = False
+
+
