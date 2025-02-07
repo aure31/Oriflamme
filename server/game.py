@@ -24,14 +24,14 @@ class Game:
         if self.state == "waiting":
             self.players.append(
                 Joueur(nom,self.random_color(),len(self.players)))
-            print(f"{nom} join the game")
+            print(f"{nom} à rejoint la partie.")
 
     def start_game(self):
         for p in self.players :
             self.gen_deck(p)
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
-        print("game started")
+        print("Début de la partie")
         self.placement()
         
             
@@ -64,7 +64,7 @@ class Game:
     def placement(self):
         self.tour +=1
         for p in self.players:
-            print("A "+p.nom+" de jouer !")
+            print("C'est au tour de "+p.nom+" de jouer !")
             card ,slot = p.play_card(self)
             self.add_card(p.id,card,slot)
         
