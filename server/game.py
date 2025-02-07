@@ -13,7 +13,7 @@ class Game:
         self.players:list[Joueur] = []
         self.state = "waiting"
         self.first_player = -1
-        self.color = colors.copy()
+        self.colors = colors.copy()
         self.tour = 0
 
     def random_color(self):

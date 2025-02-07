@@ -4,6 +4,21 @@ import random
 colors = ["red","blue","green","black","yellow"]
 
 
+class Cartes:
+    def __init__(self, id, couleur, pouvoir):
+        self.id = id
+        self.couleur = couleur
+        self.pouvoir = pouvoir
+
+    def poser_carte(self, pos):
+        pass
+
+    def retourner_carte(self, pos):
+        pass
+
+    def poser_pt_influ(self):
+        pass
+
 
 class Types:
     def __init__(self,id, nom,description):

@@ -1,4 +1,5 @@
 import socket
+import game as g
 from _thread import *
 import sys 
 
@@ -21,6 +22,7 @@ def start_server():
         return
     server = get_ip_address()
     port = 5555
+    game = g.Game()
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.bind((server, port))
