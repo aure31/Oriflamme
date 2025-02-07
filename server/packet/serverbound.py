@@ -4,25 +4,26 @@ import socket
 #server_bound client -> server
 
 class ServerBoundPacket:
+    def get_id(self):
+        return serverboundPacketList.index(self.__class__)
 
-    def __init__(self):
-        self.value = None
+class ServerBoundDataPacket(ServerBoundPacket):
+    def __init__(self,data:str):
+        self.data = data
 
-    def __init__(self,code:bytes):
-        self.value = ServerBoundPacket.decode(code)
+class ServerBoundPseudoPacket(ServerBoundDataPacket):
 
-    def getServerBoundPacket():
-        pass
-
-    def decode(code:bytes):
-        return code.decode()
+    def __init__(self,data:str):
+        super().__init__(data)
+        self.name = data
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
     packet = serverboundPacketList[id]
+    decode = data[1:].decode("utf-8")
     if len(data) > 1 :
-       return packet.
+       return packet(decode)
     else :
-        return packet.__init__()
+        return packet()
     
 serverboundPacketList : list[ServerBoundPacket.__class__] = []

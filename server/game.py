@@ -1,5 +1,5 @@
-from server.joueur import Joueur
-from server.cartes import Carte,full_deck,colors
+from .joueur import Joueur
+from .cartes import Carte,full_deck,colors
 import random
 import time
 
@@ -20,11 +20,11 @@ class Game:
         print(" ".join(self.color))
         return self.color.pop(random.randint(0,len(self.color)-1))
 
-    def join_player(self,nom):
+    def join_player(self,joueur:Joueur):
         if self.state == "waiting":
             self.players.append(
-                Joueur(nom,self.random_color(),len(self.players)))
-            print(f"{nom} à rejoint la partie.")
+                joueur)
+            print(f"{joueur.nom} à rejoint la partie.")
 
     def start_game(self):
         for p in self.players :

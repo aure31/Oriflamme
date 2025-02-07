@@ -8,16 +8,21 @@ class ClientBoundPacket:
     def send(self,conn:socket.socket):
         pass
 
+class ClientBoundDataPacket(ClientBoundPacket):
+    def __init__(self,data:str):
+        self.data = data
 
 class ClientBoundPseudoPacket(ClientBoundPacket):
     def send(self,conn:socket.socket):
-        conn.send(clientBoundPacketList.index(self.__class__))
+        conn.send(bytes([clientBoundPacketList.index(self.__class__)]))
     
     
-def getClientBoundPacket(code) -> ClientBoundPacket:
-    # Utilise l'index (code) pour récupérer la classe correspondante dans clientBoundPacketList
-    packet_class = clientBoundPacketList[code]
-    # Instancie et retourne un nouvel objet de cette classe
-    return packet_class()
+def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
+    id = data[0]
+    packet = clientBoundPacketList[id]
+    if issubclass(packet,ClientBoundDataPacket):
+       return packet(data)
+    else :
+        return packet()
 
 clientBoundPacketList = [ClientBoundPseudoPacket]

@@ -1,29 +1,32 @@
 import sys
 import os
+
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from server.cartes import Carte
-from client.classes import *
+from .cartes import Carte
+from .client import Client
 import random
 import pygame
 
 pygame.init()
 
-chat_img = pygame.image.load("client/assets/chat.png")
+#chat_img = pygame.image.load("client/assets/chat.png")
 
 class Action:
     def run():
         return
 
 class Joueur:
-    def __init__(self, nom):
+    def __init__(self, nom:str,client:'Client'):
+        self.client = client
         self.nom = nom
         self.couleur = None
-        self.id = None
+        self.id = client.id
         self.cartes : list[Carte] = []
         self.defausse = []
         self.ptsinflu = 1
-        self.chat = Chat()
+        # self.chat = Chat()
         
     def get_name(self):
         return self.nom
@@ -47,23 +50,23 @@ class Joueur:
         return random.randint(0, self.get_file_size())
     
 
-class Chat:
-    def __init__(self):
-        self.messages = []
+# class Chat:
+#     def __init__(self):
+#         self.messages = []
 
-    def affiche(self, surface):
-        surface.blit(chat_img, (0,290))
-        for mess in self.messages:
-            mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+#     def affiche(self, surface):
+#         surface.blit(chat_img, (0,290))
+#         for mess in self.messages:
+#             mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
 
-    def envoyer(self, message):
-        if message == "":
-            pass
-        elif message[0] == '/':
-            self.messages.insert(0, Texte(message, (255,247,0), None, 20))
-        elif message[0] == '@':
-            self.messages.insert(0, Texte(message, (43,185,0), None, 20))
-        else:
-            self.messages.insert(0, Texte(message, (255,255,255), None, 20))
-        if len(self.messages) > 19:
-            self.messages.pop()
+#     def envoyer(self, message):
+#         if message == "":
+#             pass
+#         elif message[0] == '/':
+#             self.messages.insert(0, Texte(message, (255,247,0), None, 20))
+#         elif message[0] == '@':
+#             self.messages.insert(0, Texte(message, (43,185,0), None, 20))
+#         else:
+#             self.messages.insert(0, Texte(message, (255,255,255), None, 20))
+#         if len(self.messages) > 19:
+#             self.messages.pop()
