@@ -8,6 +8,7 @@ from classes import *
 from network import Network, is_valid_ip, is_port
 import server.server as s
 import server.joueur as j
+import server.game as g
 from _thread import *
 
 
@@ -95,8 +96,9 @@ def main():
                     else:
                         error = None
                         start_new_thread(s.start_server,())
+                        joueur = j.Joueur(name.get_text())
                         reseau = Network(s.get_ip_address(), 5555)
-                        reseau.send(name.get_text())
+                        reseau.send(joueur.get_name())
                         menu = Menu.ATTENTE
                 if settings.est_clique():
                     error = None
@@ -125,7 +127,8 @@ def main():
                         connexion.affiche(window, 950, 750)
                         try:
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                            reseau.send(name.get_text())
+                            joueur = j.Joueur(name.get_text())
+                            reseau.send(joueur.get_name())
                             menu = Menu.ATTENTE
                         except:
                             print("client : Connexion échouée")
@@ -141,6 +144,8 @@ def main():
                     reseau.send("quit")
                     menu = Menu.ACCUEIL
                 #reseau.send("nothing")
+                if joueur.id == 1:
+                    launch.affiche(window, 950, 600)
                 
 
             case Menu.PARAMETRE:
