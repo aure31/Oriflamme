@@ -120,7 +120,7 @@ class Assassinat(Types):
         super().__init__(6, "Assassinat", "Eliminez une carte n'importe pù dans la File. Défaussez l'Assassinat")
 
     def capacite(self,Player,Game, Carte):
-        rndCardPos = Player.ChoiceCard()
+        rndCardPos = Player.choiceCard()
         Game.discard(rndCardPos)
         if(Carte not in Player.defausse):
             Game.discard(Carte.get_pos(Game))    
