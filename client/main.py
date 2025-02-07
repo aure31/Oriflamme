@@ -40,6 +40,7 @@ nouv_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/asset
 entry_error =Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
 server_error =Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 pseudo_error = Texte("Entrez un pseudo", (255,0,0), None, 30)
+connexion = Texte("Connexion...", (255,255,255), None, 30, "client/assets/Algerian.ttf")
 fleche = p.image.load("client/assets/sens.png")
 
 class Menu(enum.Enum):
@@ -116,27 +117,28 @@ def main():
                 window.blit(fleche, (790, 295))
                 window.blit(fleche, (790, 495))
                 if back.est_clique():
+                    error = None
                     menu = Menu.ACCUEIL
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
+                        error = None
+                        connexion.affiche(window, 950, 750)
                         try:
-                            error = None
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                            print(1)
                             reseau.send(name.get_text())
-                            print(2)
                             menu = Menu.ATTENTE
                         except:
+                            print("client : Connexion échouée")
                             error = "server"
-                        menu = Menu.ATTENTE
                     else:
-                        print("client : Connexion échouée")
                         error = "values" 
 
             case Menu.ATTENTE:
+                Texte("IP du serveur : "+str(reseau.server), (255, 255, 255), None, 32).affiche(window, 1150, 10)
+                Texte("Port du serveur : "+str(reseau.port), (255, 255, 255), None, 32).affiche(window, 1150, 50)
                 back.affiche(window, 25, 25)
                 if back.est_clique():
-                    #reseau.send("quit")
+                    reseau.send("quit")
                     menu = Menu.ACCUEIL
                 #reseau.send("nothing")
                 
