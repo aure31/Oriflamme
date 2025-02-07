@@ -22,14 +22,14 @@ screen_width, screen_height = window.get_size()
 r = screen_width//1600
 background = p.image.load("client/assets/background/new_bg_lobby.png").convert()
 background_image = p.transform.scale(background, (screen_width, screen_height))
-join =Bouton("client/assets/boutons/join.png", "client/assets/boutons/join_touched.png")
-new_game =Bouton("client/assets/boutons/new_game.png", "client/assets/boutons/new_game_touched.png")
-settings =Bouton("client/assets/boutons/settings.png", "client/assets/boutons/settings_touched.png")
-credits =Bouton("client/assets/boutons/credits.png", "client/assets/boutons/credits_touched.png")
-quitter =Bouton("client/assets/boutons/quit.png", "client/assets/boutons/quit_touched.png")
-back =Bouton("client/assets/boutons/back.png", "client/assets/boutons/back_touched.png")
-launch =Bouton("client/assets/boutons/launch.png", "client/assets/boutons/launch_touched.png")
-create =Bouton("client/assets/boutons/new.png", "client/assets/boutons/new_touched.png")
+join =Bouton("client/assets/new_button/join.png", "client/assets/new_button/join_touched.png")
+new_game =Bouton("client/assets/new_button/new_game.png", "client/assets/new_button/new_game_touched.png")
+settings =Bouton("client/assets/new_button/settings.png", "client/assets/new_button/settings_touched.png")
+credits =Bouton("client/assets/new_button/credits.png", "client/assets/new_button/credits_touched.png")
+quitter =Bouton("client/assets/new_button/quit.png", "client/assets/new_button/quit_touched.png")
+back =Bouton("client/assets/new_button/back.png", "client/assets/new_button/back_touched.png")
+launch =Bouton("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png")
+create =Bouton("client/assets/new_button/new.png", "client/assets/new_button/new_touched.png")
 ask_ip_join =TextInput()
 ask_port_join =TextInput()
 name = TextInput()
@@ -40,7 +40,11 @@ nouv_port =Texte("Entrez le port du serveur", (255,0,0), None, 45, "client/asset
 entry_error =Texte("Les infos entrées ne sont pas valides", (255,255,255), None, 30)
 server_error =Texte("Impossible de trouver ce serveur", (255,255,255), None, 30)
 pseudo_error = Texte("Entrez un pseudo", (255,0,0), None, 30)
+space_error = Texte("Caractère invalide détecté", (255, 0, 0), None, 30)
+connexion = Texte("Connexion...", (255,255,255), None, 30, "client/assets/Algerian.ttf")
 fleche = p.image.load("client/assets/sens.png")
+
+caracteres = [" ", "/", "@", "~", "#"]
 
 class Menu(enum.Enum):
     ACCUEIL = 0
@@ -77,14 +81,16 @@ def main():
             case Menu.ACCUEIL:
                 name.draw(170, 500, window)
                 pseudo.affiche(window, 170, 420)
-                join.affiche(window, 1000, 100)
-                new_game.affiche(window, 1000, 250)
-                settings.affiche(window, 1000, 400)
-                credits.affiche(window, 1000, 550)
-                quitter.affiche(window, 1000, 700)
+                join.affiche(window, 900, 100)
+                new_game.affiche(window, 900, 250)
+                settings.affiche(window, 900, 400)
+                credits.affiche(window, 900, 550)
+                quitter.affiche(window, 900, 700)
                 if join.est_clique():
                     if name.get_text() == "":
                         error = 'pseudo'
+                    elif " " in name.get_text():
+                        error = "space"
                     else:
                         error = None
                         menu = Menu.REJOINDRE
@@ -94,8 +100,9 @@ def main():
                     else:
                         error = None
                         start_new_thread(s.start_server,())
+                        joueur = j.Joueur(name.get_text())
                         reseau = Network(s.get_ip_address(), 5555)
-                        reseau.send(name.get_text())
+                        reseau.send(joueur.get_name())
                         menu = Menu.ATTENTE
                 if settings.est_clique():
                     error = None
@@ -107,8 +114,8 @@ def main():
                     is_running = False
 
             case Menu.REJOINDRE:
-                join.affiche(window, 950, 600)
-                back.affiche(window, 25, 25)
+                join.affiche(window, 875, 600)
+                back.affiche(window, 10, 10)
                 demande_ip.affiche(window, 800, 240)
                 demande_port.affiche(window, 800, 440)
                 ask_ip_join.draw(900, 300, window)
@@ -116,33 +123,37 @@ def main():
                 window.blit(fleche, (790, 295))
                 window.blit(fleche, (790, 495))
                 if back.est_clique():
+                    error = None
                     menu = Menu.ACCUEIL
                 if join.est_clique():
                     if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
+                        error = None
+                        connexion.affiche(window, 950, 750)
                         try:
-                            error = None
                             reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                            print(1)
-                            reseau.send(name.get_text())
-                            print(2)
+                            joueur = j.Joueur(name.get_text())
+                            reseau.send(joueur.get_name())
                             menu = Menu.ATTENTE
                         except:
+                            print("client : Connexion échouée")
                             error = "server"
-                        menu = Menu.ATTENTE
                     else:
-                        print("client : Connexion échouée")
                         error = "values" 
 
             case Menu.ATTENTE:
-                back.affiche(window, 25, 25)
+                Texte("IP du serveur : "+str(reseau.server), (255, 255, 255), None, 32).affiche(window, 1150, 10)
+                Texte("Port du serveur : "+str(reseau.port), (255, 255, 255), None, 32).affiche(window, 1150, 50)
+                back.affiche(window, 10, 10)
                 if back.est_clique():
-                    #reseau.send("quit")
+                    reseau.send("quit")
                     menu = Menu.ACCUEIL
                 #reseau.send("nothing")
+                if joueur.id == 1:
+                    launch.affiche(window, 950, 600)
                 
 
             case Menu.PARAMETRE:
-                back.affiche(window, 25, 25) 
+                back.affiche(window, 10, 10) 
                 if back.est_clique():
                     menu = Menu.ACCUEIL
 
@@ -158,6 +169,8 @@ def main():
             server_error.affiche(window, 950, 750)
         if error == 'pseudo':
             pseudo_error.affiche(window, 170, 550)
+        if error == 'space' :
+            space_error.affiche(window, 170, 550)
 
         p.display.update()
         

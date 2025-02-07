@@ -57,8 +57,8 @@ class Bouton:
     def __init__(self, image1, image2):
         self.image1 = pygame.image.load(image1)
         self.image2 = pygame.image.load(image2)
-        self.rect = self.image1.get_rect()  # Initialiser le rectangle sans position
-
+        self.rect = self.image1.get_rect()
+        
     def affiche(self, surface, x, y):
         self.rect.topleft = (x, y)
         if self.rect.collidepoint(pygame.mouse.get_pos()):
