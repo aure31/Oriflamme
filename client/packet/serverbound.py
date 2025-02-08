@@ -6,13 +6,24 @@ import enum
 
 class ServerBoundPacket:
     def send(self,conn:socket.socket):
-        pass
+        conn.send(serverBoundPacketList.index(self.__class__))
 
 class ServerBoundDataPacket(ServerBoundPacket):
-    def __init__(self,data:str):
-        self.data = data
+    def __init__(self,*data):
+        self.data = ";".join(data)
+
+    def send(self, conn):
+        packet = bytearray(len(self.data)+1)
+        packet[0] = serverBoundPacketList.index(self.__class__)
+        packet[1:] = self.data.encode("utf-8")
+        conn.send(packet)
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
+    def __init__(self,pseudo:str):
+        super().__init__(pseudo)
+        self.name = pseudo
+
+class packetsuperutile(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.name = data
@@ -32,4 +43,4 @@ def getClientBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     else :
         return packet()
 
-serverBoundPacketList = [ServerBoundPseudoPacket]
+serverBoundPacketList = [ServerBoundPseudoPacket,packetsuperutile]

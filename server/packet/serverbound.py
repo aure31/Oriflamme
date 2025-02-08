@@ -14,7 +14,7 @@ class ServerBoundDataPacket(ServerBoundPacket):
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
-        self.name = data
+        self.name = data        
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print(data)

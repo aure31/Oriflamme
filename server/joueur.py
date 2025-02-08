@@ -18,7 +18,7 @@ class Action:
         return
 
 class Joueur:
-    def __init__(self, nom:str,client:'Client'):
+    def __init__(self, nom:str , client:'Client'):
         self.client = client
         self.nom = nom
         self.couleur = None
@@ -26,7 +26,6 @@ class Joueur:
         self.cartes : list[Carte] = []
         self.defausse = []
         self.ptsinflu = 1
-        # self.chat = Chat()
         
     def get_name(self):
         return self.nom
