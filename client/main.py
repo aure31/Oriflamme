@@ -23,6 +23,8 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     stop_game()
+                if event.key == p.K_t:
+                    pass
             TextInput.handle_event_all(event)
 
         l.menu.affiche()

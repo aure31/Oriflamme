@@ -32,6 +32,11 @@ class AttenteMenu(Menu):
         self.getElement("ip").set_text("IP du serveur : "+str(l.reseau.server))
         self.getElement("port").set_text("Port du serveur : "+str(l.reseau.port))
 
+class GroupElement:
+    def __init__(self, name, elements):
+        self.name = name
+        self.elements = {}
+
 
 #------- Utilis Menu Elements -----------
 class BackBoutton(Bouton):
@@ -170,7 +175,10 @@ class MenuList(enum.Enum):
             .addElement("back",AttenteBackBoutton())\
             .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
-            .addElement("launch",AttenteLaunchBoutton())
-    JEU = Menu("Jeu").addElement("back",BackBoutton())
+            .addElement("launch",AttenteLaunchBoutton())\
+            .addElement("chat", Chat())
+    JEU = Menu("Jeu")\
+        .addElement("back",BackBoutton())\
+        .addElement("chat", Chat())
     PARAMETRE = Menu("Parametre").addElement("back",BackBoutton())
     CREDIT = Menu("Credit").addElement("back",BackBoutton())

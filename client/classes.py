@@ -3,8 +3,6 @@ import loader as l
 
 pygame.init()
 
-chat_img = pygame.image.load("client/assets/chat.png")
-
 class Element:
     def __init__(self,x:int,y:int,condition = lambda : True):
         self.condition = condition
@@ -131,13 +129,15 @@ class Texte(Element):
         surface.blit(text_surface, self.pos)
 
 class Chat:
-    def __init__(self, condition = lambda : True):
+    def __init__(self):
         self.messages = []
+        self.img = pygame.image.load("client/assets/chat.png")
         self.text_input = TextInput(0, 860)
+        self.show = False
 
     def affiche(self, surface:pygame.Surface):
-        if not self.condition(): return
-        surface.blit(chat_img, (0,290))
+        if not self.show : return
+        surface.blit(self.img, (0,290))
         for mess in self.messages:
             mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
 
@@ -152,3 +152,6 @@ class Chat:
             self.messages.insert(0, Texte(message, (255,255,255), None, 20))
         if len(self.messages) > 19:
             self.messages.pop()
+
+    def requetesServer(self):
+        pass # C'est là que tu mets les packets pour le seveur
