@@ -1,5 +1,6 @@
 import pygame
 import loader as l
+from groupelement import GroupElement
 
 pygame.init()
 
@@ -136,7 +137,7 @@ class Texte(Element):
         # Afficher le texte à la position (x, y)
         surface.blit(text_surface, self.pos)
 
-class Chat:
+class Chat(GroupElement,EventHandler):
     def __init__(self):
         self.messages = []
         self.img = pygame.image.load("client/assets/chat.png")
