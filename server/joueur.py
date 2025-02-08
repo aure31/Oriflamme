@@ -17,7 +17,7 @@ class Action:
         return
 
 class Joueur:
-    def __init__(self, nom:str , client:'Client'):
+    def __init__(self, nom:str , client:Client):
         self.client = client
         self.nom = nom
         self.couleur = None

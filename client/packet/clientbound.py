@@ -10,6 +10,15 @@ class ServerBoundPacket:
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
         self.data = data
+
+class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
+    def __init__(self,data:str):
+        super().__init__(data)
+        self.message = data
+    
+    def decode(self):
+        self.message
+        return 
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
@@ -21,4 +30,4 @@ def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     else :
         return packet()
     
-serverboundPacketList : list[ServerBoundPacket.__class__] = []
+serverboundPacketList : list[ServerBoundPacket.__class__] = [ClientBoundReceiveMessagePacket]

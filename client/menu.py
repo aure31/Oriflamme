@@ -32,7 +32,6 @@ class AttenteMenu(Menu):
         self.getElement("ip").set_text("IP du serveur : "+str(l.reseau.server))
         self.getElement("port").set_text("Port du serveur : "+str(l.reseau.port))
 
-
 #------- Utilis Menu Elements -----------
 class BackBoutton(Bouton):
     def __init__(self):
@@ -144,11 +143,7 @@ class AttenteBackBoutton(BackBoutton):
 
 #------- Jeu Menu Elements -----------
 
-
-
-
 #------- MenuList ------------
-
 
 class MenuList(enum.Enum):
     ACCUEIL = Menu("Accueil")\
