@@ -10,6 +10,12 @@ class ServerBoundPacket:
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
         self.data = data
+
+class ServerBoundPseudoPacket(ServerBoundDataPacket):
+
+    def __init__(self,data:str):
+        super().__init__(data)
+        self.name = data
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
@@ -21,4 +27,4 @@ def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     else :
         return packet()
     
-serverboundPacketList : list[ServerBoundPacket.__class__] = []
+serverboundPacketList : list[ServerBoundPacket.__class__] = [ServerBoundPseudoPacket]

@@ -66,13 +66,10 @@ class NewGameBoutton(Bouton):
         if name.get_text() == "":
             error = e.ErrorList.PSEUDO
         else:
-            server = s.Server()
-            l.reseau = Network(server.ip, server.port)
-            l.server = server
-            l.reseau.send(name.get_text())
-            m = MenuList.ATTENTE.value
-            m.init()
-            l.menu = m
+            l.server = s.Server()
+            l.reseau = Network(l.server.ip, l.server.port , name.get_text())
+            l.menu = MenuList.ATTENTE.value
+            l.menu.init()
         l.error = error
 
 class SettingsBoutton(Bouton):
@@ -110,9 +107,8 @@ class RejoindreJoinBoutton(Bouton):
             l.error = None
             l.connexion.affiche(l.window)
             try:
-                l.reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()))
-                l.joueur = j.Joueur(l.name.get_text())
-                l.reseau.send(l.joueur.get_name())
+                name : TextInput = MenuList.ACCUEIL.value.getElement("name")
+                l.reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()),name.get_text())
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
             except:

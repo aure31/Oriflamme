@@ -1,8 +1,9 @@
 import socket
 import threading as th
+from packet.serverbound import ServerBoundPacket,ServerBoundPseudoPacket
 
 class Network:
-    def __init__(self, ip, port):
+    def __init__(self, ip, port,name):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = ip
         self.stop_event = th.Event()
@@ -11,9 +12,12 @@ class Network:
         self.id = self.connect()
         self.thread = th.Thread(target=self.packetListener)
         self.thread.start()
+        self.data = None
+        self.send(ServerBoundPseudoPacket(name))
 
     def connect(self):
         print("client : Connexion à "+self.server)
+        print("client : addresse "+str(self.addr))
         self.client.connect(self.addr)
         print("client : Connexion réussie")
         return self.client.recv(2048).decode()
@@ -21,17 +25,16 @@ class Network:
     def packetListener(self):
         while not self.stop_event.is_set():
             try:
-                data = self.client.recv(2048).decode()
-                return data
+                self.data = self.client.recv(2048).decode()
             except:
                 pass
 
-    def send(self, data):
-        try:
-            self.client.send(str.encode(data))
-            return self.client.recv(2048).decode()
-        except socket.error as e:
-            print(e)
+    def send(self, packet:ServerBoundPacket):
+        packet.send(self.client)
+
+    def sendRecv(self, data):
+        self.send(data)
+        return self.packetListener()
 
     def disconect(self):
         self.stop_event.set()

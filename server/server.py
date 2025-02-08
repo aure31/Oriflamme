@@ -31,24 +31,24 @@ class Server :
 
     def connectionListener(self):
         while not self.stopevent.is_set():
-            print("En attente de nouvelle connexion...")
+            print("Server : En attente de nouvelle connexion...")
             conn, addr = self.soket.accept()
-            print("Connecté à : ", addr)
+            print("Server : Connecté à : ", addr)
             self.connection(conn,addr)
             
     def connection(self,conn:socket.socket,ip):
         client = Client(conn,ip,self.lastpid)
         self.lastpid += 1
-        packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundPseudoPacket())
+        packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
         player = Joueur(packet.name,client)
         self.game.join_player(player)
-        paketlst = th.Thread(name="player"+player.id,target=self.paketListener,args=(player,))
+        paketlst = th.Thread(name="player"+str(player.id),target=self.paketListener,args=(player,))
         paketlst.start()
         self.threadlist.append(paketlst)
 
     def paketListener(self,player:Joueur):
         while not self.stopevent.is_set():
-            packet = player.client.sendRecv(ClientBoundPseudoPacket())
+            packet = getServerBoundPacket(player.client.conn.recv(2048))
             if packet.get_id() == 0:
                 print("packet 0")
                 break
