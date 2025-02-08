@@ -39,9 +39,7 @@ class Network:
 
     def disconect(self):
         self.client.close()
-        print("client : 1")
         self.stop_event.set()
-        print("client : 2")
         self.thread.join()
         print("client : Déconnexion")
 
