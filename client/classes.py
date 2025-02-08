@@ -164,3 +164,14 @@ class Chat:
 
     def requetesServer(self):
         pass # C'est là que tu mets les packets pour le seveur
+
+    def onEvent(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_t:
+                if self.show:
+                    self.show = False
+                else:
+                    self.show = True
+            if event.key == pygame.K_RETURN:
+                self.envoyer(self.text_input.texte)
+                self.text_input.clear()
