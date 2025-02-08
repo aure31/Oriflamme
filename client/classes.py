@@ -30,7 +30,7 @@ class EventHandler:
 
 class TextInput(Element,EventHandler):
     def __init__(self, x : int , y : int,condition = lambda : True):
-        super(Element).__init__(x,y,condition)
+        Element.__init__(x,y,condition)
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
         self.border_color = (200, 200, 200)  # Couleur de bordure grise
         self.active_border_color = (0, 0, 0)  # Couleur de bordure noire quand active
