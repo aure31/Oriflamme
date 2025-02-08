@@ -24,7 +24,7 @@ class Server :
             str(e)
         self.soket.listen(5)
         self.game = Game()
-        thread =th.Thread(name="connlistener",target=self.connectionListener)
+        thread = th.Thread(name="connlistener",target=self.connectionListener)
         thread.start()
         self.threadlist.append(thread)  
 
@@ -66,6 +66,7 @@ class Server :
         self.stopevent.set()
         for t in self.threadlist:
             t.join()
+        self.threadlist = []
         print("Server stopped")
 
 

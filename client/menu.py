@@ -138,6 +138,7 @@ class AttenteBackBoutton(BackBoutton):
             print("server : Fermeture du serveur")
             print("server : "+str(l.server.ip)+":"+str(l.server.port))
             l.server.stop()
+            l.server = None
         l.menu = MenuList.ACCUEIL.value
 
 #------- Jeu Menu Elements -----------
