@@ -19,6 +19,7 @@ class ServerBoundPseudoPacket(ServerBoundDataPacket):
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
+    print(id)
     packet = serverboundPacketList[id]
     decode = data[1:].decode("utf-8")
     if len(data) > 1 :
@@ -26,4 +27,4 @@ def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     else :
         return packet()
     
-serverboundPacketList : list[ServerBoundPacket.__class__] = []
+serverboundPacketList : list[ServerBoundPacket.__class__] = [ServerBoundPseudoPacket]

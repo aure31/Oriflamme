@@ -24,8 +24,9 @@ class Server :
             str(e)
         self.soket.listen(5)
         self.game = Game()
-        self.threadlist.append(th.Thread(name="connlistener",target=self.connectionListener))
-        
+        thread =th.Thread(name="connlistener",target=self.connectionListener)
+        thread.start()
+        self.threadlist.append(thread)  
 
 
     def connectionListener(self):
@@ -41,7 +42,9 @@ class Server :
         packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundPseudoPacket())
         player = Joueur(packet.name,client)
         self.game.join_player(player)
-        self.threadlist.append(th.Thread(name="player"+player.id,target=self.paketListener,args=(player,)))
+        paketlst = th.Thread(name="player"+player.id,target=self.paketListener,args=(player,))
+        paketlst.start()
+        self.threadlist.append(paketlst)
 
     def paketListener(self,player:Joueur):
         while not self.stopevent.is_set():
