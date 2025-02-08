@@ -46,3 +46,5 @@ class Joueur:
     
     def choix_partout(self, Game):
         return random.randint(0, self.get_file_size())
+    
+    

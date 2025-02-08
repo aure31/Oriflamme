@@ -45,20 +45,12 @@ class Server :
         packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
         player = Joueur(packet.name,client)
         self.game.join_player(player)
-        paketlst = th.Thread(name="player"+str(player.id),target=self.paketListener,args=(player,))
-        paketlst.start()
-        self.threadlist.append(paketlst)
+        self.threadlist.append(client.thread)
 
-    def paketListener(self,player:Joueur):
-        while not self.stopevent.is_set():
-            data = player.client.conn.recv(2048)
-            if not data:
-                break
-            packet = getServerBoundPacket(data)
-            if packet.get_id() == 0:
-                print("packet 0")
-            else:
-                print("packet : ",packet.get_id())
+    def broadcast(self,packet:ClientBoundPacket,ignored:Client = []):
+        for player in self.game.players:
+            if player.client.id in ignored:
+                player.client.send(packet)
     
     def stop(self):
         print("stop")

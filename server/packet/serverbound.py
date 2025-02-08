@@ -6,6 +6,9 @@ import socket
 class ServerBoundPacket:
     def get_id(self):
         return serverboundPacketList.index(self.__class__)
+    
+    def handle(self,server):
+        pass
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
@@ -15,6 +18,14 @@ class ServerBoundPseudoPacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.name = data
+
+class ServerBoundMessagePacket(ServerBoundDataPacket):
+    def __init__(self,data:str):
+        super().__init__(data)
+        self.message = data
+
+    def handle(self, server):
+        return super().handle(server)
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print(data)
