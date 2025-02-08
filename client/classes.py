@@ -42,7 +42,6 @@ class TextInput(Element,EventHandler):
         self.height = 40
         self.rect = pygame.Rect(0, 0, self.width, self.height)  # Initialiser self.rect
         self.rect.topleft = self.pos  # Définir la position de self.rect
-        TextInput.inputList.append(self)
 
     def onEvent(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
