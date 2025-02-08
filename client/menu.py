@@ -13,7 +13,7 @@ class Menu:
         self.name = name
         self.elements = {}
 
-    def addElement(self,name:str, element: Element):
+    def addElement(self,name:str, element: Element | GroupElement):
         if not isinstance(element,GroupElement):
             element.setMenu(self)
         self.elements[name] = element
