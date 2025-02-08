@@ -20,6 +20,7 @@ class EventHandler:
     def __init__(self):
         EventHandler.listItems.append(self)
         pass
+    
     def onEvent(self, event):
         pass
 
