@@ -27,12 +27,6 @@ class packetsuperutile(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.name = data
-
-    def send(self,conn:socket.socket):
-        packet = bytearray(len(self.name)+1)
-        packet[0] = serverBoundPacketList.index(self.__class__)
-        packet[1:] = self.name.encode("utf-8")
-        conn.send(packet)
     
     
 def getClientBoundPacket(id:int,data:str = "") -> ServerBoundPacket:

@@ -14,10 +14,22 @@ class Element:
     def affiche(self):
         pass
 
-class TextInput(Element):
-    inputList = []
+class EventHandler:
+    listItems = []
+
+    def __init__(self):
+        EventHandler.listItems.append(self)
+        pass
+    def onEvent(self, event):
+        pass
+
+    def handle_event_all(event):
+        for item in EventHandler.listItems:
+            item.onEvent(event)
+
+class TextInput(Element,EventHandler):
     def __init__(self, x : int , y : int,condition = lambda : True):
-        super().__init__(x,y,condition)
+        super(Element).__init__(x,y,condition)
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
         self.border_color = (200, 200, 200)  # Couleur de bordure grise
         self.active_border_color = (0, 0, 0)  # Couleur de bordure noire quand active
@@ -31,7 +43,7 @@ class TextInput(Element):
         self.rect.topleft = self.pos  # Définir la position de self.rect
         TextInput.inputList.append(self)
 
-    def handle_event(self, event):
+    def onEvent(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
@@ -50,10 +62,6 @@ class TextInput(Element):
                 else:
                     self.text += event.unicode
                     self.last_valid_text = self.text  # Mettre à jour le dernier texte validé
-    
-    def handle_event_all(event):
-        for input in TextInput.inputList:
-            input.handle_event(event)
 
     def clear(self):
         self.text = ''

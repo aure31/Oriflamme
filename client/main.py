@@ -4,7 +4,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
 import Joueur as j
-from menu import *
+from menu import MenuList
+from classes import EventHandler
 import loader as l
 from loader import window,background_image
 from error import errorHandler
@@ -23,12 +24,9 @@ def main():
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
                     stop_game()
-                if event.key == p.K_t:
-                    pass
             TextInput.handle_event_all(event)
 
         l.menu.affiche()
-        Chat.affiche()
         if l.error:
             errorHandler(l.error,l.window)
         p.display.update()
