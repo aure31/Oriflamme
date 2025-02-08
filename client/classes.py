@@ -1,6 +1,10 @@
 import pygame
 import loader as l
 
+pygame.init()
+
+chat_img = pygame.image.load("client/assets/chat.png")
+
 class Element:
     def __init__(self,x:int,y:int,condition = True):
         self.condition = condition
@@ -125,3 +129,26 @@ class Texte(Element):
         text_surface = self.font.render(self.texte, True, self.couleur, self.bg_color)
         # Afficher le texte à la position (x, y)
         surface.blit(text_surface, self.pos)
+
+# class Chat:
+#     def __init__(self, condition = True):
+#         super().__init__(condition)
+#         self.messages = []
+
+#     def affiche(self, surface):
+#         surface.blit(chat_img, (0,290))
+#         TextInput(0, 860).affiche(surface)
+#         for mess in self.messages:
+#             mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+
+#     def envoyer(self, message):
+#         if message == "":
+#             pass
+#         elif message[0] == '/':
+#             self.messages.insert(0, Texte(message, (255,247,0), None, 20))
+#         elif message[0] == '@':
+#             self.messages.insert(0, Texte(message, (43,185,0), None, 20))
+#         else:
+#             self.messages.insert(0, Texte(message, (255,255,255), None, 20))
+#         if len(self.messages) > 19:
+#             self.messages.pop()

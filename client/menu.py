@@ -1,6 +1,6 @@
 import enum
 import loader as l
-from classes import Element,Bouton,TextInput,Texte
+from classes import Element,Bouton,TextInput,Texte#, Chat
 import pygame
 import error as e
 import server.server as s
@@ -171,6 +171,7 @@ class MenuList(enum.Enum):
             .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
             .addElement("launch",AttenteLaunchBoutton())
+            #.addElement("chat",Chat())
     JEU = Menu("Jeu").addElement("back",BackBoutton())
     PARAMETRE = Menu("Parametre").addElement("back",BackBoutton())
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
