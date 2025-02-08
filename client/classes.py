@@ -146,10 +146,12 @@ class Chat(GroupElement,EventHandler):
         self.show = False
 
     def affiche(self, surface:pygame.Surface):
-        if not self.show : return
-        surface.blit(self.img, (0,290))
-        for mess in self.messages:
-            mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+        if self.show :
+            surface.blit(self.img, (0,290))
+            for mess in self.messages:
+                mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+        else:
+            return
 
     def envoyer(self, message):
         if message == "":
