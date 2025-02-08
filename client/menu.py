@@ -40,6 +40,7 @@ class BackBoutton(Bouton):
 
     def onClique(self):
         l.menu = MenuList.ACCUEIL.value
+        l.error = None
 
 #------- Accueil Menu Elements -----------
 class JoinBoutton(Bouton):
