@@ -6,6 +6,7 @@ import error as e
 import server.server as s
 import Joueur as j
 from network import Network, is_valid_ip, is_port
+from groupelement import GroupElement
 
 class Menu:
     def __init__(self,name):
@@ -13,7 +14,8 @@ class Menu:
         self.elements = {}
 
     def addElement(self,name:str, element: Element):
-        element.setMenu(self)
+        if not isinstance(element,GroupElement):
+            element.setMenu(self)
         self.elements[name] = element
         return self
 
