@@ -15,10 +15,9 @@ class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.message = data
-    
-    def decode(self):
-        self.message
-        return 
+        datalist = data.split(";")
+        self.sender = datalist[0]
+        self.message = datalist[1]
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]

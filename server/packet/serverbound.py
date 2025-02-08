@@ -9,12 +9,12 @@ class ServerBoundPacket:
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
-        self.data = data
+        self.data = data.split("&;")
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
-        self.name = data        
+        self.name = data
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print(data)

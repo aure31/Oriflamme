@@ -10,7 +10,7 @@ class ServerBoundPacket:
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,*data):
-        self.data = ";".join(data)
+        self.data = "&;".join(data)
 
     def send(self, conn):
         packet = bytearray(len(self.data)+1)
@@ -23,10 +23,10 @@ class ServerBoundPseudoPacket(ServerBoundDataPacket):
         super().__init__(pseudo)
         self.name = pseudo
 
-class packetsuperutile(ServerBoundDataPacket):
+class ServerBoundMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
-        self.name = data
+        self.message = data
     
     
 def getClientBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
@@ -37,4 +37,4 @@ def getClientBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     else :
         return packet()
 
-serverBoundPacketList = [ServerBoundPseudoPacket,packetsuperutile]
+serverBoundPacketList = [ServerBoundPseudoPacket,ServerBoundMessagePacket]
