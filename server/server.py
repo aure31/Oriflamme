@@ -31,10 +31,13 @@ class Server :
 
     def connectionListener(self):
         while not self.stopevent.is_set():
-            print("Server : En attente de nouvelle connexion...")
-            conn, addr = self.soket.accept()
-            print("Server : Connecté à : ", addr)
-            self.connection(conn,addr)
+            try:
+                print("Server : En attente de nouvelle connexion...")
+                conn, addr = self.soket.accept()
+                print("Server : Connecté à : ", addr)
+                self.connection(conn,addr)
+            except:
+                break
             
     def connection(self,conn:socket.socket,ip):
         client = Client(conn,ip,self.lastpid)
@@ -48,18 +51,21 @@ class Server :
 
     def paketListener(self,player:Joueur):
         while not self.stopevent.is_set():
-            packet = getServerBoundPacket(player.client.conn.recv(2048))
+            data = player.client.conn.recv(2048)
+            if not data:
+                break
+            packet = getServerBoundPacket(data)
             if packet.get_id() == 0:
                 print("packet 0")
-                break
             else:
                 print("packet : ",packet.get_id())
     
     def stop(self):
+        print("stop")
+        self.soket.close()
         self.stopevent.set()
         for t in self.threadlist:
             t.join()
-        self.soket.close()
         print("Server stopped")
 
 

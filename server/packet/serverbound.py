@@ -12,12 +12,12 @@ class ServerBoundDataPacket(ServerBoundPacket):
         self.data = data
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
-
     def __init__(self,data:str):
         super().__init__(data)
         self.name = data
     
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
+    print(data)
     id = data[0]
     print(id)
     packet = serverboundPacketList[id]

@@ -3,12 +3,11 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame as p
-from network import Network, is_valid_ip, is_port
 import Joueur as j
 from menu import *
 import loader as l
 from loader import window,background_image
-from error import errorHandler,ErrorList
+from error import errorHandler
 import server.server as s
 
     
@@ -20,10 +19,10 @@ def main():
         window.blit(background_image, (0, 0))
         for event in p.event.get():
             if event.type == p.QUIT:
-                l.is_running = False
+                stop_game()
             if event.type == p.KEYDOWN:
                 if event.key == p.K_ESCAPE:
-                    l.is_running = False
+                    stop_game()
             TextInput.handle_event_all(event)
 
         l.menu.affiche()
@@ -31,9 +30,15 @@ def main():
             errorHandler(l.error,l.window)
         p.display.update()
         
+def stop_game():
+    l.is_running = False
+    l.reseau.disconect()
+    l.reseau = None
+    p.quit()
+    sys.exit()
 
 if __name__ == "__main__":
-    p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
-    p.mixer.music.set_volume(0.3)
-    p.mixer.music.play(-1)
+    # p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
+    # p.mixer.music.set_volume(0.3)
+    # p.mixer.music.play(-1)
     main()

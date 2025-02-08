@@ -121,20 +121,24 @@ class RejoindreJoinBoutton(Bouton):
 
 class AttenteLaunchBoutton(Bouton):
     def __init__(self):
-        super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition=lambda: l.reseau.id == 1)
+        super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition= lambda : l.reseau.id == 0)
 
-    def onClique(self, menu:Menu):
+    def onClique(self):
         pass
 
 class AttenteBackBoutton(BackBoutton):
     def __init__(self):
         super().__init__()
 
-    def onClique(self, menu:Menu):
+    def onClique(self):
+        print("client : Retour")
         l.reseau.disconect()
-        l.menu = MenuList.ACCUEIL.value
+        l.reseau = None
         if l.server is not None:
+            print("server : Fermeture du serveur")
+            print("server : "+str(l.server.ip)+":"+str(l.server.port))
             l.server.stop()
+        l.menu = MenuList.ACCUEIL.value
 
 #------- Jeu Menu Elements -----------
 
@@ -161,7 +165,7 @@ class MenuList(enum.Enum):
             .addElement("join",JoinBoutton())\
             .addElement("back",BackBoutton())
     ATTENTE = AttenteMenu()\
-            .addElement("back",BackBoutton())\
+            .addElement("back",AttenteBackBoutton())\
             .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
             .addElement("launch",AttenteLaunchBoutton())

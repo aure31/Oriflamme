@@ -10,7 +10,7 @@ class Network:
         self.port = port
         self.addr = (self.server, self.port)
         self.id = self.connect()
-        self.thread = th.Thread(target=self.packetListener)
+        self.thread = th.Thread(name="clientpacketlistner",target=self.packetListener)
         self.thread.start()
         self.data = None
         self.send(ServerBoundPseudoPacket(name))
@@ -20,14 +20,15 @@ class Network:
         print("client : addresse "+str(self.addr))
         self.client.connect(self.addr)
         print("client : Connexion réussie")
-        return self.client.recv(2048).decode()
+        return self.client.recv(2048)[0]
     
     def packetListener(self):
         while not self.stop_event.is_set():
+            print("client : stop_event : "+str(self.stop_event.is_set()))
             try:
                 self.data = self.client.recv(2048).decode()
             except:
-                pass
+                break
 
     def send(self, packet:ServerBoundPacket):
         packet.send(self.client)
@@ -37,9 +38,12 @@ class Network:
         return self.packetListener()
 
     def disconect(self):
-        self.stop_event.set()
-        self.thread.join()
         self.client.close()
+        print("client : 1")
+        self.stop_event.set()
+        print("client : 2")
+        self.thread.join()
+        print("client : Déconnexion")
 
 
 
