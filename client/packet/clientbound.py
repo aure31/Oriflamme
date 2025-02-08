@@ -9,16 +9,14 @@ class ServerBoundPacket:
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
-        self.data = data
+        self.data = data.split(";")
 
 class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
-        self.message = data
-        datalist = data.split(";")
-        self.sender = datalist[0]
-        self.message = datalist[1]
-    
+        self.sender = self.data[0]
+        self.message = self.data[1]
+
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
     print(id)

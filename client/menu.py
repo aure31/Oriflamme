@@ -124,7 +124,7 @@ class RejoindreJoinBoutton(Bouton):
 
 class AttenteLaunchBoutton(Bouton):
     def __init__(self):
-        super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition= lambda : l.reseau.id == 0)
+        super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition= lambda : l.reseau and l.reseau.id == 0)
 
     def onClique(self):
         pass
@@ -136,12 +136,12 @@ class AttenteBackBoutton(BackBoutton):
     def onClique(self):
         print("client : Retour")
         l.reseau.disconect()
-        l.reseau = None
         if l.server is not None:
             print("server : Fermeture du serveur")
             print("server : "+str(l.server.ip)+":"+str(l.server.port))
             l.server.stop()
             l.server = None
+        l.reseau = None
         l.menu = MenuList.ACCUEIL.value
 
 #------- Jeu Menu Elements -----------

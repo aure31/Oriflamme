@@ -10,6 +10,7 @@ class Network:
         self.port = port
         self.addr = (self.server, self.port)
         self.id = self.connect()
+        print("client : id : "+str(self.id))
         self.thread = th.Thread(name="clientpacketlistner",target=self.packetListener)
         self.thread.start()
         self.data = None
