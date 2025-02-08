@@ -163,7 +163,7 @@ class MenuList(enum.Enum):
             .addElement("demande_port",Texte("Entrez le port du serveur",800, 440, (255,0,0), None, 45, "client/assets/Algerian.ttf"))\
             .addElement("ask_ip_join",TextInput(900, 300))\
             .addElement("ask_port_join",TextInput(900, 500))\
-            .addElement("join",JoinBoutton())\
+            .addElement("join",RejoindreJoinBoutton())\
             .addElement("back",BackBoutton())
     ATTENTE = AttenteMenu()\
             .addElement("back",AttenteBackBoutton())\

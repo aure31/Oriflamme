@@ -89,6 +89,7 @@ class Bouton(Element):
     
     def setCoord(self, x, y):
         self.rect.topleft = (x, y)
+        return self
 
     def estClique(self):
         retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()) and not Bouton.pressed 
