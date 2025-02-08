@@ -26,6 +26,7 @@ def main():
             TextInput.handle_event_all(event)
 
         l.menu.affiche()
+        Chat.affiche()
         if l.error:
             errorHandler(l.error,l.window)
         p.display.update()
