@@ -119,7 +119,7 @@ def main():
             case MenuList.CREDIT:
                 menu = MenuList.ACCUEIL
 
-        errorHandler(error)
+        #errorHandler(error)
         p.display.update()
         
 
