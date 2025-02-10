@@ -167,7 +167,7 @@ class Chat(GroupElement, EventHandler):
     def __init__(self):
         GroupElement.__init__(self, "chat")
         EventHandler.__init__(self)
-        self.messages = []
+        self.messages : list[Element] = []
         self.img = pygame.image.load("client/assets/chat.png")
         self.text_input = TextInput(0, 860)
         self.show = False
@@ -175,12 +175,13 @@ class Chat(GroupElement, EventHandler):
     def affiche(self, surface: pygame.Surface):
         if self.show:
             surface.blit(self.img, (0, 290))
+            self.text_input.affiche(surface)
             for mess in self.messages:
-                mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+                mess.affiche(surface)
         else:
             return
 
-    def envoyer(self, message):
+    def add_message(self, message):
         if message == "":
             pass
         elif message[0] == '/':
@@ -191,6 +192,11 @@ class Chat(GroupElement, EventHandler):
             self.messages.insert(0, Texte(message, (255, 255, 255), None, 20))
         if len(self.messages) > 19:
             self.messages.pop()
+        self.update_pos()
+
+    def update_pos(self):
+        for msg in self.messages:
+            msg.pos.y -= self.messages.index(msg) * 30
 
     def requetesServer(self):
         pass  # C'est là que tu mets les packets pour le seveur
@@ -203,5 +209,5 @@ class Chat(GroupElement, EventHandler):
                 else:
                     self.show = True
             if event.key == pygame.K_RETURN:
-                self.envoyer(self.text_input.get_text())
+                self.add_message(self.text_input.get_text())
                 self.text_input.clear()
