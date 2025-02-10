@@ -40,7 +40,7 @@ class Server :
                 break
             
     def connection(self,conn:socket.socket,ip):
-        client = Client(conn,ip,self.lastpid)
+        client = Client(conn,ip,self.lastpid,self)
         self.lastpid += 1
         packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
         player = Joueur(packet.name,client)

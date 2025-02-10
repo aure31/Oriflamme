@@ -4,8 +4,8 @@ import pygame as p
 
 
 p.init()
-p.mixer.init()
-click = p.mixer.Sound("client/assets/musiques/click.mp3")
+#p.mixer.init()
+#click = p.mixer.Sound("client/assets/musiques/click.mp3")
 
 p.display.set_caption('Oriflamme')
 window = p.display.set_mode((1600,900))
