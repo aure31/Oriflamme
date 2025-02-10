@@ -54,6 +54,7 @@ class Server :
     
     def stop(self):
         print("stop")
+        self.soket.shutdown(socket.SHUT_RDWR)
         self.soket.close()
         self.stopevent.set()
         for t in self.threadlist:

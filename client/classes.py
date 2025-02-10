@@ -165,6 +165,8 @@ class Texte(Element):
 class Chat(GroupElement, EventHandler):
 
     def __init__(self):
+        GroupElement.__init__(self, "chat")
+        EventHandler.__init__(self)
         self.messages = []
         self.img = pygame.image.load("client/assets/chat.png")
         self.text_input = TextInput(0, 860)
@@ -201,5 +203,5 @@ class Chat(GroupElement, EventHandler):
                 else:
                     self.show = True
             if event.key == pygame.K_RETURN:
-                self.envoyer(self.text_input.texte)
+                self.envoyer(self.text_input.get_text())
                 self.text_input.clear()
