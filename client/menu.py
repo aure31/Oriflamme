@@ -73,6 +73,9 @@ class NewGameBoutton(Bouton):
             l.reseau = Network(l.server.ip, l.server.port , name.get_text())
             l.menu = MenuList.ATTENTE.value
             l.menu.init()
+
+            
+        
         l.error = error
 
 class SettingsBoutton(Bouton):
@@ -90,6 +93,7 @@ class CreditsBoutton(Bouton):
     def onClique(self):
         l.error = None
         l.menu = MenuList.CREDIT.value
+
 
 class QuitterBoutton(Bouton):
     def __init__(self):
@@ -127,6 +131,7 @@ class AttenteLaunchBoutton(Bouton):
         super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition= lambda : l.reseau and l.reseau.id == 0)
 
     def onClique(self):
+        l.menu = MenuList.PLATEAU.value
         pass
 
 class AttenteBackBoutton(BackBoutton):
@@ -175,3 +180,6 @@ class MenuList(enum.Enum):
         .addElement("chat", Chat())
     PARAMETRE = Menu("Parametre").addElement("back",BackBoutton())
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
+    PLATEAU = Menu("Plateau")\
+        .addElement("back",BackBoutton())\
+        .addElement("chat", Chat())
