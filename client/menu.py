@@ -1,6 +1,6 @@
 import enum
 import loader as l
-from classes import Element,Bouton,TextInput,Texte, Chat
+from classes import Element, Bouton, TextInput, Texte, Chat
 import pygame
 import error as e
 import server.server as s
@@ -8,13 +8,15 @@ import Joueur as j
 from network import Network, is_valid_ip, is_port
 from groupelement import GroupElement
 
+
 class Menu:
-    def __init__(self,name):
+
+    def __init__(self, name):
         self.name = name
         self.elements = {}
 
-    def addElement(self,name:str, element: Element | GroupElement):
-        if not isinstance(element,GroupElement):
+    def addElement(self, name: str, element: Element | GroupElement):
+        if not isinstance(element, GroupElement):
             element.setMenu(self)
         self.elements[name] = element
         return self
@@ -22,32 +24,43 @@ class Menu:
     def affiche(self):
         for element in self.elements.values():
             element.affiche(l.window)
-    
-    def getElement(self,name:str) -> Element:
+
+    def getElement(self, name: str) -> Element:
         return self.elements[name]
-    
+
+
 class AttenteMenu(Menu):
+
     def __init__(self):
         super().__init__("Attente")
 
     def init(self):
-        self.getElement("ip").set_text("IP du serveur : "+str(l.reseau.server))
-        self.getElement("port").set_text("Port du serveur : "+str(l.reseau.port))
+        self.getElement("ip").set_text("IP du serveur : " +
+                                       str(l.reseau.server))
+        self.getElement("port").set_text("Port du serveur : " +
+                                         str(l.reseau.port))
 
 
 #------- Utilis Menu Elements -----------
 class BackBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/back.png", "client/assets/new_button/back_touched.png", pygame.Vector2(10, 10))
+        super().__init__("client/assets/new_button/back.png",
+                         "client/assets/new_button/back_touched.png",
+                         pygame.Vector2(10, 10))
 
     def onClique(self):
         l.menu = MenuList.ACCUEIL.value
         l.error = None
 
+
 #------- Accueil Menu Elements -----------
 class JoinBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/join.png", "client/assets/new_button/join_touched.png", pygame.Vector2(900, 100))
+        super().__init__("client/assets/new_button/join.png",
+                         "client/assets/new_button/join_touched.png",
+                         pygame.Vector2(900, 100))
 
     def onClique(self):
         name = self.menu.getElement("name")
@@ -59,18 +72,22 @@ class JoinBoutton(Bouton):
             l.error = None
             l.menu = MenuList.REJOINDRE.value
 
+
 class NewGameBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/new_game.png", "client/assets/new_button/new_game_touched.png", pygame.Vector2(900, 250))
+        super().__init__("client/assets/new_button/new_game.png",
+                         "client/assets/new_button/new_game_touched.png",
+                         pygame.Vector2(900, 250))
 
     def onClique(self):
-        name : TextInput = self.menu.getElement("name")
+        name: TextInput = self.menu.getElement("name")
         error = None
         if name.get_text() == "":
             error = e.ErrorList.PSEUDO
         else:
             l.server = s.Server()
-            l.reseau = Network(l.server.ip, l.server.port , name.get_text())
+            l.reseau = Network(l.server.ip, l.server.port, name.get_text())
             l.menu = MenuList.ATTENTE.value
             l.menu.init()
 
@@ -78,17 +95,25 @@ class NewGameBoutton(Bouton):
         
         l.error = error
 
+
 class SettingsBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/settings.png", "client/assets/new_button/settings_touched.png", pygame.Vector2(900, 400))
+        super().__init__("client/assets/new_button/settings.png",
+                         "client/assets/new_button/settings_touched.png",
+                         pygame.Vector2(900, 400))
 
     def onClique(self):
         l.error = None
         l.menu = MenuList.PARAMETRE.value
 
+
 class CreditsBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/credits.png", "client/assets/new_button/credits_touched.png", pygame.Vector2(900, 550))
+        super().__init__("client/assets/new_button/credits.png",
+                         "client/assets/new_button/credits_touched.png",
+                         pygame.Vector2(900, 550))
 
     def onClique(self):
         l.error = None
@@ -96,26 +121,36 @@ class CreditsBoutton(Bouton):
 
 
 class QuitterBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/quit.png", "client/assets/new_button/quit_touched.png", pygame.Vector2(900, 700))
+        super().__init__("client/assets/new_button/quit.png",
+                         "client/assets/new_button/quit_touched.png",
+                         pygame.Vector2(900, 700))
 
     def onClique(self):
         l.is_running = False
 
+
 #------- Rejoindre Menu Elements -----------
 class RejoindreJoinBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/join.png", "client/assets/new_button/join_touched.png", pygame.Vector2(875, 600))
+        super().__init__("client/assets/new_button/join.png",
+                         "client/assets/new_button/join_touched.png",
+                         pygame.Vector2(875, 600))
 
     def onClique(self):
-        ask_ip_join : TextInput = self.menu.getElement("ask_ip_join")
-        ask_port_join : TextInput = self.menu.getElement("ask_port_join")
-        if is_valid_ip(ask_ip_join.get_text()) and is_port(ask_port_join.get_text()):
+        ask_ip_join: TextInput = self.menu.getElement("ask_ip_join")
+        ask_port_join: TextInput = self.menu.getElement("ask_port_join")
+        if is_valid_ip(ask_ip_join.get_text()) and is_port(
+                ask_port_join.get_text()):
             l.error = None
             l.connexion.affiche(l.window)
             try:
-                name : TextInput = MenuList.ACCUEIL.value.getElement("name")
-                l.reseau = Network(ask_ip_join.get_text(), int(ask_port_join.get_text()),name.get_text())
+                name: TextInput = MenuList.ACCUEIL.value.getElement("name")
+                l.reseau = Network(ask_ip_join.get_text(),
+                                   int(ask_port_join.get_text()),
+                                   name.get_text())
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
             except:
@@ -124,34 +159,45 @@ class RejoindreJoinBoutton(Bouton):
         else:
             l.error = e.ErrorList.VALUE
 
+
 #------- Attente Menu Elements -----------
 
+
 class AttenteLaunchBoutton(Bouton):
+
     def __init__(self):
-        super().__init__("client/assets/new_button/launch.png", "client/assets/new_button/launch_touched.png", pygame.Vector2(950, 600),condition= lambda : l.reseau and l.reseau.id == 0)
+        super().__init__("client/assets/new_button/launch.png",
+                         "client/assets/new_button/launch_touched.png",
+                         pygame.Vector2(950, 600),
+                         condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
         l.menu = MenuList.PLATEAU.value
         pass
 
+
 class AttenteBackBoutton(BackBoutton):
+
     def __init__(self):
         super().__init__()
 
     def onClique(self):
         print("client : Retour")
         l.reseau.disconect()
+        print("disconect")
         if l.server is not None:
             print("server : Fermeture du serveur")
-            print("server : "+str(l.server.ip)+":"+str(l.server.port))
+            print("server : " + str(l.server.ip) + ":" + str(l.server.port))
             l.server.stop()
             l.server = None
         l.reseau = None
         l.menu = MenuList.ACCUEIL.value
 
+
 #------- Jeu Menu Elements -----------
 
 #------- MenuList ------------
+
 
 class MenuList(enum.Enum):
     ACCUEIL = Menu("Accueil")\
