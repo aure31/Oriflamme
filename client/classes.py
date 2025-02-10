@@ -107,7 +107,7 @@ class Bouton(Element):
         retour = pygame.mouse.get_pressed()[0] and self.rect.collidepoint(pygame.mouse.get_pos()) and not Bouton.pressed 
         Bouton.presse(retour)
         if retour:
-            l.click.play()
+            #l.click.play()
             self.onClique()
         return retour
     
