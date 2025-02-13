@@ -1,5 +1,4 @@
 import socket
-import enum
 
 #ClientBound server -> client
 #ServerBound client -> server
@@ -13,6 +12,7 @@ class ServerBoundDataPacket(ServerBoundPacket):
         self.data = "&;".join(data)
 
     def send(self, conn):
+        print("client:sending",self.data)
         packet = bytearray(len(self.data)+1)
         packet[0] = serverBoundPacketList.index(self.__class__)
         packet[1:] = self.data.encode("utf-8")

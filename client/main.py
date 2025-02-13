@@ -35,6 +35,8 @@ def stop_game():
     l.is_running = False
     l.reseau.disconect()
     l.reseau = None
+    if l.server:
+        l.server.stop()
     p.quit()
     sys.exit()
 

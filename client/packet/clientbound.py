@@ -1,4 +1,5 @@
-import socket
+
+import loader as l
 
 #client_bound server -> client
 #server_bound client -> server
@@ -6,18 +7,23 @@ import socket
 class ServerBoundPacket:
     def get_id(self):
         return serverboundPacketList.index(self.__class__)
+    
+    def handle(self):
+        pass
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,data:str):
-        self.data = data.split(";")
+        self.data = data.split("&;")
 
 class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
-        self.sender = self.data[0]
-        self.message = self.data[1]
+        self.message = self.data[0]
 
-def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
+    def handle(self):
+        l.chat.addMessage(self.message)
+
+def getClientBoundPacket(data:bytes) -> ServerBoundPacket:
     id = data[0]
     print(id)
     packet = serverboundPacketList[id]

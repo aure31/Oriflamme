@@ -1,5 +1,4 @@
-from classes import Bouton, TextInput, Texte
-from network import Network
+from classes import Texte,Chat
 import pygame as p
 
 
@@ -19,11 +18,12 @@ connexion = Texte("Connexion...",950, 750, (255,255,255), None, 30, "client/asse
 fleche = p.image.load("client/assets/sens.png")
 
 caracteres = [" ", "/", "@", "~", "#"]
+chat = Chat()
 
 #Global Variables
 error = None
 menu = None
-reseau : Network = None
+reseau = None
 server = None
 joueur = None
 is_running = True

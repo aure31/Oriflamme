@@ -17,7 +17,7 @@ class Menu:
 
     def addElement(self, name: str, element: Element | GroupElement):
         if not isinstance(element, GroupElement):
-            element.setMenu(self)
+            element.addMenu(self)
         self.elements[name] = element
         return self
 
@@ -27,6 +27,9 @@ class Menu:
 
     def getElement(self, name: str) -> Element:
         return self.elements[name]
+    
+    def isAffiche(self):
+        return l.menu == self
 
 
 class AttenteMenu(Menu):
@@ -63,7 +66,7 @@ class JoinBoutton(Bouton):
                          pygame.Vector2(900, 100))
 
     def onClique(self):
-        name = self.menu.getElement("name")
+        name = self.menus[0].getElement("name")
         if name.get_text() == "":
             l.error = e.ErrorList.PSEUDO
         elif " " in name.get_text():
@@ -81,7 +84,7 @@ class NewGameBoutton(Bouton):
                          pygame.Vector2(900, 250))
 
     def onClique(self):
-        name: TextInput = self.menu.getElement("name")
+        name: TextInput = self.menus[0].getElement("name")
         error = None
         if name.get_text() == "":
             error = e.ErrorList.PSEUDO
@@ -140,8 +143,8 @@ class RejoindreJoinBoutton(Bouton):
                          pygame.Vector2(875, 600))
 
     def onClique(self):
-        ask_ip_join: TextInput = self.menu.getElement("ask_ip_join")
-        ask_port_join: TextInput = self.menu.getElement("ask_port_join")
+        ask_ip_join: TextInput = self.menus[0].getElement("ask_ip_join")
+        ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
         if is_valid_ip(ask_ip_join.get_text()) and is_port(
                 ask_port_join.get_text()):
             l.error = None
@@ -198,7 +201,6 @@ class AttenteBackBoutton(BackBoutton):
 
 #------- MenuList ------------
 
-
 class MenuList(enum.Enum):
     ACCUEIL = Menu("Accueil")\
             .addElement("name",TextInput(170, 500))\
@@ -220,12 +222,12 @@ class MenuList(enum.Enum):
             .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
             .addElement("launch",AttenteLaunchBoutton())\
-            .addElement("chat", Chat())
+            .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("back",BackBoutton())\
-        .addElement("chat", Chat())
+        .addElement("chat", l.chat)
     PARAMETRE = Menu("Parametre").addElement("back",BackBoutton())
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
     PLATEAU = Menu("Plateau")\
         .addElement("back",BackBoutton())\
-        .addElement("chat", Chat())
+        .addElement("chat", l.chat)

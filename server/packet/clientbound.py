@@ -6,18 +6,28 @@ import enum
 
 class ClientBoundPacket:
     def send(self,conn:socket.socket):
-        pass
+        conn.send(clientBoundPacketList.index(self.__class__))
 
 class ClientBoundDataPacket(ClientBoundPacket):
-    def __init__(self,data:str):
-        self.data = data
+    def __init__(self,*data):
+        self.data = "&;".join(data)
+
+    def send(self, conn):
+        packet = bytearray(len(self.data)+1)
+        packet[0] = clientBoundPacketList.index(self.__class__)
+        packet[1:] = self.data.encode("utf-8")
+        conn.send(packet)
 
 class ClientBoundIdPacket(ClientBoundPacket):
     def __init__(self,id:int):
         self.id = id
 
     def send(self,conn:socket.socket):
-        conn.send(bytes([clientBoundPacketList.index(self.__class__),self.id]))
+        conn.send(bytes([self.id]))
+
+class ClientBoundMessagePacket(ClientBoundDataPacket):
+    def __init__(self, message:str):
+        super().__init__(message)
     
     
 def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
@@ -28,4 +38,4 @@ def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
     else :
         return packet()
 
-clientBoundPacketList = [ClientBoundIdPacket]
+clientBoundPacketList = [ClientBoundMessagePacket]

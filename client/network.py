@@ -1,10 +1,12 @@
 import socket
 import threading as th
 from packet.serverbound import ServerBoundPacket,ServerBoundPseudoPacket
+from packet.clientbound import getClientBoundPacket
 
 class Network:
     def __init__(self, ip, port,name):
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.name = name
+        self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server = ip
         self.stop_event = th.Event()
         self.port = port
@@ -19,27 +21,31 @@ class Network:
     def connect(self):
         print("client : Connexion à "+self.server)
         print("client : addresse "+str(self.addr))
-        self.client.connect(self.addr)
+        self.conn.connect(self.addr)
         print("client : Connexion réussie")
-        return self.client.recv(2048)[0]
+        return self.conn.recv(2048)[0]
     
     def packetListener(self):
         while not self.stop_event.is_set():
-            print("client : stop_event : "+str(self.stop_event.is_set()))
+            
             try:
-                self.data = self.client.recv(2048).decode()
+                data = self.conn.recv(2048)
+                if not data:
+                    break
+                packet = getClientBoundPacket(data)
+                packet.handle(self.conn)
             except:
                 break
 
     def send(self, packet:ServerBoundPacket):
-        packet.send(self.client)
+        packet.send(self.conn)
 
     def sendRecv(self, data):
         self.send(data)
         return self.packetListener()
 
     def disconect(self):
-        self.client.close()
+        self.conn.close()
         self.stop_event.set()
         self.thread.join()
         print("client : Déconnexion")

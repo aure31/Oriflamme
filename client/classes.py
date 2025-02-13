@@ -1,6 +1,7 @@
 import pygame
 import loader as l
-from groupelement import GroupElement
+from groupelement import GroupElement,ListElement
+from packet.serverbound import ServerBoundMessagePacket
 
 pygame.init()
 
@@ -10,34 +11,47 @@ class Element:
     def __init__(self, x: int, y: int, condition=lambda: True):
         self.condition = condition
         self.pos = pygame.Vector2(x, y)
+        self.menus = []
+        
 
-    def setMenu(self, menu):
-        self.menu = menu
+    def addMenu(self, menu):
+        self.menus.append(menu)
+
+    def isAffiche(self):
+        if not self.condition():
+            return False
+        for menu in self.menus:
+            if menu.isAffiche():
+                return True
+        return False
 
     def affiche(self, window):
         pass
 
 
 class EventHandler:
-    listItems = []
+    listItems = [[] for i in range(11)]
 
-    def __init__(self):
-        EventHandler.listItems.append(self)
+    def __init__(self,priority=10):
+        print("client : init EventHandler")
+        EventHandler.listItems[priority].append(self)
+        self.priority = priority
         pass
 
     def onEvent(self, event):
         pass
 
     def handle_event_all(event):
-        for item in EventHandler.listItems:
-            item.onEvent(event)
+        for subList in EventHandler.listItems:
+            for item in subList:
+                item.onEvent(event)
 
 
 class TextInput(Element, EventHandler):
 
     def __init__(self, x: int, y: int, condition=lambda: True):
         Element.__init__(self, x, y, condition)
-        EventHandler.__init__(self)
+        EventHandler.__init__(self,0)
         self.bg_color = (255, 255, 255)  # Couleur de fond blanche
         self.border_color = (200, 200, 200)  # Couleur de bordure grise
         self.active_border_color = (0, 0, 0
@@ -60,7 +74,7 @@ class TextInput(Element, EventHandler):
                 self.active = False
 
         if event.type == pygame.KEYDOWN:
-            if self.active:
+            if self.active and self.isAffiche():
                 if event.key == pygame.K_RETURN:
                     print(f'Texte validé : {self.text}')
                     self.last_valid_text = self.text
@@ -160,46 +174,69 @@ class Texte(Element):
                                         self.bg_color)
         # Afficher le texte à la position (x, y)
         surface.blit(text_surface, self.pos)
+        #print("client : affiche texte : ",self.texte)
+
+class Image(Element):
+    
+    def __init__(self, image, x, y, condition=lambda: True):
+        super().__init__(x, y, condition)
+        self.image = pygame.image.load(image)
+
+    def affiche(self, surface):
+        if not self.condition(): return
+        surface.blit(self.image, self.pos)
 
 
 class Chat(GroupElement, EventHandler):
 
     def __init__(self):
-        self.messages = []
-        self.img = pygame.image.load("client/assets/chat.png")
-        self.text_input = TextInput(0, 860)
+        EventHandler.__init__(self)
+        GroupElement.__init__(self, "Chat")
+        self.messages: ListElement = ListElement()
         self.show = False
+        self.addElement("background", Image("client/assets/chat.png", 0, 290))
+        self.addElement("text_input", TextInput(0, l.window.get_height() - 40))
+        self.addElement("messages", self.messages)
 
     def affiche(self, surface: pygame.Surface):
         if self.show:
-            surface.blit(self.img, (0, 290))
-            for mess in self.messages:
-                mess.affiche(surface, 10, 830 - self.messages.index(mess) * 30)
+            super().affiche(surface)
         else:
             return
 
-    def envoyer(self, message):
+    def addMessage(self, message):
         if message == "":
             pass
         elif message[0] == '/':
-            self.messages.insert(0, Texte(message, (255, 247, 0), None, 20))
+            self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (255, 247, 0), None, 20))
         elif message[0] == '@':
-            self.messages.insert(0, Texte(message, (43, 185, 0), None, 20))
+            self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (43, 185, 0), None, 20))
         else:
-            self.messages.insert(0, Texte(message, (255, 255, 255), None, 20))
-        if len(self.messages) > 19:
-            self.messages.pop()
+            self.messages.addElement(Texte(message,10,l.screen_height-60, (255, 255, 255), None, 20))
+        if len(self.messages.elements) > 19:
+            self.messages.elements.pop(0)
+        for e in self.messages.elements:
+            print("client : message : ",e.isAffiche(),e.menus)
+        self.update_pos()
 
-    def requetesServer(self):
-        pass  # C'est là que tu mets les packets pour le seveur
+    def update_pos(self):
+        for msg in self.messages.elements:
+            msg.pos.y -= 30
+
+    def sendMessages(self,message):
+        l.reseau.send(ServerBoundMessagePacket(message))
 
     def onEvent(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_t:
+            text_input : TextInput = self.getElement("text_input")
+            if event.key == pygame.K_t and not text_input.active:
                 if self.show:
                     self.show = False
                 else:
                     self.show = True
             if event.key == pygame.K_RETURN:
-                self.envoyer(self.text_input.texte)
-                self.text_input.clear()
+                print("text :",text_input.get_text())
+                format_text = "["+l.reseau.name+"] : "+text_input.get_text()
+                self.addMessage(format_text)
+                self.sendMessages(format_text)
+                text_input.clear()

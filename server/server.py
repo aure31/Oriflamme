@@ -47,9 +47,10 @@ class Server :
         self.game.join_player(player)
         self.threadlist.append(client.thread)
 
-    def broadcast(self,packet:ClientBoundPacket,ignored:Client = []):
+    def broadcast(self,packet:ClientBoundPacket,ignored:list[int] = []):
         for player in self.game.players:
-            if player.client.id in ignored:
+            if player.client.id not in ignored:
+                print("broadcast : receved :",player.client.id)
                 player.client.send(packet)
     
     def stop(self):

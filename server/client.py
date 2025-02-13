@@ -9,9 +9,9 @@ class Client:
         self.conn = conn
         self.id = id
         self.thread = th.Thread(name="client"+str(self.id),target=self.paketListener)
-        self.thread.start()
         self.server = server
-        self.stopevent = server.stopevent
+        self.stopevent = self.server.stopevent
+        self.thread.start()
 
     def send(self,packet:ClientBoundPacket):
         packet.send(self.conn)
@@ -22,12 +22,19 @@ class Client:
     
     def paketListener(self):
         while not self.stopevent.is_set():
+            print("packet : listening id:",self.id)
             data = self.conn.recv(2048)
             if not data:
-                break
+                continue
+            
             packet = getServerBoundPacket(data)
-            packet.handle(self)
+            print("packet : handeled",packet.get_id())
+            try:
+                packet.handle(self)
+            except:
+                print("packet : error handeling")
             if packet.get_id() == 0:
                 print("packet 0")
             else:
                 print("packet : ",packet.get_id())
+        print("packet : stoped")
