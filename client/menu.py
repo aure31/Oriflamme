@@ -226,7 +226,9 @@ class MenuList(enum.Enum):
     JEU = Menu("Jeu")\
         .addElement("back",BackBoutton())\
         .addElement("chat", l.chat)
-    PARAMETRE = Menu("Parametre").addElement("back",BackBoutton())
+    PARAMETRE = Menu("Parametre")\
+        .addElement("back",BackBoutton())\
+        .addElement("Musique",Texte("Musique : ", 800, 200, (0,0,0), None, 45, "client/assets/Algerian.ttf"))
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
     PLATEAU = Menu("Plateau")\
         .addElement("back",BackBoutton())\
