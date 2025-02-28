@@ -176,17 +176,6 @@ class Texte(Element):
         surface.blit(text_surface, self.pos)
         #print("client : affiche texte : ",self.texte)
 
-# class Switcher(Element, EventHandler):
-#     def __init__(self, x, y, etat):
-#         Element.__init__(x, y)
-#         EventHandler.__init__()
-#         self.etat = etat
-    
-#     def onEvent(self, event):
-#         if event.type == pygame.MOUSEBUTTONDOWN:
-#             if self.rect.collidepoint(event.pos):
-
-
 class Image(Element):
     
     def __init__(self, image, x, y, condition=lambda: True):

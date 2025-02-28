@@ -133,6 +133,11 @@ class QuitterBoutton(Bouton):
     def onClique(self):
         l.is_running = False
 
+class MusicBoutton(Bouton):
+    def __init__(self):
+        super().__init__("client/assets/boutons/on.png","client/assets/on_touched.png", pygame.Vector2(900, 300))
+        self.active = True
+
 
 #------- Rejoindre Menu Elements -----------
 class RejoindreJoinBoutton(Bouton):
@@ -228,7 +233,8 @@ class MenuList(enum.Enum):
         .addElement("chat", l.chat)
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
-        .addElement("Musique",Texte("Musique : ", 800, 200, (0,0,0), None, 45, "client/assets/Algerian.ttf"))
+        .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
+        .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
     PLATEAU = Menu("Plateau")\
         .addElement("back",BackBoutton())\
