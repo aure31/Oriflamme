@@ -4,18 +4,18 @@ import loader as l
 #client_bound server -> client
 #server_bound client -> server
 
-class ServerBoundPacket:
+class ClientBoundPacket:
     def get_id(self):
-        return serverboundPacketList.index(self.__class__)
+        return clientboundPacketList.index(self.__class__)
     
     def handle(self):
         pass
 
-class ServerBoundDataPacket(ServerBoundPacket):
+class ClientBoundDataPacket(ClientBoundPacket):
     def __init__(self,data:str):
         self.data = data.split("&;")
 
-class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
+class ClientBoundReceiveMessagePacket(ClientBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.message = self.data[0]
@@ -23,14 +23,14 @@ class ClientBoundReceiveMessagePacket(ServerBoundDataPacket):
     def handle(self):
         l.chat.addMessage(self.message)
 
-def getClientBoundPacket(data:bytes) -> ServerBoundPacket:
+def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
     id = data[0]
     print(id)
-    packet = serverboundPacketList[id]
+    packet = clientboundPacketList[id]
     decode = data[1:].decode("utf-8")
     if len(data) > 1 :
        return packet(decode)
     else :
         return packet()
     
-serverboundPacketList : list[ServerBoundPacket.__class__] = [ClientBoundReceiveMessagePacket]
+clientboundPacketList : list[ClientBoundPacket.__class__] = [ClientBoundReceiveMessagePacket]

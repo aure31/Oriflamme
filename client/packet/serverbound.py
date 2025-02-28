@@ -1,7 +1,7 @@
 import socket
 
-#ClientBound server -> client
-#ServerBound client -> server
+#client_bound server -> client
+#server_bound client -> server
 
 class ServerBoundPacket:
     def send(self,conn:socket.socket):
@@ -12,7 +12,6 @@ class ServerBoundDataPacket(ServerBoundPacket):
         self.data = "&;".join(data)
 
     def send(self, conn):
-        print("client:sending",self.data)
         packet = bytearray(len(self.data)+1)
         packet[0] = serverBoundPacketList.index(self.__class__)
         packet[1:] = self.data.encode("utf-8")
@@ -29,7 +28,7 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
         self.message = data
     
     
-def getClientBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
+def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     id = data[0]
     packet = serverBoundPacketList[id]
     if issubclass(packet,ServerBoundDataPacket):

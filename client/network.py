@@ -15,34 +15,43 @@ class Network:
         print("client : id : "+str(self.id))
         self.thread = th.Thread(name="clientpacketlistner",target=self.packetListener)
         self.thread.start()
-        self.data = None
         self.send(ServerBoundPseudoPacket(name))
 
     def connect(self):
         print("client : Connexion à "+self.server)
-        print("client : addresse "+str(self.addr))
-        self.conn.connect(self.addr)
-        print("client : Connexion réussie")
-        return self.conn.recv(2048)[0]
+        try:
+            self.conn.settimeout(10)  # 10 second timeout
+            self.conn.connect(self.addr)
+            self.conn.settimeout(None)  # Reset to blocking mode
+            print("client : Connexion réussie")
+            return self.conn.recv(2048)[0]
+        except socket.timeout:
+            print("client : Timeout de connexion")
+            raise
+        except ConnectionRefusedError:
+            print("client : Connexion refusée")
+            raise
+        except Exception as e:
+            print("client : Erreur de connexion inconue:", str(e))
+            raise
     
     def packetListener(self):
         while not self.stop_event.is_set():
-            
             try:
                 data = self.conn.recv(2048)
                 if not data:
-                    break
+                    continue
                 packet = getClientBoundPacket(data)
-                packet.handle(self.conn)
-            except:
-                break
+                packet.handle()
+            except Exception as e:
+                print("client : Erreur de réception de paquet", e)
 
     def send(self, packet:ServerBoundPacket):
         packet.send(self.conn)
 
     def sendRecv(self, data):
         self.send(data)
-        return self.packetListener()
+        return self.conn.recv(2048)
 
     def disconect(self):
         self.conn.close()

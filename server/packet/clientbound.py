@@ -5,6 +5,9 @@ import enum
 #ServerBound client -> server
 
 class ClientBoundPacket:
+    def get_id(self):
+        return clientBoundPacketList.index(self.__class__)
+    
     def send(self,conn:socket.socket):
         conn.send(clientBoundPacketList.index(self.__class__))
 

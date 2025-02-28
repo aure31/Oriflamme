@@ -11,21 +11,24 @@ class Client:
         self.thread = th.Thread(name="client"+str(self.id),target=self.paketListener)
         self.server = server
         self.stopevent = self.server.stopevent
-        self.thread.start()
+        
 
     def send(self,packet:ClientBoundPacket):
         packet.send(self.conn)
 
     def sendRecv(self,packet:ClientBoundPacket) -> ServerBoundPacket:
+        print("packet : sending",flush=True)
         packet.send(self.conn)
         return getServerBoundPacket(self.conn.recv(2048))
     
     def paketListener(self):
         while not self.stopevent.is_set():
-            print("packet : listening id:",self.id)
+            print("server packet : listening player :",self.id)
             data = self.conn.recv(2048)
             if not data:
-                continue
+                print("server packet : connection closed ",self.id)
+                break
+                
             
             packet = getServerBoundPacket(data)
             print("packet : handeled",packet.get_id())

@@ -11,7 +11,7 @@ from .client import Client
 
 class Server :
     used_ports = []
-    def __init__(self, port:int =5555, ip:str = "localhost"):
+    def __init__(self, port:int =5555, ip:str = "0.0.0.0"):
         self.port = port if port not in Server.used_ports else 5555+len(Server.used_ports)
         self.ip = ip
         self.soket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,7 +21,7 @@ class Server :
         try:
             self.soket.bind((self.ip, port))
         except socket.error as e:
-            str(e)
+            print(str(e))
         self.soket.listen(5)
         self.game = Game()
         thread = th.Thread(name="connlistener",target=self.connectionListener)
@@ -37,21 +37,25 @@ class Server :
                 print("Server : Connecté à : ", addr)
                 self.connection(conn,addr)
             except:
-                break
+                print("Server : Erreur de connexion")
             
     def connection(self,conn:socket.socket,ip):
-        client = Client(conn,ip,self.lastpid,self)
-        self.lastpid += 1
-        packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
-        player = Joueur(packet.name,client)
-        self.game.join_player(player)
-        self.threadlist.append(client.thread)
+        try:
+            client = Client(conn,ip,self.lastpid,self)
+            self.lastpid += 1
+            packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
+            player = Joueur(packet.name,client)
+            self.game.join_player(player)
+            self.threadlist.append(client.thread)
+            client.thread.start()
+        except Exception as e:
+            print("Server : Erreur creation", e)
 
     def broadcast(self,packet:ClientBoundPacket,ignored:list[int] = []):
         for player in self.game.players:
             if player.client.id not in ignored:
-                print("broadcast : receved :",player.client.id)
                 player.client.send(packet)
+                print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
         print("stop")
