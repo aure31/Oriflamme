@@ -176,7 +176,7 @@ class AttenteLaunchBoutton(Bouton):
     def __init__(self):
         super().__init__("client/assets/new_button/launch.png",
                          "client/assets/new_button/launch_touched.png",
-                         pygame.Vector2(950, 600),
+                         pygame.Vector2(950, 700),
                          condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
