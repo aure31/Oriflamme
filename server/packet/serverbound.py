@@ -1,4 +1,5 @@
 import socket
+import utils
 
 
 #client_bound server -> client
@@ -12,16 +13,17 @@ class ServerBoundPacket:
         pass
 
 class ServerBoundDataPacket(ServerBoundPacket):
-    def __init__(self,data:str):
-        self.data = data.split("&;")
+    def __init__(self,data:list[str]):
+        self.data = data
+        
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
-    def __init__(self,data:str):
+    def __init__(self,data:list[str]):
         super().__init__(data)
         self.name = data
 
 class ServerBoundMessagePacket(ServerBoundDataPacket):
-    def __init__(self,data:str):
+    def __init__(self,data:list[str]):
         super().__init__(data)
         self.message = data
 
@@ -30,15 +32,16 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
         import server.packet.clientbound as cp
         client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
     
+
+
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print(data)
     id = data[0]
-    #print(id)
     packet = serverboundPacketList[id]
-    decode = data[1:].decode("utf-8")
-    if len(data) > 1 :
+    decode = utils.unparse(data[1:])
+    if issubclass(packet,ServerBoundDataPacket) :
        return packet(decode)
     else :
         return packet()
     
-serverboundPacketList : list[ServerBoundPacket.__class__] = [ServerBoundPseudoPacket,ServerBoundMessagePacket]
+serverboundPacketList = [ServerBoundPseudoPacket,ServerBoundMessagePacket]

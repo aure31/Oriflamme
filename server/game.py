@@ -104,7 +104,6 @@ class Game:
 
     def get_player(self,idPlayer) -> Joueur:
         return self.players[idPlayer]
-    
 
     def discard(self, cardPos : int):
         print(cardPos)

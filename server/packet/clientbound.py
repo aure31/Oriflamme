@@ -1,5 +1,6 @@
 import socket
 import enum
+import utils
 
 #ClientBound server -> client
 #ServerBound client -> server
@@ -12,13 +13,11 @@ class ClientBoundPacket:
         conn.send(clientBoundPacketList.index(self.__class__))
 
 class ClientBoundDataPacket(ClientBoundPacket):
-    def __init__(self,*data):
-        self.data = "&;".join(data)
+    def __init__(self,*data:str):
+        self.data = data
 
     def send(self, conn):
-        packet = bytearray(len(self.data)+1)
-        packet[0] = clientBoundPacketList.index(self.__class__)
-        packet[1:] = self.data.encode("utf-8")
+        packet = utils.parser()
         conn.send(packet)
 
 class ClientBoundIdPacket(ClientBoundPacket):
@@ -31,6 +30,45 @@ class ClientBoundIdPacket(ClientBoundPacket):
 class ClientBoundMessagePacket(ClientBoundDataPacket):
     def __init__(self, message:str):
         super().__init__(message)
+
+class clientBoundPlayerJoinPacket(ClientBoundDataPacket):
+    def __init__(self, name:str,color:str):
+        super().__init__(name)
+
+class CLientBoundGameStartPacket(ClientBoundPacket):
+    pass
+
+class ClientBoundGameEndPacket(ClientBoundDataPacket):
+    def __init__(self, winner:str):
+        super().__init__(winner)
+    
+# game packet
+class ClientBoundGameHandPacket(ClientBoundDataPacket):
+    def __init__(self,card:list[str]):
+        super().__init__(card)
+        self.card = card
+
+class ClientBoundShowCardPacket(ClientBoundDataPacket):
+    def __init__(self,id:int, card:str,player:str):
+        super().__init__(id,card,player)
+        self.id = id
+        self.card = card
+        self.player = player
+
+class ClientBoundPlayCardPacket(ClientBoundDataPacket):
+    def __init__(self,id:int, pos:int, card:str, player:str):
+        super().__init__(id,pos,card,player)
+        self.id = id
+        self.pos = pos
+        self.card = card
+        self.player = player
+
+# interaction packet
+class ClientBoundChoseToShowPacket(ClientBoundPacket):
+    pass
+
+class ClientBoundChoseToPlayPacket(ClientBoundPacket):
+    pass
     
     
 def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
@@ -41,4 +79,4 @@ def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
     else :
         return packet()
 
-clientBoundPacketList = [ClientBoundMessagePacket]
+clientBoundPacketList = [ClientBoundMessagePacket,clientBoundPlayerJoinPacket,CLientBoundGameStartPacket,ClientBoundGameEndPacket,ClientBoundGameHandPacket,ClientBoundShowCardPacket,ClientBoundPlayCardPacket,ClientBoundChoseToShowPacket,ClientBoundChoseToPlayPacket]

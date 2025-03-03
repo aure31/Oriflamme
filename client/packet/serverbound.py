@@ -1,4 +1,5 @@
 import socket
+import utils
 
 #client_bound server -> client
 #server_bound client -> server
@@ -12,9 +13,7 @@ class ServerBoundDataPacket(ServerBoundPacket):
         self.data = "&;".join(data)
 
     def send(self, conn):
-        packet = bytearray(len(self.data)+1)
-        packet[0] = serverBoundPacketList.index(self.__class__)
-        packet[1:] = self.data.encode("utf-8")
+        packet = utils.parser()
         conn.send(packet)
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):

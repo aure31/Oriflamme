@@ -1,5 +1,6 @@
 
 import loader as l
+import utils
 
 #client_bound server -> client
 #server_bound client -> server
@@ -12,25 +13,102 @@ class ClientBoundPacket:
         pass
 
 class ClientBoundDataPacket(ClientBoundPacket):
-    def __init__(self,data:str):
-        self.data = data.split("&;")
+    def __init__(self,data:list[str]):
+        self.data = data
 
-class ClientBoundReceiveMessagePacket(ClientBoundDataPacket):
-    def __init__(self,data:str):
+class ClientBoundIdPacket(ClientBoundPacket):
+    def __init__(self,data:list[str]):
+        self.id = int(data[0])
+
+    def handle(self):
+        pass
+
+class ClientBoundMessagePacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
         super().__init__(data)
         self.message = self.data[0]
 
     def handle(self):
         l.chat.addMessage(self.message)
 
+class ClientBoundPlayerJoinPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.name = data[0]
+        self.color = data[1]
+
+    def handle(self):
+        pass
+
+class ClientBoundGameStartPacket(ClientBoundPacket):
+    def handle(self):
+        pass
+
+class ClientBoundGameEndPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.winner = data[0]
+
+    def handle(self):
+        pass
+
+# game packet
+class ClientBoundGameHandPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.card = data
+
+    def handle(self):
+        pass
+
+class ClientBoundShowCardPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.id = int(data[0])
+        self.card = data[1]
+        self.player = data[2]
+
+    def handle(self):
+        pass
+
+class ClientBoundPlayCardPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.id = int(data[0])
+        self.pos = int(data[1])
+        self.card = data[2]
+        self.player = data[3]
+
+    def handle(self):
+        pass
+
+# interaction packet
+class ClientBoundChoseToShowPacket(ClientBoundPacket):
+    def handle(self):
+        pass
+
+class ClientBoundChoseToPlayPacket(ClientBoundPacket):
+    def handle(self):
+        pass
+
 def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
     id = data[0]
     print(id)
     packet = clientboundPacketList[id]
-    decode = data[1:].decode("utf-8")
-    if len(data) > 1 :
+    decode = utils.unparse(data[1:])
+    if issubclass(packet,ClientBoundDataPacket):
        return packet(decode)
     else :
         return packet()
     
-clientboundPacketList : list[ClientBoundPacket.__class__] = [ClientBoundReceiveMessagePacket]
+clientboundPacketList = [
+    ClientBoundMessagePacket,
+    ClientBoundPlayerJoinPacket,
+    ClientBoundGameStartPacket,
+    ClientBoundGameEndPacket,
+    ClientBoundGameHandPacket,
+    ClientBoundShowCardPacket,
+    ClientBoundPlayCardPacket,
+    ClientBoundChoseToShowPacket,
+    ClientBoundChoseToPlayPacket
+]
