@@ -34,8 +34,8 @@ class Client:
             print("packet : handeled",packet.get_id())
             try:
                 packet.handle(self)
-            except:
-                print("packet : error handeling")
+            except Exception as e:
+                print("packet : error handeling",e)
             if packet.get_id() == 0:
                 print("packet 0")
             else:

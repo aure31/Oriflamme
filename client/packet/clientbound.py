@@ -92,10 +92,9 @@ class ClientBoundChoseToPlayPacket(ClientBoundPacket):
         pass
 
 def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
-    id = data[0]
-    print(id)
+    print("client : clientboundget :",data)
+    id,decode = utils.unparse(data)
     packet = clientboundPacketList[id]
-    decode = utils.unparse(data[1:])
     if issubclass(packet,ClientBoundDataPacket):
        return packet(decode)
     else :

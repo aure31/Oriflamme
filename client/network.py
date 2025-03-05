@@ -40,11 +40,13 @@ class Network:
             try:
                 data = self.conn.recv(2048)
                 if not data:
-                    continue
+                    self.disconect()
+                    break
                 packet = getClientBoundPacket(data)
                 packet.handle()
             except Exception as e:
                 print("client : Erreur de réception de paquet", e)
+                print("client : data :",data)
 
     def send(self, packet:ServerBoundPacket):
         packet.send(self.conn)

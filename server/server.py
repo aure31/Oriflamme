@@ -9,7 +9,7 @@ from .client import Client
 
 class Server :
     used_ports = []
-    def __init__(self, port:int =5555, ip:str = "127.0.0.1"):
+    def __init__(self, port:int =5555, ip:str = "localhost"):
         self.port = port if port not in Server.used_ports else 5555+len(Server.used_ports)
         self.ip = ip
         self.soket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,7 +19,7 @@ class Server :
         try:
             self.soket.bind((self.ip, port))
         except socket.error as e:
-            print(str(e))
+            print("server :error binding :",e)
         self.soket.listen(5)
         self.game = Game()
         thread = th.Thread(name="connlistener",target=self.connectionListener)
@@ -34,8 +34,8 @@ class Server :
                 conn, addr = self.soket.accept()
                 print("Server : Connecté à : ", addr)
                 self.connection(conn,addr)
-            except:
-                print("Server : Erreur de connexion")
+            except Exception as e:
+                print("Server : Erreur de connexion :",e)
             
     def connection(self,conn:socket.socket,ip):
         try:
@@ -57,6 +57,7 @@ class Server :
     
     def stop(self):
         print("stop")
+        self.soket.shutdown(socket.SHUT_RDWR)
         self.soket.close()
         self.stopevent.set()
         for t in self.threadlist:

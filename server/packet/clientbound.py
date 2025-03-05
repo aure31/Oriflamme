@@ -17,7 +17,7 @@ class ClientBoundDataPacket(ClientBoundPacket):
         self.data = data
 
     def send(self, conn):
-        packet = utils.parser()
+        packet = utils.parser(self.get_id(),self.data)
         conn.send(packet)
 
 class ClientBoundIdPacket(ClientBoundPacket):
@@ -72,6 +72,7 @@ class ClientBoundChoseToPlayPacket(ClientBoundPacket):
     
     
 def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
+    print("client : clientboundget :",data)
     id = data[0]
     packet = clientBoundPacketList[id]
     if issubclass(packet,ClientBoundDataPacket):

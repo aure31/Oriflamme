@@ -25,7 +25,7 @@ class ServerBoundPseudoPacket(ServerBoundDataPacket):
 class ServerBoundMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
-        self.message = data
+        self.message = data[0]
 
     def handle(self, client):
         print("server : message get :",self.message, flush=True)
@@ -35,10 +35,9 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
 
 
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
-    print(data)
-    id = data[0]
+    print("server : serverboundget :",data)
+    id,decode = utils.unparse(data)
     packet = serverboundPacketList[id]
-    decode = utils.unparse(data[1:])
     if issubclass(packet,ServerBoundDataPacket) :
        return packet(decode)
     else :

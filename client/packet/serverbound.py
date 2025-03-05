@@ -31,6 +31,7 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
     
     
 def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
+    print("client : serverboundget :",data)
     id = data[0]
     packet = serverBoundPacketList[id]
     if issubclass(packet,ServerBoundDataPacket):

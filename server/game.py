@@ -106,7 +106,7 @@ class Game:
         return self.players[idPlayer]
 
     def discard(self, cardPos : int):
-        print(cardPos)
+        #print(cardPos)
         sous_lst=len(self.file_influence[cardPos])
         card = None
         if sous_lst == 1:
