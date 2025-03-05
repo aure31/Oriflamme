@@ -40,19 +40,40 @@ class ServerBoundGameStartPacket(ServerBoundPacket):
         client.server.broadcast(cp.CLientBoundGameStartPacket(),[client.id])
 
 
+class ServerBoundPlayCardPacket(ServerBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.id = int(data[0])
+        self.pos = int(data[1])
+        self.card = data[2]
+        self.player = data[3]
+
+    def handle(self, client):
+        print("server : play card get :",self.card, flush=True)
+
+class ServerBoundShowCardPacket(ServerBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.id = int(data[0])
+        self.card = data[1]
+        self.player = data[2]
+
+    def handle(self, client):
+        print("server : show card get :",self.card, flush=True) 
+
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print("server : serverboundget :",data)
     id,decode = utils.unparse(data)
-    packet = serverboundPacketList[id]
+    packet = serverBoundPacketList[id]
     if issubclass(packet,ServerBoundDataPacket) :
        return packet(decode)
     else :
         return packet()
     
-serverBoundPacketList = [
-    ServerBoundPseudoPacket,
-    ServerBoundMessagePacket,
-    ServerBoundGameStartPacket,
-    ServerBoundPlayCardPacket,
-    ServerBoundShowCardPacket
-]
+serverBoundPacketList = {
+    1 : ServerBoundPseudoPacket,
+    2 : ServerBoundMessagePacket,
+    3 : ServerBoundGameStartPacket,
+    4 : ServerBoundPlayCardPacket,
+    5 : ServerBoundShowCardPacket
+}
