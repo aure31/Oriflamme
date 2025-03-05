@@ -7,5 +7,6 @@ class Joueur:
         self.network = network
         network.send(ServerBoundPseudoPacket(nom))
         self.couleur = None
+        self.deck = []
         self.defausse = []
         self.ptsinflu = 1

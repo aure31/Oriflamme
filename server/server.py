@@ -1,10 +1,8 @@
 import socket
 import threading as th
-import sys 
-import os
 from .packet.clientbound import *
 from .packet.serverbound import *
-from .joueur import Joueur
+from .Joueur import Joueur
 from .game import Game
 from .client import Client
         
