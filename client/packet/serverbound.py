@@ -28,7 +28,10 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
     def __init__(self,data:str):
         super().__init__(data)
         self.message = data
-    
+
+class ServerBoundGameStartPacket(ServerBoundDataPacket):
+    def __init__(self):
+        super().__init__("Game Started")    
     
 def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     print("client : serverboundget :",data)
