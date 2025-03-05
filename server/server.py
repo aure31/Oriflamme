@@ -9,7 +9,7 @@ from .client import Client
 
 class Server :
     used_ports = []
-    def __init__(self, port:int =5555, ip:str = "0.0.0.0"):
+    def __init__(self, port:int =5555, ip:str = "127.0.0.1"):
         self.port = port if port not in Server.used_ports else 5555+len(Server.used_ports)
         self.ip = ip
         self.soket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
