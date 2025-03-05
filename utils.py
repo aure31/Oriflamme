@@ -1,23 +1,19 @@
 def unparse(data:bytes) -> list[str]:
-    i=0
-    sizes = []
-    while data[i] != 0b0:
-        sizes.append(data[i])
-        i+=1
-    i+=1
-    data = data[i:]
-    count = 0
+    nb = data[0]
+    elements = data[1+nb:]
+    count = 1+nb
     out = []
-    for e in sizes:
-        out.append(data[count:count+e].decode("utf-8"))
-        count += e
+    for i in range(nb):
+        size = data[i+1]
+        out.append(elements[count:count+size].decode("utf-8"))
+        count += size
     return out
 
 def parser(id:int,data:list[str]) -> bytes:
     prefix = [id]
-    data = []
+    parsed_data = []
+    prefix.append(len(data))
     for e in data:
         prefix.append(len(e))
-        data.append(e.encode("utf-8"))
-    prefix.append(0)
-    return bytes(prefix)+b"".join(data)
+        parsed_data.append(e.encode("utf-8"))
+    return bytes(prefix)+b"".join(parsed_data)

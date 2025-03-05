@@ -5,15 +5,18 @@ import utils
 #server_bound client -> server
 
 class ServerBoundPacket:
+    def get_id(self):
+        return serverBoundPacketList.index(self.__class__)
+
     def send(self,conn:socket.socket):
         conn.send(serverBoundPacketList.index(self.__class__))
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,*data):
-        self.data = "&;".join(data)
+        self.data = data
 
     def send(self, conn):
-        packet = utils.parser()
+        packet = utils.parser(self.get_id(),self.data)
         conn.send(packet)
 
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
