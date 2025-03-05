@@ -9,7 +9,7 @@ class ServerBoundPacket:
         return serverBoundPacketList.index(self.__class__)
 
     def send(self,conn:socket.socket):
-        conn.send(serverBoundPacketList.index(self.__class__))
+        conn.send(bytes([serverBoundPacketList.index(self.__class__)]))
 
 class ServerBoundDataPacket(ServerBoundPacket):
     def __init__(self,*data):
@@ -53,10 +53,10 @@ def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     else :
         return packet()
 
-serverBoundPacketList = {
-    1 : ServerBoundPseudoPacket,
-    2 : ServerBoundMessagePacket,
-    3 : ServerBoundGameStartPacket,
-    4 : ServerBoundPlayCardPacket,
-    5 : ServerBoundShowCardPacket
-}
+serverBoundPacketList = [
+    ServerBoundPseudoPacket,
+    ServerBoundMessagePacket,
+    ServerBoundGameStartPacket,
+    ServerBoundPlayCardPacket,
+    ServerBoundShowCardPacket
+]

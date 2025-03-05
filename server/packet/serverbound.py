@@ -7,7 +7,7 @@ import utils
 
 class ServerBoundPacket:
     def get_id(self):
-        return serverboundPacketList.index(self.__class__)
+        return serverBoundPacketList.index(self.__class__)
     
     def handle(self,client):
         pass
@@ -37,7 +37,7 @@ class ServerBoundGameStartPacket(ServerBoundPacket):
     def handle(self, client):
         print("server : game start get")
         import server.packet.clientbound as cp
-        client.server.broadcast(cp.CLientBoundGameStartPacket(),[client.id])
+        client.server.broadcast(cp.ClientBoundGameStartPacket(),[client.id])
 
 
 class ServerBoundPlayCardPacket(ServerBoundDataPacket):
@@ -59,7 +59,7 @@ class ServerBoundShowCardPacket(ServerBoundDataPacket):
         self.player = data[2]
 
     def handle(self, client):
-        print("server : show card get :",self.card, flush=True) 
+        print("server : show card get :",self.card, flush=True)
 
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     print("server : serverboundget :",data)
@@ -70,10 +70,10 @@ def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     else :
         return packet()
     
-serverBoundPacketList = {
-    1 : ServerBoundPseudoPacket,
-    2 : ServerBoundMessagePacket,
-    3 : ServerBoundGameStartPacket,
-    4 : ServerBoundPlayCardPacket,
-    5 : ServerBoundShowCardPacket
-}
+serverBoundPacketList = [
+    ServerBoundPseudoPacket,
+    ServerBoundMessagePacket,
+    ServerBoundGameStartPacket,
+    ServerBoundPlayCardPacket,
+    ServerBoundShowCardPacket
+]

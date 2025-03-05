@@ -10,7 +10,7 @@ class ClientBoundPacket:
         return clientBoundPacketList.index(self.__class__)
     
     def send(self,conn:socket.socket):
-        conn.send(clientBoundPacketList.index(self.__class__))
+        conn.send(bytes([clientBoundPacketList.index(self.__class__)]))
 
 class ClientBoundDataPacket(ClientBoundPacket):
     def __init__(self,*data:str):
@@ -80,14 +80,14 @@ def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
     else :
         return packet()
 
-clientBoundPacketList = {
-    1 : ClientBoundMessagePacket,
-    2 : ClientBoundPlayerJoinPacket,
-    3 : ClientBoundGameStartPacket,
-    4 : ClientBoundGameEndPacket,
-    5 : ClientBoundGameHandPacket,
-    6 : ClientBoundShowCardPacket,
-    7 : ClientBoundPlayCardPacket,
-    8 : ClientBoundChoseToShowPacket,
-    9 : ClientBoundChoseToPlayPacket
-}
+clientBoundPacketList = [
+    ClientBoundMessagePacket,
+    ClientBoundPlayerJoinPacket,
+    ClientBoundGameStartPacket,
+    ClientBoundGameEndPacket,
+    ClientBoundGameHandPacket,
+    ClientBoundShowCardPacket,
+    ClientBoundPlayCardPacket,
+    ClientBoundChoseToShowPacket,
+    ClientBoundChoseToPlayPacket
+]

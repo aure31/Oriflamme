@@ -7,7 +7,7 @@ import utils
 
 class ClientBoundPacket:
     def get_id(self):
-        return clientboundPacketList.index(self.__class__)
+        return clientBoundPacketList.index(self.__class__)
     
     def handle(self):
         pass
@@ -94,20 +94,20 @@ class ClientBoundChoseToPlayPacket(ClientBoundPacket):
 def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
     print("client : clientboundget :",data)
     id,decode = utils.unparse(data)
-    packet = clientboundPacketList[id]
+    packet = clientBoundPacketList[id]
     if issubclass(packet,ClientBoundDataPacket):
        return packet(decode)
     else :
         return packet()
     
-clientboundPacketList = {
-    1 : ClientBoundMessagePacket,
-    2 : ClientBoundPlayerJoinPacket,
-    3 : ClientBoundGameStartPacket,
-    4 : ClientBoundGameEndPacket,
-    5 : ClientBoundGameHandPacket,
-    6 : ClientBoundShowCardPacket,
-    7 : ClientBoundPlayCardPacket,
-    8 : ClientBoundChoseToShowPacket,
-    9 : ClientBoundChoseToPlayPacket
-}
+clientBoundPacketList = [
+    ClientBoundMessagePacket,
+    ClientBoundPlayerJoinPacket,
+    ClientBoundGameStartPacket,
+    ClientBoundGameEndPacket,
+    ClientBoundGameHandPacket,
+    ClientBoundShowCardPacket,
+    ClientBoundPlayCardPacket,
+    ClientBoundChoseToShowPacket,
+    ClientBoundChoseToPlayPacket
+]
