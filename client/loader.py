@@ -12,11 +12,9 @@ screen_width, screen_height = window.get_size()
 r = screen_width//1600
 
 #Images/Elements
-background = p.image.load("client/assets/background/new_bg_lobby.png").convert()
-background_image = p.transform.scale(background, (screen_width, screen_height))
-connexion = Texte("Connexion...",950, 750, (255,255,255), None, 30, "client/assets/Algerian.ttf")
-fleche = p.image.load("client/assets/sens.png")
-
+bg_menus = p.image.load("client/assets/background/new_bg_lobby.png").convert()
+bg_game = p.image.load("client/assets/background/new_bg_game.png").convert()
+background = p.transform.scale(bg_menus, (screen_width, screen_height))
 caracteres = [" ", "/", "@", "~", "#"]
 chat = Chat()
 

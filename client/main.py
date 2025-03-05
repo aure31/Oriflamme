@@ -7,7 +7,7 @@ import Joueur as j
 from menu import MenuList
 from classes import EventHandler
 import loader as l
-from loader import window,background_image
+from loader import window,background
 from error import errorHandler
 import server.server as s
 
@@ -17,7 +17,7 @@ def main():
     clock = p.time.Clock()
     while l.is_running:
         clock.tick(60)
-        window.blit(background_image, (0, 0))
+        window.blit(background, (0, 0))
         for event in p.event.get():
             if event.type == p.QUIT:
                 stop_game()
