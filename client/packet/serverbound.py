@@ -29,9 +29,20 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
         super().__init__(data)
         self.message = data
 
-class ServerBoundGameStartPacket(ServerBoundDataPacket):
-    def __init__(self):
-        super().__init__("Game Started")    
+class ServerBoundGameStartPacket(ServerBoundPacket):
+    pass
+
+class ServerBoundPlayCardPacket(ServerBoundDataPacket):
+    def __init__(self,id:int, pos:int):
+        super().__init__(id,pos)
+        self.id = id
+        self.pos = pos
+
+class ServerBoundShowCardPacket(ServerBoundDataPacket):
+    def __init__(self,id:int):
+        super().__init__(id)
+        self.id = id
+    
     
 def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     print("client : serverboundget :",data)
@@ -42,4 +53,10 @@ def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     else :
         return packet()
 
-serverBoundPacketList = [ServerBoundPseudoPacket,ServerBoundMessagePacket]
+serverBoundPacketList = {
+    1 : ServerBoundPseudoPacket,
+    2 : ServerBoundMessagePacket,
+    3 : ServerBoundGameStartPacket,
+    4 : ServerBoundPlayCardPacket,
+    5 : ServerBoundShowCardPacket
+}

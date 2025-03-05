@@ -100,14 +100,14 @@ def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
     else :
         return packet()
     
-clientboundPacketList = [
-    ClientBoundMessagePacket,
-    ClientBoundPlayerJoinPacket,
-    ClientBoundGameStartPacket,
-    ClientBoundGameEndPacket,
-    ClientBoundGameHandPacket,
-    ClientBoundShowCardPacket,
-    ClientBoundPlayCardPacket,
-    ClientBoundChoseToShowPacket,
-    ClientBoundChoseToPlayPacket
-]
+clientboundPacketList = {
+    1 : ClientBoundMessagePacket,
+    2 : ClientBoundPlayerJoinPacket,
+    3 : ClientBoundGameStartPacket,
+    4 : ClientBoundGameEndPacket,
+    5 : ClientBoundGameHandPacket,
+    6 : ClientBoundShowCardPacket,
+    7 : ClientBoundPlayCardPacket,
+    8 : ClientBoundChoseToShowPacket,
+    9 : ClientBoundChoseToPlayPacket
+}

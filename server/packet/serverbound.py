@@ -32,6 +32,12 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
         import server.packet.clientbound as cp
         client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
     
+class ServerBoundGameStartPacket(ServerBoundPacket):
+    
+    def handle(self, client):
+        print("server : game start get")
+        import server.packet.clientbound as cp
+        client.server.broadcast(cp.CLientBoundGameStartPacket(),[client.id])
 
 
 def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
@@ -43,4 +49,10 @@ def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
     else :
         return packet()
     
-serverboundPacketList = [ServerBoundPseudoPacket,ServerBoundMessagePacket]
+serverBoundPacketList = [
+    ServerBoundPseudoPacket,
+    ServerBoundMessagePacket,
+    ServerBoundGameStartPacket,
+    ServerBoundPlayCardPacket,
+    ServerBoundShowCardPacket
+]

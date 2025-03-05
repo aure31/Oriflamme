@@ -31,11 +31,11 @@ class ClientBoundMessagePacket(ClientBoundDataPacket):
     def __init__(self, message:str):
         super().__init__(message)
 
-class clientBoundPlayerJoinPacket(ClientBoundDataPacket):
+class ClientBoundPlayerJoinPacket(ClientBoundDataPacket):
     def __init__(self, name:str,color:str):
         super().__init__(name)
 
-class CLientBoundGameStartPacket(ClientBoundPacket):
+class ClientBoundGameStartPacket(ClientBoundPacket):
     pass
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
@@ -80,4 +80,14 @@ def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
     else :
         return packet()
 
-clientBoundPacketList = [ClientBoundMessagePacket,clientBoundPlayerJoinPacket,CLientBoundGameStartPacket,ClientBoundGameEndPacket,ClientBoundGameHandPacket,ClientBoundShowCardPacket,ClientBoundPlayCardPacket,ClientBoundChoseToShowPacket,ClientBoundChoseToPlayPacket]
+clientBoundPacketList = {
+    1 : ClientBoundMessagePacket,
+    2 : ClientBoundPlayerJoinPacket,
+    3 : ClientBoundGameStartPacket,
+    4 : ClientBoundGameEndPacket,
+    5 : ClientBoundGameHandPacket,
+    6 : ClientBoundShowCardPacket,
+    7 : ClientBoundPlayCardPacket,
+    8 : ClientBoundChoseToShowPacket,
+    9 : ClientBoundChoseToPlayPacket
+}
