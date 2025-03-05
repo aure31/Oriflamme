@@ -1,12 +1,15 @@
-from network import Network
-from packet.serverbound import ServerBoundPseudoPacket
+players = []
 
 class Joueur:
-    def __init__(self, nom:str, network:Network):
+    def __init__(self,id:int = -1,nom:str= ""):
         self.nom = nom
-        self.network = network
-        network.send(ServerBoundPseudoPacket(nom))
-        self.couleur = None
-        self.deck = []
+        self.id = id
+        self.cartes = []
         self.defausse = []
         self.ptsinflu = 1
+        self.couleur = None
+
+    def decode(data:str):
+        id = int(data[0])
+        nom = data[1:]
+        return Joueur(id,nom)

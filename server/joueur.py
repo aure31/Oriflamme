@@ -7,6 +7,7 @@ from .cartes import Carte
 from .client import Client
 import random
 import pygame
+from packet.clientbound import ClientBoundPlayerListPacket
 
 pygame.init()
 
@@ -45,5 +46,11 @@ class Joueur:
     
     def choix_partout(self, Game):
         return random.randint(0, self.get_file_size())
+    
+    def encode(self):
+        return str(self.id)+self.nom
+
+    def decode(self):
+        pass
     
     

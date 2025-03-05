@@ -44,9 +44,14 @@ class Network:
                     break
                 packet = getClientBoundPacket(data)
                 packet.handle()
+            except socket.timeout as e :
+                print("client : Timeout de réception de paquet", e)
+                self.disconect()
+                break
             except Exception as e:
                 print("client : Erreur de réception de paquet", e)
                 print("client : data :",data)
+            
 
     def send(self, packet:ServerBoundPacket):
         packet.send(self.conn)

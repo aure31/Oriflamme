@@ -1,6 +1,8 @@
 
 import loader as l
 import utils
+import Joueur as j
+from Joueur import Joueur
 
 #client_bound server -> client
 #server_bound client -> server
@@ -31,14 +33,20 @@ class ClientBoundMessagePacket(ClientBoundDataPacket):
     def handle(self):
         l.chat.addMessage(self.message)
 
-class ClientBoundPlayerJoinPacket(ClientBoundDataPacket):
+class ClientBoundPlayerListPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
-        self.name = data[0]
-        self.color = data[1]
 
     def handle(self):
-        pass
+        playerlist = []
+        playernames = []
+        for data in self.data:
+            joueur = Joueur.decode(data)
+            playerlist.append(joueur)
+            playernames.append(joueur.nom)
+        j.players = playerlist
+        l.menu.getElement("playerList").setText(playernames)
+        print("client : playerlist get :",l.menu.getElement("playerList").elements)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
@@ -102,7 +110,7 @@ def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
     
 clientBoundPacketList = [
     ClientBoundMessagePacket,
-    ClientBoundPlayerJoinPacket,
+    ClientBoundPlayerListPacket,
     ClientBoundGameStartPacket,
     ClientBoundGameEndPacket,
     ClientBoundGameHandPacket,

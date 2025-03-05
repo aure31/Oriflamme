@@ -1,5 +1,4 @@
 import socket
-import enum
 import utils
 
 #ClientBound server -> client
@@ -13,8 +12,11 @@ class ClientBoundPacket:
         conn.send(bytes([clientBoundPacketList.index(self.__class__)]))
 
 class ClientBoundDataPacket(ClientBoundPacket):
-    def __init__(self,*data:str):
-        self.data = data
+    def __init__(self,*data:str,datas:list[str] = None ):
+        if datas is not None:
+            self.data = datas
+        else:
+            self.data = data
 
     def send(self, conn):
         packet = utils.parser(self.get_id(),self.data)
@@ -31,9 +33,12 @@ class ClientBoundMessagePacket(ClientBoundDataPacket):
     def __init__(self, message:str):
         super().__init__(message)
 
-class ClientBoundPlayerJoinPacket(ClientBoundDataPacket):
-    def __init__(self, name:str,color:str):
-        super().__init__(name)
+class ClientBoundPlayerListPacket(ClientBoundDataPacket):
+    def __init__(self, datas:list):
+        endode_datas = []
+        for data in datas:
+            endode_datas.append(data.encode())
+        super().__init__(datas=endode_datas)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     pass
@@ -82,7 +87,7 @@ def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
 
 clientBoundPacketList = [
     ClientBoundMessagePacket,
-    ClientBoundPlayerJoinPacket,
+    ClientBoundPlayerListPacket,
     ClientBoundGameStartPacket,
     ClientBoundGameEndPacket,
     ClientBoundGameHandPacket,

@@ -1,12 +1,11 @@
 import enum
+from client.network import Network, is_port
 import loader as l
-from classes import Element, Bouton, TextInput, Texte, Chat
-import pygame
 import error as e
 import server.server as s
-import Joueur as j
-from network import Network, is_valid_ip, is_port
-from groupelement import GroupElement
+from classes import Element, Bouton, TextInput, Texte
+import pygame
+from groupelement import DynamicTextList, GroupElement
 
 
 class Menu:
@@ -16,8 +15,7 @@ class Menu:
         self.elements = {}
 
     def addElement(self, name: str, element: Element | GroupElement):
-        if not isinstance(element, GroupElement):
-            element.addMenu(self)
+        element.addMenu(self)
         self.elements[name] = element
         return self
 
@@ -42,7 +40,10 @@ class AttenteMenu(Menu):
                                        str(l.reseau.server))
         self.getElement("port").set_text("Port du serveur : " +
                                          str(l.reseau.port))
-
+        self.getElement("playerList").addElement(Texte("Joueurs :",1150,100))
+    
+    def addPlayer(self,player:str):
+        self.getElement("playerList").addElement(Texte(player,1150, 100+len(self.getElement("playerList").elements)*30, (255, 255, 255)))
 
 #------- Utilis Menu Elements -----------
 class BackBoutton(Bouton):
@@ -138,7 +139,6 @@ class MusicBoutton(Bouton):
         super().__init__("client/assets/boutons/on.png","client/assets/on_touched.png", pygame.Vector2(900, 300))
         self.active = True
 
-
 #------- Rejoindre Menu Elements -----------
 class RejoindreJoinBoutton(Bouton):
 
@@ -150,8 +150,7 @@ class RejoindreJoinBoutton(Bouton):
     def onClique(self):
         ask_ip_join: TextInput = self.menus[0].getElement("ask_ip_join")
         ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
-        if is_valid_ip(ask_ip_join.get_text()) and is_port(
-                ask_port_join.get_text()):
+        if  is_port(ask_port_join.get_text()):
             l.error = None
             l.connexion.affiche(l.window)
             try:
@@ -201,7 +200,6 @@ class AttenteBackBoutton(BackBoutton):
         l.reseau = None
         l.menu = MenuList.ACCUEIL.value
 
-
 #------- Jeu Menu Elements -----------
 
 #------- MenuList ------------
@@ -227,6 +225,8 @@ class MenuList(enum.Enum):
             .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
             .addElement("launch",AttenteLaunchBoutton())\
+            .addElement("player",Texte("Joueurs :",1150, 90, (255, 255, 255), None, 32))\
+            .addElement("playerList", DynamicTextList((1150, 120), 30))\
             .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("back",BackBoutton())\

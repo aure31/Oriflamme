@@ -29,7 +29,6 @@ class GroupElement:
     
 
 class ListElement:
-
     def __init__(self):
         self.elements = []
         self.menus = []
@@ -47,4 +46,21 @@ class ListElement:
 
     def removeElement(self,element):
         self.elements.remove(element)
+
+
+class DynamicTextList(ListElement):
+    def __init__(self,start:tuple[int,int] = (0,0),threshold:int = 10,color:tuple[int,int,int] = (255,255,255)):
+        super().__init__()
+        self.start = start
+        self.threshold = threshold
+        self.color = color
+    
+    def setText(self,text:list[str]):
+        from client.classes import Texte
+        self.elements = []
+        y = self.start[1]
+        for txt in text:
+            self.addElement(Texte(txt,self.start[0],y,self.color))
+            y += self.threshold
+
 
