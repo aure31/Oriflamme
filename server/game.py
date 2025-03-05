@@ -1,4 +1,4 @@
-from .Joueur import Joueur
+from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
 import time

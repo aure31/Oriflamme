@@ -2,7 +2,7 @@ import socket
 import threading as th
 from .packet.clientbound import *
 from .packet.serverbound import *
-from .Joueur import Joueur
+from .joueur import Joueur
 from .game import Game
 from .client import Client
         

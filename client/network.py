@@ -28,8 +28,8 @@ class Network:
         except socket.timeout:
             print("client : Timeout de connexion")
             raise
-        except ConnectionRefusedError:
-            print("client : Connexion refusée")
+        except ConnectionRefusedError as e:
+            print("client : Connexion refusée :",str(e))
             raise
         except Exception as e:
             print("client : Erreur de connexion inconue:", str(e))
