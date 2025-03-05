@@ -32,9 +32,7 @@ class Game:
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("Début de la partie")
-        self.placement()
-        
-            
+        self.placement()        
 
     def add_card(self,idPlayer:int,card:Carte,slot:int):
         index = 0

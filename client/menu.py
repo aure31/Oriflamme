@@ -236,6 +236,3 @@ class MenuList(enum.Enum):
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
         .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
     CREDIT = Menu("Credit").addElement("back",BackBoutton())
-    PLATEAU = Menu("Plateau")\
-        .addElement("back",BackBoutton())\
-        .addElement("chat", l.chat)
