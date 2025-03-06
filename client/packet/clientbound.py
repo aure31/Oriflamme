@@ -1,7 +1,7 @@
 import loader as l
 import utils
-import Joueur as j
-from Joueur import Joueur
+import joueur as j
+import game as g
 
 #client_bound server -> client
 #server_bound client -> server
@@ -40,10 +40,10 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
         playerlist = []
         playernames = []
         for data in self.data:
-            joueur = Joueur.decode(data)
+            joueur = j.Joueur.decode(data)
             playerlist.append(joueur)
             playernames.append(joueur.nom)
-        j.players = playerlist
+        g.Game.game.joueurs = playerlist
         l.menu.getElement("playerList").setText(playernames)
         print("client : playerlist get :",l.menu.getElement("playerList").elements)
 

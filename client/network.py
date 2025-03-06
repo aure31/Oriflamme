@@ -2,6 +2,7 @@ import socket
 import threading as th
 from packet.serverbound import ServerBoundPacket,ServerBoundPseudoPacket
 from packet.clientbound import getClientBoundPacket
+from server.game import Game
 
 class Network:
     def __init__(self, ip, port,name):
@@ -13,6 +14,7 @@ class Network:
         self.addr = (self.server, self.port)
         self.id = self.connect()
         print("client : id : "+str(self.id))
+        Game(self.id)
         self.thread = th.Thread(name="clientpacketlistner",target=self.packetListener)
         self.thread.start()
         self.send(ServerBoundPseudoPacket(name))

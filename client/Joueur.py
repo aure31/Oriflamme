@@ -1,5 +1,3 @@
-players = []
-
 class Joueur:
     def __init__(self,id:int = -1,nom:str= ""):
         self.nom = nom
