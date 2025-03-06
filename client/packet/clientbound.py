@@ -49,7 +49,7 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
-        l.background = l.bg_game
+        l.bg = l.bg_game
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
