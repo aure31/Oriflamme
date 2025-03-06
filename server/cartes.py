@@ -57,7 +57,6 @@ class Espion(Types):
         super().__init__(2, "Espion", "Volez 1 point d'influence à un joueur dont l'une des cartes est adjacente")
 
     def capacite(self,Player,Game, Carte):
-        file = Game.get_top_cards()
         ajdCard = eval(Player.ask(str(Carte.type) + "Choisir entre -1 et 1 (gauche/droite)")) 
         Game.getPlayer(ajdCard.idPlayer).ptsinflu -= 1
         Player.ptsinflu += 1

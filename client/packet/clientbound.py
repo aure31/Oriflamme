@@ -43,8 +43,8 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
         playerlist = []
         playernames = []
         for data in self.data:
-            joueur = j.Joueur.decode(data)
-            playerlist.append(joueur)
+            joueur : j.Joueur = j.Joueur.decode(data)
+            playerlist[joueur.id] = joueur
             playernames.append(joueur.nom)
         g.Game.game.joueurs = playerlist
         l.menu.getElement("playerList").setText(playernames)
