@@ -181,7 +181,7 @@ class AttenteLaunchBoutton(Bouton):
 
     def onClique(self):
         l.menu = MenuList.JEU.value
-        l.reseau.send(sb.ServerBoundGameStartPacket())
+        sb.ServerBoundGameStartPacket().send(l.reseau.conn)
 
 
 class AttenteBackBoutton(BackBoutton):
