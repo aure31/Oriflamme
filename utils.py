@@ -1,6 +1,8 @@
 def unparse(data:bytes) -> tuple[int,list[str]]:
     print("unparse : in ",data)
     id = data[0]
+    if len(data) == 1:
+        return id,[]
     nb = data[1]
     elements = data[2+nb:]
     count = 0
