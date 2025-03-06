@@ -17,8 +17,9 @@ def parser(id:int,data:list[str]) -> bytes:
     parsed_data = []
     prefix.append(len(data))
     for e in data:
-        prefix.append(len(e))
-        parsed_data.append(e.encode("utf-8"))
+        encode = e.encode("utf-8")
+        prefix.append(len(encode))
+        parsed_data.append(encode)
     return bytes(prefix)+b"".join(parsed_data)
 
 

@@ -21,7 +21,7 @@ class Server :
         except socket.error as e:
             print("server :error binding :",e)
         self.soket.listen(5)
-        self.game = Game()
+        self.game = Game(self)
         thread = th.Thread(name="connlistener",target=self.connectionListener)
         thread.start()
         self.threadlist.append(thread)  
@@ -56,9 +56,17 @@ class Server :
                 print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
-        print("stop")
-        self.soket.shutdown(socket.SHUT_RDWR)
-        self.soket.close()
+        
+        # Vérifier si le socket est encore valide et connecté
+        try:
+            # Vérifie si le socket est connecté en essayant de récupérer son état
+            self.soket.getpeername()
+            self.soket.shutdown(socket.SHUT_RDWR)
+        except (OSError, socket.error):
+            # Ignore les erreurs si le socket n'est pas connecté
+            pass
+        finally:
+            self.soket.close()
         self.stopevent.set()
         for t in self.threadlist:
             t.join()

@@ -229,7 +229,7 @@ class Chat(GroupElement, EventHandler):
     def onEvent(self, event):
         if event.type == pygame.KEYDOWN:
             text_input : TextInput = self.getElement("text_input")
-            if event.key == pygame.K_t and not text_input.active:
+            if event.key == pygame.K_t and not text_input.active and l.menu in self.menus :
                 if self.show:
                     self.show = False
                 else:

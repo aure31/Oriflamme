@@ -1,14 +1,15 @@
 from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
-import time
+from .packet.clientbound import ClientBoundPlayerListPacket
 
 states={}
 
 
 
 class Game:
-    def __init__(self):
+    def __init__(self,server):
+        self.server = server
         self.file_influence :list[list[Carte]] = []
         self.players:list[Joueur] = []
         self.state = "waiting"
@@ -22,8 +23,8 @@ class Game:
 
     def join_player(self,joueur:Joueur):
         if self.state == "waiting":
-            self.players.append(
-                joueur)
+            self.players.append(joueur)
+            self.server.broadcast(ClientBoundPlayerListPacket(self.players))
             print(f"{joueur.nom} à rejoint la partie.")
 
     def start_game(self):
