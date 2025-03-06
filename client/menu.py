@@ -6,6 +6,7 @@ import server.server as s
 from classes import Element, Bouton, TextInput, Texte
 import pygame
 from groupelement import DynamicTextList, GroupElement
+import packet.serverbound as sb
 
 
 class Menu:
@@ -179,8 +180,8 @@ class AttenteLaunchBoutton(Bouton):
                          condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
-        l.menu = MenuList.PLATEAU.value
-        pass
+        l.menu = MenuList.JEU.value
+        l.reseau.send(sb.ServerBoundGameStartPacket())
 
 
 class AttenteBackBoutton(BackBoutton):

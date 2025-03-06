@@ -1,7 +1,6 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import pygame as p
 from menu import MenuList
 from classes import EventHandler
@@ -9,7 +8,6 @@ import loader as l
 from loader import window,background
 from error import errorHandler
 import server.server as s
-
     
 def main():
     l.menu = MenuList.ACCUEIL.value

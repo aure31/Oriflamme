@@ -1,4 +1,3 @@
-
 import loader as l
 import utils
 import Joueur as j
@@ -50,7 +49,7 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
-        pass
+        l.background = l.bg_game
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
