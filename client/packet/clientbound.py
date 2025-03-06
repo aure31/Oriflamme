@@ -1,7 +1,10 @@
 import loader as l
 import utils
 import joueur as j
+import pygame as p
 import game as g
+
+p.init()
 
 #client_bound server -> client
 #server_bound client -> server
@@ -49,7 +52,7 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
-        l.bg = l.bg_game
+        l.background = p.transform.scale(l.bg_game, (l.screen_width, l.screen_height))
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):

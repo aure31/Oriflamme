@@ -15,5 +15,5 @@ class Card:
         p.image.load("client/assets/cartes/"+ids[id]+"/"+couleur+".png")
         pass
 
-types = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
-                       Embuscade(), Complot(), Changeforme(), Seigneur()]
+# types = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
+#                        Embuscade(), Complot(), Changeforme(), Seigneur()]
