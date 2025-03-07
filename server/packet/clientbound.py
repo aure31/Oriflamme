@@ -1,5 +1,5 @@
 import socket
-import utils
+import utils.utils as utils
 
 #ClientBound server -> client
 #ServerBound client -> server

@@ -1,7 +1,7 @@
 import pygame as p
 import random
 
-colors = ["red","blue","green","black","yellow"]
+colors = ["rouge","bleu","vert","black","yellow"]
 
 
 class Cartes:
