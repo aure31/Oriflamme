@@ -64,7 +64,7 @@ class Server :
             self.soket.shutdown(socket.SHUT_RDWR)
         except (OSError, socket.error):
             # Ignore les erreurs si le socket n'est pas connecté
-            pass
+            print("Server : Socket not connected")
         finally:
             self.soket.close()
         self.stopevent.set()

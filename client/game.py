@@ -28,8 +28,8 @@ class Game():
         self.cartes = [HandCard(int(e[0]),self.itself.couleur) for e in hand]
 
     def add_card_file(self, id_carte : int, pos : int , id_joueur : int = None) -> PlayCard:
-        if joueur is None:
-            joueur = self.itself
+        if id_joueur is None:
+            id_joueur = self.itself.id
         carte = HandCard(id_carte,joueur.couleur).toPlayCard(joueur.id)
         self.file_influence.insert(pos,carte)
         return carte
@@ -40,7 +40,7 @@ class Game():
     def play_card(self,hand_pos : int, new_pos : int):
         card = self.cartes[hand_pos]
         self.file_influence.insert(new_pos,card.toPlayCard())
-        self.cartes.pop(id_carte)
+        self.cartes.pop(hand_pos)
 
 
     def parse_pos(self,pos:int) -> int:
