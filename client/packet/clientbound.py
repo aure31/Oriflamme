@@ -52,7 +52,8 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
-        l.background = p.transform.scale(l.bg_game, (l.screen_width, l.screen_height))
+        print("changement d'arrière plan")
+        l.background = l.bg_game
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
