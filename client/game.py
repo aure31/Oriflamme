@@ -1,6 +1,8 @@
 import pygame as p
 from card import HandCard,PlayCard
+import loader as l
 from joueur import Joueur
+from packet.serverbound import ServerBoundPlayCardPacket
 
 class Game():
     game = None
@@ -12,11 +14,16 @@ class Game():
         self.tour = 0
         Game.game = self
 
+    def setPlayersColor(self,colors:list[str]):
+        for i in range(len(colors)):
+            self.joueurs[i].couleur = colors[i]
+
     def setPlayerList(self,playerlist:list[str]):
-        for joueur in playerlist:
-            self.joueurs.append(Joueur.decode(joueur))
+        self.joueurs = { int(joueur[0]) : Joueur.decode(joueur) for joueur in playerlist }
 
     def get_player(self,id:int) -> Joueur:
+        if id is None:
+            return self.itself
         for joueur in self.joueurs:
             if joueur.id == id:
                 return joueur
@@ -28,8 +35,7 @@ class Game():
         self.cartes = [HandCard(int(e[0]),self.itself.couleur) for e in hand]
 
     def add_card_file(self, id_carte : int, pos : int , id_joueur : int = None) -> PlayCard:
-        if id_joueur is None:
-            id_joueur = self.itself.id
+        joueur = self.get_player(id_joueur)
         carte = HandCard(id_carte,joueur.couleur).toPlayCard(joueur.id)
         self.file_influence.insert(pos,carte)
         return carte
@@ -41,6 +47,7 @@ class Game():
         card = self.cartes[hand_pos]
         self.file_influence.insert(new_pos,card.toPlayCard())
         self.cartes.pop(hand_pos)
+        ServerBoundPlayCardPacket(card.type.id,str(new_pos)).send(l.network)
 
 
     def parse_pos(self,pos:int) -> int:

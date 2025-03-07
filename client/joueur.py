@@ -1,4 +1,6 @@
-class Joueur:
+from utils.parser import Parser
+
+class Joueur(Parser):
     def __init__(self,id:int = -1,nom:str= ""):
         self.nom = nom
         self.id = id
