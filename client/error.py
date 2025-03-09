@@ -26,8 +26,10 @@ def errorHandler(error: ErrorList,window) -> int:
     return error.value.code
 
 def pseudo_error(pseudo):
-    if len(pseudo) > 10:
+    if len(pseudo) > 20:
         return ErrorList.LONG
+    elif pseudo == "":
+        return ErrorList.PSEUDO
     else:
         for car in pseudo:
             if car in caracteres:

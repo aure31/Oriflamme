@@ -210,6 +210,8 @@ class Chat(GroupElement, EventHandler):
     def addMessage(self, message):
         if message == "":
             pass
+        elif self.gmdetecte(message):
+            self.messages.addElement(Texte("Message inaproprié (non envoyé)",10,l.screen_height-60, (255, 0, 0), None, 20))
         elif message[0] == '/':
             self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (255, 247, 0), None, 20))
         elif message[0] == '@':
@@ -241,3 +243,10 @@ class Chat(GroupElement, EventHandler):
                 self.addMessage(format_text)
                 self.sendMessages(format_text)
                 text_input.clear()
+
+    def gmdetecte(self, message):
+        message = message.lower()
+        for mot in l.gm:
+            if mot in message:
+                return True
+        return False

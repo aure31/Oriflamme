@@ -68,12 +68,11 @@ class JoinBoutton(Bouton):
 
     def onClique(self):
         name = self.menus[0].getElement("name")
-        if name.get_text() == "":
-            l.error = e.ErrorList.PSEUDO
         erreur = e.pseudo_error(name.get_text())
         if erreur != None:
             l.error = erreur
         else:
+            l.error = None
             l.menu = MenuList.REJOINDRE.value
 
 
@@ -87,12 +86,11 @@ class NewGameBoutton(Bouton):
     def onClique(self):
         name: TextInput = self.menus[0].getElement("name")
         error = None
-        if name.get_text() == "":
-            error = e.ErrorList.PSEUDO
         erreur = e.pseudo_error(name.get_text())
         if erreur != None:
             error = erreur
         else:
+            l.error = None
             l.server = s.Server()
             l.reseau = Network(l.server.ip, l.server.port, name.get_text())
             l.menu = MenuList.ATTENTE.value
