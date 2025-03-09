@@ -183,6 +183,9 @@ class Carte:
             return 
         player = game.get_player(self.idPlayer)
         self.type.capacite(player,game,self)
+    
+    def encode(self) -> str:
+        return str(self.type.id)
 
 types : list[Types] = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
                        Embuscade(), Complot(), Changeforme(), Seigneur()]

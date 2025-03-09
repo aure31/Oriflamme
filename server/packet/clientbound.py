@@ -22,6 +22,13 @@ class ClientBoundDataPacket(ClientBoundPacket):
         packet = utils.parser(self.get_id(),self.data)
         conn.send(packet)
 
+class ClientBoundDataListPacket(ClientBoundDataPacket):
+    def __init__(self,datas:list):
+        endode_datas = []
+        for data in datas:
+            endode_datas.append(data.encode())
+        super().__init__(datas=endode_datas)
+
 class ClientBoundIdPacket(ClientBoundPacket):
     def __init__(self,id:int):
         self.id = id
@@ -33,23 +40,24 @@ class ClientBoundMessagePacket(ClientBoundDataPacket):
     def __init__(self, message:str):
         super().__init__(message)
 
-class ClientBoundPlayerListPacket(ClientBoundDataPacket):
+class ClientBoundPlayerListPacket(ClientBoundDataListPacket):
     def __init__(self, datas:list):
-        endode_datas = []
-        for data in datas:
-            endode_datas.append(data.encode())
-        super().__init__(datas=endode_datas)
+        super().__init__(datas)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     pass
 
+class ClientBoundColorsPacket(ClientBoundDataListPacket):
+    def __init__(self,datas:list[tuple[int,str]]):
+        super().__init__([str(data[0])+data[1] for data in datas])
+    
+# game packet
+
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self, winner:str):
         super().__init__(winner)
-    
-# game packet
-class ClientBoundGameHandPacket(ClientBoundDataPacket):
-    def __init__(self,card:list[str]):
+class ClientBoundGameHandPacket(ClientBoundDataListPacket):
+    def __init__(self,card:list):
         super().__init__(card)
         self.card = card
 

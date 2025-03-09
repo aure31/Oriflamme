@@ -9,7 +9,7 @@ class Game():
     game = None
     def __init__(self,id:int,name:str):
         self.itself = Joueur(id,name)
-        self.joueurs = {}
+        self.joueurs : dict[int,Joueur] = {}
         self.cartes = []
         self.file_influence : list[list[PlayCard]] = []
         self.tour = 0
