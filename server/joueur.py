@@ -7,7 +7,7 @@ from .cartes import Carte
 from .client import Client
 import random
 import pygame
-from packet.clientbound import ClientBoundPlayerListPacket
+import packet.clientbound as cb
 
 pygame.init()
 
@@ -28,6 +28,9 @@ class Joueur:
         
     def get_name(self):
         return self.nom
+    
+    def add_card_file(self) -> tuple[Carte,int]:
+        pass
 
     def jouer(self,game) -> tuple[Carte,int]:
         cards = ", ".join([str(e.type) for e in self.cartes ])

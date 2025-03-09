@@ -1,5 +1,7 @@
 import socket
 import utils.utils as utils
+import server.packet.clientbound as cp
+from game import Game
 
 
 #client_bound server -> client
@@ -20,6 +22,7 @@ class ServerBoundDataPacket(ServerBoundPacket):
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
+        print(data)
         self.name = data[0]
 
 class ServerBoundMessagePacket(ServerBoundDataPacket):
@@ -29,15 +32,15 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
 
     def handle(self, client):
         print("server : message get :",self.message, flush=True)
-        import server.packet.clientbound as cp
         client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
     
 class ServerBoundGameStartPacket(ServerBoundPacket):
     
     def handle(self, client):
         print("server : game start get")
-        import server.packet.clientbound as cp
+        client.server.game.start_game()
         client.server.broadcast(cp.ClientBoundGameStartPacket(),[client.id])
+        
 
 
 class ServerBoundPlayCardPacket(ServerBoundDataPacket):

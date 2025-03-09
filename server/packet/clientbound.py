@@ -69,12 +69,11 @@ class ClientBoundPlayCardPacket(ClientBoundDataPacket):
         self.player = player
 
 # interaction packet
-class ClientBoundChoseToShowPacket(ClientBoundPacket):
-    pass
-
 class ClientBoundChoseToPlayPacket(ClientBoundPacket):
     pass
-    
+
+class ClientBoundChoseToShowPacket(ClientBoundPacket):
+    pass    
     
 def getClientBoundPacket(id:int,data:str = "") -> ClientBoundPacket:
     print("client : clientboundget :",data)

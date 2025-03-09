@@ -1,6 +1,6 @@
 import socket
 import threading as th
-from .packet.clientbound import *
+import packet.clientbound as cb
 from .packet.serverbound import *
 from .joueur import Joueur
 from .game import Game
@@ -41,7 +41,7 @@ class Server :
         try:
             client = Client(conn,ip,self.lastpid,self)
             self.lastpid += 1
-            packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
+            packet : ServerBoundPseudoPacket = client.sendRecv(cb.ClientBoundIdPacket(client.id))
             player = Joueur(packet.name,client)
             self.game.join_player(player)
             self.threadlist.append(client.thread)
@@ -49,7 +49,7 @@ class Server :
         except Exception as e:
             print("Server : Erreur creation", e)
 
-    def broadcast(self,packet:ClientBoundPacket,ignored:list[int] = []):
+    def broadcast(self,packet:cb.ClientBoundPacket,ignored:list[int] = []):
         for player in self.game.players:
             if player.client.id not in ignored:
                 player.client.send(packet)

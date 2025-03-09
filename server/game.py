@@ -1,10 +1,9 @@
 from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
-from .packet.clientbound import ClientBoundPlayerListPacket
+import packet.clientbound as cb
 
 states={}
-
 
 
 class Game:
@@ -24,7 +23,7 @@ class Game:
     def join_player(self,joueur:Joueur):
         if self.state == "waiting":
             self.players.append(joueur)
-            self.server.broadcast(ClientBoundPlayerListPacket(self.players))
+            self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players))
             print(f"{joueur.nom} à rejoint la partie.")
 
     def start_game(self):
@@ -33,7 +32,7 @@ class Game:
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("Début de la partie")
-        self.placement()        
+        self.phase_un()        
 
     def add_card(self,idPlayer:int,card:Carte,slot:int):
         index = 0
@@ -60,18 +59,16 @@ class Game:
     def get_card(self,index) -> Carte :
         return self.file_influence[index][-1]
     
-    def placement(self):
+    def phase_un(self):
         self.tour +=1
         for p in self.players:
             print("C'est au tour de "+p.nom+" de jouer !")
-            card ,slot = p.play_card(self)
-            self.add_card(p.id,card,slot)
-        
-        self.end_round()
+            carte = p.client.sendRecv(cb.ClientBoundChoseToPlayPacket())
+        self.phase_deux()
             
  
     #phase a la fin du tours
-    def end_round(self):
+    def phase_deux(self):
         for lst in self.file_influence:
             card = lst[-1]
             if card.shown:
@@ -123,3 +120,5 @@ class Game:
             defausse.append(out.pop(random.randint(0,len(out)-1)))
         player.cartes = out
         player.defausse = defausse
+
+
