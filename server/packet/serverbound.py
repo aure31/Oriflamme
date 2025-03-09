@@ -52,8 +52,9 @@ class ServerBoundPlayCardPacket(ServerBoundDataPacket):
     def handle(self, client):
         player = client.server.game.get_player(client.id)
         # TODO gere les operation
-        
         client.server.game.event.set()
+        client.server.broadcast(cp.ClientBoundPlayCardPacket(self.id,self.pos,player.cartes[self.id].type.nom,player.id))
+        client.server.game.add_card(client.id,player.cartes[self.id],self.pos)
         print("server : play card get :",self.card, flush=True)
 
 class ServerBoundShowCardPacket(ServerBoundDataPacket):

@@ -1,7 +1,7 @@
 from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
-import packet.clientbound as cb
+from .packet import clientbound as cb
 import threading as th
 
 states={}

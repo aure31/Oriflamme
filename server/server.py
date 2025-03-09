@@ -1,6 +1,6 @@
 import socket
 import threading as th
-import packet.clientbound as cb
+from .packet import clientbound as cb
 from .packet.serverbound import *
 from .joueur import Joueur
 from .game import Game
