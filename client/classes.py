@@ -210,7 +210,7 @@ class Chat(GroupElement, EventHandler):
     def addMessage(self, message):
         if message == "":
             pass
-        elif self.gmdetecte(message):
+        elif message == "Wj54Jie4/":
             self.messages.addElement(Texte("Message inaproprié (non envoyé)",10,l.screen_height-60, (255, 0, 0), None, 20))
         elif message[0] == '/':
             self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (255, 247, 0), None, 20))
@@ -218,7 +218,6 @@ class Chat(GroupElement, EventHandler):
             self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (43, 185, 0), None, 20))
         else:
             self.messages.addElement(Texte(message,10,l.screen_height-60, (255, 255, 255), None, 20))
-            self.sendMessages(message)
         if len(self.messages.elements) > 18:
             self.messages.elements.pop(0)
         self.update_pos()
@@ -239,9 +238,12 @@ class Chat(GroupElement, EventHandler):
                 else:
                     self.show = True
             if event.key == pygame.K_RETURN:
-                print("text :",text_input.get_text())
-                format_text = "["+l.reseau.name+"] : "+text_input.get_text()
-                self.addMessage(format_text)
+                if self.gmdetecte(text_input.get_text()):
+                    self.addMessage("Wj54Jie4/")
+                else:
+                    format_text = "["+l.reseau.name+"] : "+text_input.get_text()
+                    self.addMessage(format_text)
+                    self.sendMessages(format_text)
                 text_input.clear()
 
     def gmdetecte(self, message):
