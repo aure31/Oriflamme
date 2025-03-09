@@ -157,7 +157,7 @@ class Complot(Types):
         Player.ptsinflu += Carte.ptsinflu
         Game.discard(Carte.get_pos(Game))
 
-class Carte(p.sprite.Sprite):
+class Carte:
     def __init__(self, type:Types):
         self.couleur = None
         self.type = type

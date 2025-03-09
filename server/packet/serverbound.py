@@ -1,7 +1,7 @@
 import socket
 import utils.utils as utils
 import server.packet.clientbound as cp
-import Threading as th
+import threading as th
 
 
 #client_bound server -> client
@@ -48,10 +48,12 @@ class ServerBoundPlayCardPacket(ServerBoundDataPacket):
         super().__init__(data)
         self.id = int(data[0])
         self.pos = int(data[1])
-        self.card = data[2]
-        self.player = data[3]
 
     def handle(self, client):
+        player = client.server.game.get_player(client.id)
+        # TODO gere les operation
+        
+        client.server.game.event.set()
         print("server : play card get :",self.card, flush=True)
 
 class ServerBoundShowCardPacket(ServerBoundDataPacket):

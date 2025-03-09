@@ -2,6 +2,7 @@ from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
 import packet.clientbound as cb
+import threading as th
 
 states={}
 
@@ -12,6 +13,7 @@ class Game:
         self.file_influence :list[list[Carte]] = []
         self.players:list[Joueur] = []
         self.state = "waiting"
+        self.event = th.Event()
         self.first_player = -1
         self.colors = colors.copy()
         self.tour = 0
@@ -63,7 +65,8 @@ class Game:
         self.tour +=1
         for p in self.players:
             print("C'est au tour de "+p.nom+" de jouer !")
-            carte = p.client.sendRecv(cb.ClientBoundChoseToPlayPacket())
+            p.client.send(cb.ClientBoundGameHandPacket(p.cartes))
+            self.event.wait()
         self.phase_deux()
             
  
