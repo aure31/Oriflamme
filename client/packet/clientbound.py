@@ -1,5 +1,6 @@
 import loader as l
 import utils.utils as utils
+from card import HandCard 
 import joueur as j
 import pygame as p
 import game as g
@@ -69,10 +70,10 @@ class ClientBoundColorsPacket(ClientBoundDataPacket):
 class ClientBoundGameHandPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
-        self.card = data
+        self.card = [HandCard(int(data),g.Game.game.itself.couleur) for data in self.data]
 
     def handle(self):
-        pass
+        g.Game.game.setHand(self.card)
 
 class ClientBoundShowCardPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
