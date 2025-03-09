@@ -27,6 +27,7 @@ class Client:
             data = self.conn.recv(2048)
             if not data:
                 print("server packet : connection closed ",self.id)
+                self.server.game.left_player(self.id)
                 break
                 
             

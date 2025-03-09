@@ -52,10 +52,10 @@ class ClientBoundColorsPacket(ClientBoundDataListPacket):
         super().__init__([str(data[0])+data[1] for data in datas])
     
 # game packet
-
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self, winner:str):
         super().__init__(winner)
+
 class ClientBoundGameHandPacket(ClientBoundDataListPacket):
     def __init__(self,card:list):
         super().__init__(card)

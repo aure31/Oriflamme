@@ -22,8 +22,8 @@ class Server :
             print("server :error binding :",e)
         self.soket.listen(5)
         self.game = Game(self)
-        thread = th.Thread(name="connlistener",target=self.connectionListener)
-        self.startTread(thread)  
+        self.connectionthread = th.Thread(name="connlistener",target=self.connectionListener)
+        self.connectionthread.start()
 
     def startTread(self,thread:th.Thread):
         self.threadlist.append(thread)
@@ -52,26 +52,25 @@ class Server :
             print("Server : Erreur creation", e)
 
     def broadcast(self,packet:cb.ClientBoundPacket,ignored:list[int] = []):
-        for player in self.game.players:
+        for player in self.game.players.values():
             if player.client.id not in ignored:
                 player.client.send(packet)
                 print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
-        
+        self.stopevent.set()
         # Vérifier si le socket est encore valide et connecté
         try:
             # Vérifie si le socket est connecté en essayant de récupérer son état
-            self.soket.getpeername()
             self.soket.shutdown(socket.SHUT_RDWR)
         except (OSError, socket.error):
             # Ignore les erreurs si le socket n'est pas connecté
             print("Server : Socket not connected")
         finally:
             self.soket.close()
-        self.stopevent.set()
         for t in self.threadlist:
             t.join()
+        self.connectionthread.join()
         self.threadlist = []
         print("Server stopped")
 

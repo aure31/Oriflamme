@@ -34,10 +34,16 @@ class Game:
             self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
             print(f"{joueur.nom} à rejoint la partie.")
 
+    def left_player(self,idPlayer:int):
+        print(f"{self.get_player(idPlayer).nom} à quitté la partie.")
+        self.players.pop(idPlayer)
+        self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
+
     def start_game(self):
         self.colorSelector()
         for p in self.players.values() :
             self.gen_deck(p)
+            p.client.send(cb.ClientBoundGameHandPacket(p.cartes))
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("Début de la partie")
@@ -72,7 +78,7 @@ class Game:
         self.tour +=1
         for p in self.players.values():
             print("C'est au tour de "+p.nom+" de jouer !")
-            p.client.send(cb.ClientBoundGameHandPacket(p.cartes))
+            p.client.send(cb.ClientBoundChoseToPlayPacket())
             self.event.wait()
             self.event.clear()
         self.phase_deux()
