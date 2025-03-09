@@ -1,6 +1,6 @@
 import pygame as p
 
-colors = ["red","blue","green","black","yellow"]
+colors = ["rouge","bleu","vert","gris","jaune"]
 memo_import = {}
 
 class Type:

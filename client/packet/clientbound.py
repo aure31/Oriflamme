@@ -56,6 +56,13 @@ class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def handle(self):
         pass
 
+class ClientBoundColorsPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+
+    def handle(self):
+        g.Game.game.setPlayersColor(self.colors)
+
 # game packet
 class ClientBoundGameHandPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):

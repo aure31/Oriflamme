@@ -16,8 +16,8 @@ class Game():
         Game.game = self
 
     def setPlayersColor(self,colors:list[str]):
-        for i in range(len(colors)):
-            self.joueurs[i].couleur = colors[i]
+        for data in colors:
+            self.joueurs[int(data[0])].couleur = data[1:]
 
     def setPlayerList(self,playerlist:list[str]):
         MenuList.ATTENTE.value.getElement("playerList").setText([e[1:] for e in playerlist])
