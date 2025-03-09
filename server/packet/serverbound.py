@@ -1,7 +1,7 @@
 import socket
 import utils.utils as utils
 import server.packet.clientbound as cp
-from game import Game
+import Threading as th
 
 
 #client_bound server -> client
@@ -38,8 +38,8 @@ class ServerBoundGameStartPacket(ServerBoundPacket):
     
     def handle(self, client):
         print("server : game start get")
-        import server.packet.clientbound as cp
-        client.server.game.start_game()
+        thread = th.Thread(name="game",target=client.server.game.start_game)
+        client.server.startTread(thread)
         client.server.broadcast(cp.ClientBoundGameStartPacket())
 
 
