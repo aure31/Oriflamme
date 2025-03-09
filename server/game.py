@@ -67,6 +67,7 @@ class Game:
             print("C'est au tour de "+p.nom+" de jouer !")
             p.client.send(cb.ClientBoundGameHandPacket(p.cartes))
             self.event.wait()
+            self.event.clear()
         self.phase_deux()
             
  
