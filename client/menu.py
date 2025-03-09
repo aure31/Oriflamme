@@ -70,10 +70,10 @@ class JoinBoutton(Bouton):
         name = self.menus[0].getElement("name")
         if name.get_text() == "":
             l.error = e.ErrorList.PSEUDO
-        elif " " in name.get_text():
-            l.error = e.ErrorList.SPACE
+        erreur = e.pseudo_error(name.get_text())
+        if erreur != None:
+            l.error = erreur
         else:
-            l.error = None
             l.menu = MenuList.REJOINDRE.value
 
 
@@ -89,6 +89,9 @@ class NewGameBoutton(Bouton):
         error = None
         if name.get_text() == "":
             error = e.ErrorList.PSEUDO
+        erreur = e.pseudo_error(name.get_text())
+        if erreur != None:
+            error = erreur
         else:
             l.server = s.Server()
             l.reseau = Network(l.server.ip, l.server.port, name.get_text())
@@ -152,7 +155,7 @@ class RejoindreJoinBoutton(Bouton):
         ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
         if  is_port(ask_port_join.get_text()):
             l.error = None
-            l.connexion.affiche(l.window)
+            #l.connection.affiche(s.window)
             try:
                 name: TextInput = MenuList.ACCUEIL.value.getElement("name")
                 l.reseau = Network(ask_ip_join.get_text(),
@@ -179,7 +182,6 @@ class AttenteLaunchBoutton(Bouton):
                          condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
-        l.menu = MenuList.JEU.value
         sb.ServerBoundGameStartPacket().send(l.reseau.conn)
 
 
@@ -236,3 +238,4 @@ class MenuList(enum.Enum):
         .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
     CREDIT = Menu("Credit")\
         .addElement("back",BackBoutton())
+    

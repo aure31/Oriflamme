@@ -8,8 +8,6 @@ screen_width, screen_height = window.get_size()
 r = screen_width//1600
 bg_menus = p.transform.scale(p.image.load("client/assets/background/new_bg_lobby.png").convert(), (screen_width, screen_height))
 bg_game = p.transform.scale(p.image.load("client/assets/background/new_bg_game.png").convert(), (screen_width, screen_height))
-
-caracteres = [" ", "/", "@", "~", "#"]
 chat = Chat()
 
 #Global Variables

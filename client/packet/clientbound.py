@@ -3,6 +3,7 @@ import utils.utils as utils
 import joueur as j
 import pygame as p
 import game as g
+import menu as m
 
 p.init()
 
@@ -47,6 +48,7 @@ class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
         print("changement d'arrière plan")
         l.background = l.bg_game
+        l.menu = m.MenuList.JEU.value
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
