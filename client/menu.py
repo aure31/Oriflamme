@@ -92,12 +92,19 @@ class NewGameBoutton(Bouton):
         else:
             l.error = None
             l.server = s.Server()
-            l.reseau = Network(l.server.ip, l.server.port, name.get_text())
-            l.menu = MenuList.ATTENTE.value
-            l.menu.init()
+            # Add a small delay to ensure server is ready
+            import time
+            time.sleep(0.1)  # 100ms delay
+            try:
+                l.reseau = Network(l.server.ip, l.server.port, name.get_text())
+                l.menu = MenuList.ATTENTE.value
+                l.menu.init()
+            except ConnectionRefusedError:
+                error = e.ErrorList.SERVER
+                if l.server:
+                    l.server.stop()
+                    l.server = None
 
-            
-        
         l.error = error
 
 
@@ -153,7 +160,6 @@ class RejoindreJoinBoutton(Bouton):
         ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
         if  is_port(ask_port_join.get_text()):
             l.error = None
-            #l.connection.affiche(s.window)
             try:
                 name: TextInput = MenuList.ACCUEIL.value.getElement("name")
                 l.reseau = Network(ask_ip_join.get_text(),
@@ -236,4 +242,3 @@ class MenuList(enum.Enum):
         .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
     CREDIT = Menu("Credit")\
         .addElement("back",BackBoutton())
-    

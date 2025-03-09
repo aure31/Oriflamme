@@ -29,7 +29,8 @@ def main():
         
 def stop_game():
     l.is_running = False
-    l.reseau.disconect()
+    if l.reseau:
+        l.reseau.disconect()
     l.reseau = None
     if l.server:
         l.server.stop()

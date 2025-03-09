@@ -52,7 +52,8 @@ class Network:
                 break
             except Exception as e:
                 print("client : Erreur de réception de paquet", e)
-                print("client : data :",data)
+                if not data :
+                    print("client : data :",data)
             
 
     def send(self, packet:ServerBoundPacket):
