@@ -58,21 +58,44 @@ class HandCard:
         if color not in colors:
             raise ValueError("client : Invalid Color")
         self.color = color
-        self.img = self.get_img()
+        self.img = self.getImg()
+        self.back = self.getBack()
 
-    def get_img(self):
+    def getBack(self):
+        if not self.color in memo_import:
+            memo_import[self.color] = p.image.load("client/assets/cartes/back/"+self.color+".png")
+        return memo_import[self.color]
+
+    def getImg(self):
         if not (id,self.color) in memo_import:
             memo_import[(id,self.color)] = p.image.load("client/assets/cartes/"+self.type.path+"/"+self.color+".png")
         return memo_import[(id,self.color)]
     
     def toPlayCard(self,idPlayer:int = -1):
         return PlayCard(self)
+    
 
 class PlayCard(HandCard):
-    def __init__(self, HandCard:HandCard):
-        super().__init__(HandCard)
-        self.idPlayer = -1
+    def __init__(self, idPlayer:int, card:HandCard):
+        super().__init__(card.type.id,card.color)
+        self.type = card.type
+        self.color = card.color
+        self.img = card.img
+        self.back = card.back
+        self.idPlayer = idPlayer
         self.ptsinflu = 0
         self.shown = False
+
+    def setShown(self,shown:bool):
+        self.shown = shown
+    
+    def getImg(self):
+        if self.shown:
+            return self.img
+        else:
+            return self.back
+        
+    def getBack(self):
+        return self.back
     
     

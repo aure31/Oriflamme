@@ -23,9 +23,11 @@ class Server :
         self.soket.listen(5)
         self.game = Game(self)
         thread = th.Thread(name="connlistener",target=self.connectionListener)
-        thread.start()
-        self.threadlist.append(thread)  
+        self.startTread(thread)  
 
+    def startTread(self,thread:th.Thread):
+        self.threadlist.append(thread)
+        thread.start()
 
     def connectionListener(self):
         while not self.stopevent.is_set():

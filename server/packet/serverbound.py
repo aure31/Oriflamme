@@ -38,9 +38,9 @@ class ServerBoundGameStartPacket(ServerBoundPacket):
     
     def handle(self, client):
         print("server : game start get")
+        import server.packet.clientbound as cp
         client.server.game.start_game()
-        client.server.broadcast(cp.ClientBoundGameStartPacket(),[client.id])
-        
+        client.server.broadcast(cp.ClientBoundGameStartPacket())
 
 
 class ServerBoundPlayCardPacket(ServerBoundDataPacket):

@@ -1,5 +1,5 @@
 import loader as l
-import utils
+import utils.utils as utils
 import joueur as j
 import pygame as p
 import game as g
@@ -40,14 +40,7 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
         super().__init__(data)
 
     def handle(self):
-        playerlist = []
-        playernames = []
-        for data in self.data:
-            joueur : j.Joueur = j.Joueur.decode(data)
-            playerlist[joueur.id] = joueur
-            playernames.append(joueur.nom)
-        g.Game.game.joueurs = playerlist
-        l.menu.getElement("playerList").setText(playernames)
+        g.Game.game.setPlayerList(self.data)
         print("client : playerlist get :",l.menu.getElement("playerList").elements)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):

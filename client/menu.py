@@ -41,7 +41,6 @@ class AttenteMenu(Menu):
                                        str(l.reseau.server))
         self.getElement("port").set_text("Port du serveur : " +
                                          str(l.reseau.port))
-        self.getElement("playerList").addElement(Texte("Joueurs :",1150,100))
     
     def addPlayer(self,player:str):
         self.getElement("playerList").addElement(Texte(player,1150, 100+len(self.getElement("playerList").elements)*30, (255, 255, 255)))
@@ -230,10 +229,10 @@ class MenuList(enum.Enum):
             .addElement("playerList", DynamicTextList((1150, 120), 30))\
             .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
-        .addElement("back",BackBoutton())\
         .addElement("chat", l.chat)
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
         .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
-    CREDIT = Menu("Credit").addElement("back",BackBoutton())
+    CREDIT = Menu("Credit")\
+        .addElement("back",BackBoutton())
