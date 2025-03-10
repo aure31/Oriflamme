@@ -50,7 +50,7 @@ class ClientBoundGameStartPacket(ClientBoundPacket):
 class ClientBoundColorsPacket(ClientBoundDataListPacket):
     def __init__(self,datas:list[tuple[int,str]]):
         super().__init__([str(data[0])+data[1] for data in datas])
-    
+
 # game packet
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self, winner:str):

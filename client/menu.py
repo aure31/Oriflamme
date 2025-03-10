@@ -243,7 +243,8 @@ class MenuList(enum.Enum):
             .addElement("playerList", DynamicTextList((1150, 120), 30))\
             .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
-        .addElement("chat", l.chat)
+        .addElement("chat", l.chat)\
+        .addElement("cartes", )
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
