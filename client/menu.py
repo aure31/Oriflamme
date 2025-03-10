@@ -202,10 +202,10 @@ class AttenteBackBoutton(BackBoutton):
 
     def onClique(self):
         print("client : Retour")
-        l.reseau.disconect()
         l.chat.sendMessages("@"+l.reseau.name+" a quitté la partie")
         l.chat.addMessage("@"+l.reseau.name+" a quitté la partie")
         print("disconect")
+        l.reseau.disconect()
         if l.server is not None:
             print("server : Fermeture du serveur")
             print("server : " + str(l.server.ip) + ":" + str(l.server.port))
@@ -240,14 +240,13 @@ class MenuList(enum.Enum):
             .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
             .addElement("launch",AttenteLaunchBoutton())\
             .addElement("player",Texte("Joueurs :",1150, 90, (255, 255, 255), None, 32))\
-            .addElement("playerList", DynamicTextList((1150, 120), 30))\
+            .addElement("playerList", DynamicTextList((1150, 120), 30, (0, 255, 0)))\
             .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("chat", l.chat)\
-        .addElement("cartes", )
+        .addElement("cartes", GroupElement("Cartes"))
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
-        .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
-        .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
+        .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))
     CREDIT = Menu("Credit")\
         .addElement("back",BackBoutton())

@@ -258,7 +258,7 @@ class Chat(GroupElement, EventHandler):
         return "[" + l.reseau.name + "] : " + message
 
     def sendMessages(self, message):
-        if message:
+        if message and l.reseau:  # Utilise directement l.reseau au lieu d'une référence stockée
             l.reseau.send(ServerBoundMessagePacket(message))
 
     def onEvent(self, event):
