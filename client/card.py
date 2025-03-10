@@ -9,49 +9,20 @@ class Type:
         self.name = name
         self.path = path
 
-class Archer(Type):
-    def __init__(self):
-        super().__init__(0, "Archer", "archer")
 
-class Soldat(Type):
-    def __init__(self):
-        super().__init__(1, "Soldat", "soldat")
-
-class Espion(Type):
-    def __init__(self):
-        super().__init__(2, "Espion", "espion")
-
-class Heritier(Type):
-    def __init__(self):
-        super().__init__(3, "Héritier", "heritier")
-
-class Changeforme(Type):
-    def __init__(self):
-        super().__init__(4, "Changeforme", "changeforme")
-
-class Seigneur(Type):
-    def __init__(self):
-        super().__init__(5,"Seigneur", "seigneur")
-
-class Assassinat(Type):
-    def __init__(self):
-        super().__init__(6, "Assassinat", "assassinat")
-
-class DecretRoyal(Type):
-    def __init__(self):
-        super().__init__(7, "Décret Royal", "decretroyal")
-
-class Embuscade(Type):
-    def __init__(self):
-        super().__init__(8, "Embuscade", "embuscade")
-
-class Complot(Type):
-    def __init__(self):
-        super().__init__(9, "Complot", "complot")
 
 class HandCard:
-    __types__ : list[Type] = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
-                       Embuscade(), Complot(), Changeforme(), Seigneur()]
+    __types__ = [ Type(0, "Archer", "archer"),
+            Type(1, "Soldat", "soldat"),
+            Type(2, "Espion", "espion"),
+            Type(3, "Héritier", "heritier"),
+            Type(4, "Changeforme", "changeforme"),
+            Type(5,"Seigneur", "seigneur"),
+            Type(6, "Assassinat", "assassinat"),
+            Type(7, "Décret Royal", "decretroyal"),
+            Type(8, "Embuscade", "embuscade"),
+            Type(9, "Complot", "complot")
+            ]
 
     def __init__(self, id:int,color:str):
         self.type = HandCard.__types__[id]
