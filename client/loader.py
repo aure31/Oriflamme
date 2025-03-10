@@ -27,5 +27,5 @@ gm = mots_bannis = [
     "ducon", "duconne", "mongol", "autiste", "schizo", "dégénéré", "gros",
     "moche", "nul", "suce", "branleur", "branleuse", "foutre", "nique", 
     "suicide", "meurs", "crève", "tuer", "viol", "pédophile", "harcèlement",
-    "menace", "sale", "clochard", "prostituée", "anus", "trouduc"
+    "menace", "sale ", "clochard", "prostituée", " anus", "trouduc"
 ]

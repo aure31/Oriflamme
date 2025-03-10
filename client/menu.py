@@ -99,6 +99,8 @@ class NewGameBoutton(Bouton):
                 l.reseau = Network(l.server.ip, l.server.port, name.get_text())
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
+                l.chat.sendMessages("@"+l.reseau.name+" a créé la partie")
+                l.chat.addMessage("@"+l.reseau.name+" a créé la partie")
             except ConnectionRefusedError:
                 error = e.ErrorList.SERVER
                 if l.server:
@@ -167,6 +169,8 @@ class RejoindreJoinBoutton(Bouton):
                                    name.get_text())
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
+                l.chat.sendMessages("@"+l.reseau.name+" a rejoint la partie")
+                l.chat.addMessage("@"+l.reseau.name+" a rejoint la partie")
             except:
                 print("client : Connexion échouée")
                 l.error = e.ErrorList.SERVER
@@ -186,6 +190,8 @@ class AttenteLaunchBoutton(Bouton):
                          condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
+        l.chat.sendMessages("#La partie a commencé")
+        l.chat.addMessage("#La partie a commencé !")
         sb.ServerBoundGameStartPacket().send(l.reseau.conn)
 
 
@@ -197,6 +203,8 @@ class AttenteBackBoutton(BackBoutton):
     def onClique(self):
         print("client : Retour")
         l.reseau.disconect()
+        l.chat.sendMessages("@"+l.reseau.name+" a quitté la partie")
+        l.chat.addMessage("@"+l.reseau.name+" a quitté la partie")
         print("disconect")
         if l.server is not None:
             print("server : Fermeture du serveur")

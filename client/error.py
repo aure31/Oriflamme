@@ -17,7 +17,7 @@ class ErrorList(enum.Enum):
     SERVER = Error(1, "Impossible de trouver ce serveur", 950, 750)
     PSEUDO = Error(2, "Entrez un pseudo", 170, 550)
     CARACTERE = Error(3, "Caractère invalide détecté", 170, 550) 
-    LONG = Error(4, "Pseudo trop long", 170, 550)
+    LONG = Error(4, "Pseudo trop long (20 caractères max)", 170, 550)
 
 caracteres = [" ", "/", "@", "~", "#"]
 
