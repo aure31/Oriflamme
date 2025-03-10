@@ -6,7 +6,6 @@ import threading as th
 
 states={}
 
-
 class Game:
     def __init__(self,server):
         self.server = server
@@ -83,7 +82,6 @@ class Game:
             self.event.clear()
         self.phase_deux()
             
-    #phase a la fin du tours
     def phase_deux(self):
         for lst in self.file_influence:
             card = lst[-1]

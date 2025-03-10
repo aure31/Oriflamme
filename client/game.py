@@ -37,6 +37,8 @@ class Game():
             raise ValueError("client : need to set color before setting the hand")
         self.cartes = [HandCard(int(e[0]),self.itself.couleur) for e in hand]
 
+
+# Actions dans le jeu
     def addCardFile(self, id_carte : int, pos : int , id_joueur : int = None) -> PlayCard:
         joueur = self.getPlayer(id_joueur)
         carte = HandCard(id_carte,joueur.couleur).toPlayCard(joueur.id)
