@@ -1,39 +1,53 @@
 from .joueur import Joueur
 from .cartes import Carte,full_deck,colors
 import random
-from .packet.clientbound import ClientBoundPlayerListPacket
+from .packet import clientbound as cb
+import threading as th
 
 states={}
-
 
 
 class Game:
     def __init__(self,server):
         self.server = server
-        self.file_influence :list[list[Carte]] = []
-        self.players:list[Joueur] = []
+        self.file_influence : list[list[Carte]] = []
+        self.players: dict[int,Joueur] = {}
         self.state = "waiting"
+        self.event = th.Event()
         self.first_player = -1
         self.colors = colors.copy()
         self.tour = 0
 
     def random_color(self):
-        print(" ".join(self.color))
         return self.color.pop(random.randint(0,len(self.color)-1))
+    
+    def colorSelector(self):
+        datas = []
+        for e in self.players.values():
+            e.couleur = self.random_color()
+            datas.append((e.id,e.couleur))
+        self.server.broadcast(cb.ClientBoundColorsPacket(datas))
 
     def join_player(self,joueur:Joueur):
         if self.state == "waiting":
-            self.players.append(joueur)
-            self.server.broadcast(ClientBoundPlayerListPacket(self.players))
+            self.players[joueur.id] = joueur
+            self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
             print(f"{joueur.nom} à rejoint la partie.")
 
+    def left_player(self,idPlayer:int):
+        print(f"{self.get_player(idPlayer).nom} à quitté la partie.")
+        self.players.pop(idPlayer)
+        self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
+
     def start_game(self):
-        for p in self.players :
+        self.colorSelector()
+        for p in self.players.values() :
             self.gen_deck(p)
+            p.client.send(cb.ClientBoundGameHandPacket(p.cartes))
         self.first_player = random.randint(0,len(self.players))
         self.state="start"
         print("Début de la partie")
-        self.placement()        
+        self.phase_un()        
 
     def add_card(self,idPlayer:int,card:Carte,slot:int):
         index = 0
@@ -60,18 +74,17 @@ class Game:
     def get_card(self,index) -> Carte :
         return self.file_influence[index][-1]
     
-    def placement(self):
+    def phase_un(self):
         self.tour +=1
-        for p in self.players:
+        for p in self.players.values():
             print("C'est au tour de "+p.nom+" de jouer !")
-            card ,slot = p.play_card(self)
-            self.add_card(p.id,card,slot)
-        
-        self.end_round()
+            p.client.send(cb.ClientBoundChoseToPlayPacket())
+            self.event.wait()
+            self.event.clear()
+        self.phase_deux()
             
- 
     #phase a la fin du tours
-    def end_round(self):
+    def phase_deux(self):
         for lst in self.file_influence:
             card = lst[-1]
             if card.shown:

@@ -1,8 +1,10 @@
 import loader as l
-import utils
+import utils.utils as utils
+from card import HandCard 
 import joueur as j
 import pygame as p
 import game as g
+import menu as m
 
 p.init()
 
@@ -40,20 +42,14 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
         super().__init__(data)
 
     def handle(self):
-        playerlist = []
-        playernames = []
-        for data in self.data:
-            joueur : j.Joueur = j.Joueur.decode(data)
-            playerlist[joueur.id] = joueur
-            playernames.append(joueur.nom)
-        g.Game.game.joueurs = playerlist
-        l.menu.getElement("playerList").setText(playernames)
+        g.Game.game.setPlayerList(self.data)
         print("client : playerlist get :",l.menu.getElement("playerList").elements)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
     def handle(self):
         print("changement d'arrière plan")
         l.background = l.bg_game
+        l.menu = m.MenuList.JEU.value
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
@@ -63,14 +59,21 @@ class ClientBoundGameEndPacket(ClientBoundDataPacket):
     def handle(self):
         pass
 
+class ClientBoundColorsPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+
+    def handle(self):
+        g.Game.game.setPlayersColor(self.colors)
+
 # game packet
 class ClientBoundGameHandPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
-        self.card = data
+        self.card = [HandCard(int(data),g.Game.game.itself.couleur) for data in self.data]
 
     def handle(self):
-        pass
+        g.Game.game.setHand(self.card)
 
 class ClientBoundShowCardPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):

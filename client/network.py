@@ -1,8 +1,6 @@
 import socket
 import threading as th
 from packet.serverbound import ServerBoundPacket,ServerBoundPseudoPacket
-from packet.clientbound import getClientBoundPacket
-from server.game import Game
 
 class Network:
     def __init__(self, ip, port,name):
@@ -14,7 +12,8 @@ class Network:
         self.addr = (self.server, self.port)
         self.id = self.connect()
         print("client : id : "+str(self.id))
-        Game(self.id)
+        from game import Game
+        Game(self.id,self.name)
         self.thread = th.Thread(name="clientpacketlistner",target=self.packetListener)
         self.thread.start()
         self.send(ServerBoundPseudoPacket(name))
@@ -38,6 +37,7 @@ class Network:
             raise
     
     def packetListener(self):
+        from packet.clientbound import getClientBoundPacket
         while not self.stop_event.is_set():
             try:
                 data = self.conn.recv(2048)
@@ -52,7 +52,8 @@ class Network:
                 break
             except Exception as e:
                 print("client : Erreur de réception de paquet", e)
-                print("client : data :",data)
+                if not data :
+                    print("client : data :",data)
             
 
     def send(self, packet:ServerBoundPacket):

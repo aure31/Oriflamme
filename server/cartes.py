@@ -1,7 +1,7 @@
 import pygame as p
 import random
 
-colors = ["rouge","bleu","vert","black","yellow"]
+colors = ["rouge","bleu","vert","gris","jaune"]
 
 
 class Cartes:
@@ -157,7 +157,7 @@ class Complot(Types):
         Player.ptsinflu += Carte.ptsinflu
         Game.discard(Carte.get_pos(Game))
 
-class Carte(p.sprite.Sprite):
+class Carte:
     def __init__(self, type:Types):
         self.couleur = None
         self.type = type
@@ -183,6 +183,9 @@ class Carte(p.sprite.Sprite):
             return 
         player = game.get_player(self.idPlayer)
         self.type.capacite(player,game,self)
+    
+    def encode(self) -> str:
+        return str(self.type.id)
 
 types : list[Types] = [Archer(), Soldat(), Espion(), Heritier(), Assassinat(), DecretRoyal(),
                        Embuscade(), Complot(), Changeforme(), Seigneur()]

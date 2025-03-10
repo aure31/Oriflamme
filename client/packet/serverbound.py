@@ -43,7 +43,6 @@ class ServerBoundShowCardPacket(ServerBoundDataPacket):
         super().__init__(id)
         self.id = id
     
-    
 def getServerBoundPacket(id:int,data:str = "") -> ServerBoundPacket:
     print("client : serverboundget :",data)
     id = data[0]

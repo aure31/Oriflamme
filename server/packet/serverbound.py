@@ -1,5 +1,7 @@
 import socket
 import utils.utils as utils
+import server.packet.clientbound as cp
+import threading as th
 
 
 #client_bound server -> client
@@ -20,6 +22,7 @@ class ServerBoundDataPacket(ServerBoundPacket):
 class ServerBoundPseudoPacket(ServerBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
+        print(data)
         self.name = data[0]
 
 class ServerBoundMessagePacket(ServerBoundDataPacket):
@@ -29,15 +32,15 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
 
     def handle(self, client):
         print("server : message get :",self.message, flush=True)
-        import server.packet.clientbound as cp
         client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
     
 class ServerBoundGameStartPacket(ServerBoundPacket):
     
     def handle(self, client):
         print("server : game start get")
-        import server.packet.clientbound as cp
-        client.server.broadcast(cp.ClientBoundGameStartPacket(),[client.id])
+        thread = th.Thread(name="game",target=client.server.game.start_game)
+        client.server.startTread(thread)
+        client.server.broadcast(cp.ClientBoundGameStartPacket())
 
 
 class ServerBoundPlayCardPacket(ServerBoundDataPacket):
@@ -45,10 +48,13 @@ class ServerBoundPlayCardPacket(ServerBoundDataPacket):
         super().__init__(data)
         self.id = int(data[0])
         self.pos = int(data[1])
-        self.card = data[2]
-        self.player = data[3]
 
     def handle(self, client):
+        player = client.server.game.get_player(client.id)
+        # TODO gere les operation
+        client.server.game.event.set()
+        client.server.broadcast(cp.ClientBoundPlayCardPacket(self.id,self.pos,player.cartes[self.id].type.nom,player.id))
+        client.server.game.add_card(client.id,player.cartes[self.id],self.pos)
         print("server : play card get :",self.card, flush=True)
 
 class ServerBoundShowCardPacket(ServerBoundDataPacket):

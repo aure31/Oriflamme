@@ -57,6 +57,7 @@ class TextInput(Element, EventHandler):
         self.active_border_color = (0, 0, 0
                                     )  # Couleur de bordure noire quand active
         self.text = ''
+        self.texte_affiché = ''
         self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
         self.font = pygame.font.Font(None, 32)
         self.active = False
@@ -79,6 +80,7 @@ class TextInput(Element, EventHandler):
                     print(f'Texte validé : {self.text}')
                     self.last_valid_text = self.text
                     self.active = False  # Désactiver le champ de texte
+
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                     self.last_valid_text = self.text  # Mettre à jour le dernier texte validé après suppression
@@ -98,7 +100,8 @@ class TextInput(Element, EventHandler):
         pygame.draw.rect(surface, self.bg_color, self.rect)
         border_color = self.active_border_color if self.active else self.border_color
         pygame.draw.rect(surface, border_color, self.rect, 2)
-        text_surface = self.font.render(self.text, True, (0, 0, 0))
+        self.texte_affiché = self.text[-40:]
+        text_surface = self.font.render(self.texte_affiché, True, (0, 0, 0))
         surface.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
 
 
@@ -207,16 +210,16 @@ class Chat(GroupElement, EventHandler):
     def addMessage(self, message):
         if message == "":
             pass
+        elif message == "Wj54Jie4/":
+            self.messages.addElement(Texte("Message inaproprié (non envoyé)",10,l.screen_height-60, (255, 0, 0), None, 20))
         elif message[0] == '/':
             self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (255, 247, 0), None, 20))
         elif message[0] == '@':
             self.messages.addElement(Texte(message[1:],10,l.screen_height-60, (43, 185, 0), None, 20))
         else:
             self.messages.addElement(Texte(message,10,l.screen_height-60, (255, 255, 255), None, 20))
-        if len(self.messages.elements) > 19:
+        if len(self.messages.elements) > 18:
             self.messages.elements.pop(0)
-        for e in self.messages.elements:
-            print("client : message : ",e.isAffiche(),e.menus)
         self.update_pos()
 
     def update_pos(self):
@@ -235,8 +238,17 @@ class Chat(GroupElement, EventHandler):
                 else:
                     self.show = True
             if event.key == pygame.K_RETURN:
-                print("text :",text_input.get_text())
-                format_text = "["+l.reseau.name+"] : "+text_input.get_text()
-                self.addMessage(format_text)
-                self.sendMessages(format_text)
+                if self.gmdetecte(text_input.get_text()):
+                    self.addMessage("Wj54Jie4/")
+                else:
+                    format_text = "["+l.reseau.name+"] : "+text_input.get_text()
+                    self.addMessage(format_text)
+                    self.sendMessages(format_text)
                 text_input.clear()
+
+    def gmdetecte(self, message):
+        message = message.lower()
+        for mot in l.gm:
+            if mot in message:
+                return True
+        return False

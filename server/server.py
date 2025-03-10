@@ -1,6 +1,6 @@
 import socket
 import threading as th
-from .packet.clientbound import *
+from .packet import clientbound as cb
 from .packet.serverbound import *
 from .joueur import Joueur
 from .game import Game
@@ -22,10 +22,12 @@ class Server :
             print("server :error binding :",e)
         self.soket.listen(5)
         self.game = Game(self)
-        thread = th.Thread(name="connlistener",target=self.connectionListener)
-        thread.start()
-        self.threadlist.append(thread)  
+        self.connectionthread = th.Thread(name="connlistener",target=self.connectionListener)
+        self.connectionthread.start()
 
+    def startTread(self,thread:th.Thread):
+        self.threadlist.append(thread)
+        thread.start()
 
     def connectionListener(self):
         while not self.stopevent.is_set():
@@ -41,7 +43,7 @@ class Server :
         try:
             client = Client(conn,ip,self.lastpid,self)
             self.lastpid += 1
-            packet : ServerBoundPseudoPacket = client.sendRecv(ClientBoundIdPacket(client.id))
+            packet : ServerBoundPseudoPacket = client.sendRecv(cb.ClientBoundIdPacket(client.id))
             player = Joueur(packet.name,client)
             self.game.join_player(player)
             self.threadlist.append(client.thread)
@@ -49,27 +51,26 @@ class Server :
         except Exception as e:
             print("Server : Erreur creation", e)
 
-    def broadcast(self,packet:ClientBoundPacket,ignored:list[int] = []):
-        for player in self.game.players:
+    def broadcast(self,packet:cb.ClientBoundPacket,ignored:list[int] = []):
+        for player in self.game.players.values():
             if player.client.id not in ignored:
                 player.client.send(packet)
                 print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
-        
+        self.stopevent.set()
         # Vérifier si le socket est encore valide et connecté
         try:
             # Vérifie si le socket est connecté en essayant de récupérer son état
-            self.soket.getpeername()
             self.soket.shutdown(socket.SHUT_RDWR)
         except (OSError, socket.error):
             # Ignore les erreurs si le socket n'est pas connecté
             print("Server : Socket not connected")
         finally:
             self.soket.close()
-        self.stopevent.set()
         for t in self.threadlist:
             t.join()
+        self.connectionthread.join()
         self.threadlist = []
         print("Server stopped")
 

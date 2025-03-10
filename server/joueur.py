@@ -7,7 +7,6 @@ from .cartes import Carte
 from .client import Client
 import random
 import pygame
-from packet.clientbound import ClientBoundPlayerListPacket
 
 pygame.init()
 

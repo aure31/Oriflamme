@@ -41,7 +41,6 @@ class AttenteMenu(Menu):
                                        str(l.reseau.server))
         self.getElement("port").set_text("Port du serveur : " +
                                          str(l.reseau.port))
-        self.getElement("playerList").addElement(Texte("Joueurs :",1150,100))
     
     def addPlayer(self,player:str):
         self.getElement("playerList").addElement(Texte(player,1150, 100+len(self.getElement("playerList").elements)*30, (255, 255, 255)))
@@ -69,10 +68,9 @@ class JoinBoutton(Bouton):
 
     def onClique(self):
         name = self.menus[0].getElement("name")
-        if name.get_text() == "":
-            l.error = e.ErrorList.PSEUDO
-        elif " " in name.get_text():
-            l.error = e.ErrorList.SPACE
+        erreur = e.pseudo_error(name.get_text())
+        if erreur != None:
+            l.error = erreur
         else:
             l.error = None
             l.menu = MenuList.REJOINDRE.value
@@ -88,16 +86,25 @@ class NewGameBoutton(Bouton):
     def onClique(self):
         name: TextInput = self.menus[0].getElement("name")
         error = None
-        if name.get_text() == "":
-            error = e.ErrorList.PSEUDO
+        erreur = e.pseudo_error(name.get_text())
+        if erreur != None:
+            error = erreur
         else:
+            l.error = None
             l.server = s.Server()
-            l.reseau = Network(l.server.ip, l.server.port, name.get_text())
-            l.menu = MenuList.ATTENTE.value
-            l.menu.init()
+            # Add a small delay to ensure server is ready
+            import time
+            time.sleep(0.1)  # 100ms delay
+            try:
+                l.reseau = Network(l.server.ip, l.server.port, name.get_text())
+                l.menu = MenuList.ATTENTE.value
+                l.menu.init()
+            except ConnectionRefusedError:
+                error = e.ErrorList.SERVER
+                if l.server:
+                    l.server.stop()
+                    l.server = None
 
-            
-        
         l.error = error
 
 
@@ -153,7 +160,6 @@ class RejoindreJoinBoutton(Bouton):
         ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
         if  is_port(ask_port_join.get_text()):
             l.error = None
-            l.connexion.affiche(l.window)
             try:
                 name: TextInput = MenuList.ACCUEIL.value.getElement("name")
                 l.reseau = Network(ask_ip_join.get_text(),
@@ -180,7 +186,6 @@ class AttenteLaunchBoutton(Bouton):
                          condition=lambda: l.reseau and l.reseau.id == 0)
 
     def onClique(self):
-        l.menu = MenuList.JEU.value
         sb.ServerBoundGameStartPacket().send(l.reseau.conn)
 
 
@@ -230,10 +235,10 @@ class MenuList(enum.Enum):
             .addElement("playerList", DynamicTextList((1150, 120), 30))\
             .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
-        .addElement("back",BackBoutton())\
         .addElement("chat", l.chat)
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))\
         .addElement("On", Bouton("client/assets/boutons/on.png", "client/assets/boutons/on_touched.png", pygame.Vector2(1175, 190)))
-    CREDIT = Menu("Credit").addElement("back",BackBoutton())
+    CREDIT = Menu("Credit")\
+        .addElement("back",BackBoutton())
