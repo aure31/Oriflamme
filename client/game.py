@@ -1,4 +1,3 @@
-import pygame as p
 from card import HandCard,PlayCard
 import loader as l
 from joueur import Joueur
@@ -6,14 +5,13 @@ from packet.serverbound import ServerBoundPlayCardPacket
 from menu import MenuList
 
 class Game():
-    game = None
     def __init__(self,id:int,name:str):
         self.itself = Joueur(id,name)
         self.joueurs : dict[int,Joueur] = {}
         self.cartes = []
         self.file_influence : list[list[PlayCard]] = []
         self.tour = 0
-        Game.game = self
+        l.game = self
 
     def setPlayersColor(self,colors:list[str]):
         for data in colors:

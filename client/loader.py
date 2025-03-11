@@ -17,6 +17,7 @@ reseau = None
 server = None
 joueur = None
 is_running = True
+game = None
 background = bg_menus
 
 gm = mots_bannis = [
