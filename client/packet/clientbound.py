@@ -42,7 +42,7 @@ class ClientBoundPlayerListPacket(ClientBoundDataPacket):
         super().__init__(data)
 
     def handle(self):
-        g.Game.game.setPlayerList(self.data)
+        l.game.setPlayerList(self.data)
         print("client : playerlist get :",l.menu.getElement("playerList").elements)
 
 class ClientBoundGameStartPacket(ClientBoundPacket):
@@ -64,16 +64,16 @@ class ClientBoundColorsPacket(ClientBoundDataPacket):
         super().__init__(data)
 
     def handle(self):
-        g.Game.game.setPlayersColor(self.colors)
+        l.game.setPlayersColor(self.colors)
 
 # game packet
 class ClientBoundGameHandPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
-        self.card = [HandCard(int(data),g.Game.game.itself.couleur) for data in self.data]
+        self.card = [HandCard(int(data),l.game.itself.couleur) for data in self.data]
 
     def handle(self):
-        g.Game.game.setHand(self.card)
+        l.game.setHand(self.card)
 
 class ClientBoundShowCardPacket(ClientBoundDataPacket):
     def __init__(self,data:list[str]):
