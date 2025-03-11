@@ -69,4 +69,7 @@ class PlayCard(HandCard):
     def getBack(self):
         return self.back
     
+    def affiche(self,window,pos):
+        window.blit(self.getImg(),pos)
+    
     
