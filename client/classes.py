@@ -275,8 +275,8 @@ class Chat(GroupElement, EventHandler):
                 text_input.clear()
 
     def gmdetecte(self, message):
-        message = message.lower()
-        for mot in l.mots_bannis:
-            if mot.lower() in message:
+        message = message.lower().split(" ")
+        for i in range(len(message)):
+            if message[i] in l.mots_bannis:
                 return True
         return False
