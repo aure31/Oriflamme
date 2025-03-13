@@ -1,3 +1,5 @@
+import loader as l
+
 class GroupElement:
     def __init__(self, name):
         self.name = name
@@ -64,3 +66,9 @@ class DynamicTextList(ListElement):
             y += self.threshold
 
 
+class CardListElement(GroupElement):
+    super().__init__("cartes")         
+
+    def affiche(self):
+        for element in l.game.cartes:
+            element.affiche

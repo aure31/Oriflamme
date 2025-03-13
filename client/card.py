@@ -1,4 +1,5 @@
 import pygame as p
+from classes import Element
 
 colors = ["rouge","bleu","vert","gris","jaune"]
 memo_import = {}
@@ -11,7 +12,7 @@ class Type:
 
 
 
-class HandCard:
+class HandCard(Element):
     __types__ = [ Type(0, "Archer", "archer"),
             Type(1, "Soldat", "soldat"),
             Type(2, "Espion", "espion"),
@@ -23,7 +24,7 @@ class HandCard:
             Type(8, "Embuscade", "embuscade"),
             Type(9, "Complot", "complot")
             ]
-
+    super().__init__(0,0)
     def __init__(self, id:int,color:str):
         self.type = HandCard.__types__[id]
         if color not in colors:

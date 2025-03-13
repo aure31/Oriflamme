@@ -5,7 +5,7 @@ import error as e
 import server.server as s
 from classes import Element, Bouton, TextInput, Texte
 import pygame
-from groupelement import DynamicTextList, GroupElement
+from groupelement import DynamicTextList, GroupElement, CardListElement
 import packet.serverbound as sb
 
 
@@ -220,31 +220,31 @@ class AttenteBackBoutton(BackBoutton):
 
 class MenuList(enum.Enum):
     ACCUEIL = Menu("Accueil")\
-            .addElement("name",TextInput(170, 500))\
-            .addElement("pseudo",Texte("Votre nom :",170, 420, (254, 215, 32), None, 50, "client/assets/Algerian.ttf"))\
-            .addElement("join",JoinBoutton())\
-            .addElement("new_game",NewGameBoutton())\
-            .addElement("settings",SettingsBoutton())\
-            .addElement("credits",CreditsBoutton())\
-            .addElement("quitter",QuitterBoutton())
+        .addElement("name",TextInput(170, 500))\
+        .addElement("pseudo",Texte("Votre nom :",170, 420, (254, 215, 32), None, 50, "client/assets/Algerian.ttf"))\
+        .addElement("join",JoinBoutton())\
+        .addElement("new_game",NewGameBoutton())\
+        .addElement("settings",SettingsBoutton())\
+        .addElement("credits",CreditsBoutton())\
+        .addElement("quitter",QuitterBoutton())
     REJOINDRE = Menu("Rejoindre")\
-            .addElement("demande_ip",Texte("Entrez l'adresse IP du serveur",800, 240, (255,0,0), None, 45, "client/assets/Algerian.ttf"))\
-            .addElement("demande_port",Texte("Entrez le port du serveur",800, 440, (255,0,0), None, 45, "client/assets/Algerian.ttf"))\
-            .addElement("ask_ip_join",TextInput(900, 300))\
-            .addElement("ask_port_join",TextInput(900, 500))\
-            .addElement("join",RejoindreJoinBoutton())\
-            .addElement("back",BackBoutton())
+        .addElement("demande_ip",Texte("Entrez l'adresse IP du serveur",800, 240, (255,0,0), None, 45, "client/assets/Algerian.ttf"))\
+        .addElement("demande_port",Texte("Entrez le port du serveur",800, 440, (255,0,0), None, 45, "client/assets/Algerian.ttf"))\
+        .addElement("ask_ip_join",TextInput(900, 300))\
+        .addElement("ask_port_join",TextInput(900, 500))\
+        .addElement("join",RejoindreJoinBoutton())\
+        .addElement("back",BackBoutton())
     ATTENTE = AttenteMenu()\
-            .addElement("back",AttenteBackBoutton())\
-            .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
-            .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
-            .addElement("launch",AttenteLaunchBoutton())\
-            .addElement("player",Texte("Joueurs :",1150, 90, (255, 255, 255), None, 32))\
-            .addElement("playerList", DynamicTextList((1150, 120), 30, (0, 255, 0)))\
-            .addElement("chat", l.chat)
+        .addElement("back",AttenteBackBoutton())\
+        .addElement("ip",Texte("IP du serveur : ",1150, 10, (255, 255, 255), None, 32))\
+        .addElement("port",Texte("Port du serveur : ",1150, 50, (255, 255, 255), None, 32))\
+        .addElement("launch",AttenteLaunchBoutton())\
+        .addElement("player",Texte("Joueurs :",1150, 90, (255, 255, 255), None, 32))\
+        .addElement("playerList", DynamicTextList((1150, 120), 30, (0, 255, 0)))\
+        .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("chat", l.chat)\
-        .addElement("cartes", GroupElement("Cartes"))
+        .addElement("cartes", CardListElement())
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))
