@@ -28,7 +28,7 @@ def main():
         
 def stop_game():
     l.is_running = False
-    #DO NOT TUCHE PLEASE
+    #DO NOT TOUCH PLEASE
     try:
         if l.reseau:
             l.reseau.disconect()
