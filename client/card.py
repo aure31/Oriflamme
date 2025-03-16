@@ -24,8 +24,9 @@ class HandCard(Element):
             Type(8, "Embuscade", "embuscade"),
             Type(9, "Complot", "complot")
             ]
-    super().__init__(0,0)
+    
     def __init__(self, id:int,color:str):
+        super().__init__(0,0)
         self.type = HandCard.__types__[id]
         if color not in colors:
             raise ValueError("client : Invalid Color")

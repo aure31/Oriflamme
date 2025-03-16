@@ -38,7 +38,7 @@ def stop_game():
     sys.exit()
 
 if __name__ == "__main__":
-    # p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
-    # p.mixer.music.set_volume(0.3)
-    # p.mixer.music.play(-1)
+    p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")
+    p.mixer.music.set_volume(0.3)
+    p.mixer.music.play(-1)
     main()

@@ -67,8 +67,8 @@ class DynamicTextList(ListElement):
 
 
 class CardListElement(GroupElement):
-    super().__init__("cartes")         
-
-    def affiche(self):
-        for element in l.game.cartes:
-            element.affiche
+    def __init__(self):
+        super().__init__("cartes")
+        self.elements = {}
+        self.menus = []
+        self.show = None
