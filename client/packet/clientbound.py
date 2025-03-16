@@ -108,14 +108,17 @@ class ClientBoundChoseToPlayPacket(ClientBoundPacket):
     def handle(self):
         pass
 
-def getClientBoundPacket(data:bytes) -> ClientBoundPacket:
+def getClientBoundPacket(data:bytes) -> list[ClientBoundPacket]:
     print("client : clientboundget :",data)
-    id,decode = utils.unparse(data)
-    packet = clientBoundPacketList[id]
-    if issubclass(packet,ClientBoundDataPacket):
-       return packet(decode)
-    else :
-        return packet()
+    result = []
+    list = utils.unparse(data,True)
+    for id,decode in list:
+        packet = clientBoundPacketList[id]
+        if issubclass(packet,ClientBoundDataPacket):
+            result.append(packet(decode))
+        else :
+            result.append(packet())
+    return result
     
 clientBoundPacketList = [
     ClientBoundMessagePacket,
@@ -129,3 +132,5 @@ clientBoundPacketList = [
     ClientBoundChoseToPlayPacket,
     ClientBoundChoseToShowPacket
 ]
+
+utils.clientBoundList = [issubclass(packet,ClientBoundDataPacket) for packet in clientBoundPacketList]

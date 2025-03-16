@@ -31,9 +31,10 @@ class Client:
                         print(f"server packet : connection closed {self.id}")
                         break
                     
-                    packet = getServerBoundPacket(data)
-                    print("packet : handeled", packet.get_id())
-                    packet.handle(self)
+                    packets = getServerBoundPacket(data)
+                    for packet in packets:
+                        print("packet : handeled", packet.get_id())
+                        packet.handle(self)
                 except ConnectionResetError:
                     print(f"server packet : connection reset by client {self.id}")
                     break

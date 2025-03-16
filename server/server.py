@@ -43,7 +43,7 @@ class Server :
         try:
             client = Client(conn,ip,self.lastpid,self)
             self.lastpid += 1
-            packet : ServerBoundPseudoPacket = client.sendRecv(cb.ClientBoundIdPacket(client.id))
+            packet : ServerBoundPseudoPacket = client.sendRecv(cb.ClientBoundIdPacket(client.id))[0]
             player = Joueur(packet.name,client)
             self.game.join_player(player)
             self.threadlist.append(client.thread)

@@ -35,7 +35,6 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
         client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
     
 class ServerBoundGameStartPacket(ServerBoundPacket):
-    
     def handle(self, client):
         print("server : game start get")
         thread = th.Thread(name="game",target=client.server.game.start_game)
@@ -67,14 +66,17 @@ class ServerBoundShowCardPacket(ServerBoundDataPacket):
     def handle(self, client):
         print("server : show card get :",self.card, flush=True)
 
-def getServerBoundPacket(data:bytes) -> ServerBoundPacket:
+def getServerBoundPacket(data:bytes) -> list[ServerBoundPacket]:
     print("server : serverboundget :",data)
-    id,decode = utils.unparse(data)
-    packet = serverBoundPacketList[id]
-    if issubclass(packet,ServerBoundDataPacket) :
-       return packet(decode)
-    else :
-        return packet()
+    result = []
+    list = utils.unparse(data,False)
+    for id,decode in list:
+        packet = serverBoundPacketList[id]
+        if issubclass(packet,ServerBoundDataPacket):
+            result.append(packet(decode))
+        else :
+            result.append(packet())
+    return result
     
 serverBoundPacketList = [
     ServerBoundPseudoPacket,

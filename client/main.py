@@ -6,7 +6,6 @@ from menu import MenuList
 from classes import EventHandler
 import loader as l
 from error import errorHandler
-import server.server as s
 
 def main():
     l.menu = MenuList.ACCUEIL.value

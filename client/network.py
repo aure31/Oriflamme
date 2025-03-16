@@ -44,8 +44,10 @@ class Network:
                 if not data:
                     self.disconect()
                     break
-                packet = getClientBoundPacket(data)
-                packet.handle()
+                
+                packets = getClientBoundPacket(data)
+                for packet in packets:
+                    packet.handle()
             except socket.timeout as e :
                 print("client : Timeout de réception de paquet", e)
                 self.disconect()

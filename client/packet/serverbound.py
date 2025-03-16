@@ -59,3 +59,5 @@ serverBoundPacketList = [
     ServerBoundPlayCardPacket,
     ServerBoundShowCardPacket
 ]
+
+utils.ServerBoundList = [issubclass(packet,ServerBoundDataPacket) for packet in serverBoundPacketList]

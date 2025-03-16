@@ -1,4 +1,26 @@
-def unparse(data:bytes) -> tuple[int,list[str]]:
+clientBoundList = []
+ServerBoundList = []
+
+def unparse(data:bytes,clientbound:bool) -> list[tuple[int,list[str]]]:
+    result = []
+    while len(data) > 0:
+        if clientbound and clientBoundList[data[0]]:
+            taille = 2+sum(data[2:2+data[1]])+data[1]
+            result.append(one_unparse(data[:taille]))
+            data = data[taille:]
+        elif clientbound and not clientBoundList[data[0]]:
+            result.append(one_unparse(data[:1]))
+            data = data[1:]
+        elif not clientbound and ServerBoundList[data[0]]:
+            taille = 2+sum(data[2:2+data[1]])+data[1]
+            result.append(one_unparse(data[:taille]))
+            data = data[taille:]
+        elif not clientbound and not ServerBoundList[data[0]]:
+            result.append(one_unparse(data[:1]))
+            data = data[1:]
+    return result
+
+def one_unparse(data:bytes) -> tuple[int,list[str]]:
     print("unparse : in ",data)
     id = data[0]
     if len(data) == 1:
