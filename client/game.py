@@ -7,7 +7,7 @@ from menu import MenuList
 class Game():
     def __init__(self,id:int,name:str):
         self.itself = Joueur(id,name)
-        self.itself.couleur = None  # Initialisation explicite
+        self.itself.couleur = None
         self.joueurs = {}
         self.cartes = []
         self.file_influence = []
@@ -15,15 +15,12 @@ class Game():
         l.game = self
 
     def setPlayersColor(self, colors: list[str]):
-        print(f"Debug - Setting colors: {colors}")  # Debug log
         for data in colors:
             player_id = int(data[0])
             color = data[1:]
             if player_id == self.itself.id:
-                print(f"Debug - Setting own color to: {color}")  # Debug log
                 self.itself.couleur = color
             if player_id in self.joueurs:
-                print(f"Debug - Setting player {player_id} color to: {color}")  # Debug log
                 self.joueurs[player_id].couleur = color
 
     def setPlayerList(self,playerlist:list[str]):
@@ -40,9 +37,6 @@ class Game():
         return None
 
     def setHand(self, cards):
-        print(f"Debug - Setting hand with {len(cards)} cards")
-        print(f"Debug - Player color: {self.itself.couleur}")
-        
         self.cartes = []
         x_start = 400
         y_position = 800
@@ -50,7 +44,6 @@ class Game():
         
         for i, card_id in enumerate(cards):
             try:
-                # Utiliser directement l'ID reçu
                 new_card = HandCard(card_id, self.itself.couleur)
                 new_card.rect = new_card.img.get_rect()
                 new_card.rect.x = x_start + (i * spacing)

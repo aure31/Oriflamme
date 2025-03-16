@@ -52,31 +52,26 @@ class ClientBoundGameStartPacket(ClientBoundPacket):
         l.menu = m.MenuList.JEU.value
 
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
-    def __init__(self, data:list[str]):
+    def __init__(self,data:list[str]):
         super().__init__(data)
         self.winner = data[0]
 
     def handle(self):
-        if l.reseau:
-            l.reseau.disconect()
-            l.reseau = None
-        l.menu = MenuList.ACCUEIL.value
+        pass
 
 class ClientBoundColorsPacket(ClientBoundDataPacket):
     def __init__(self, data: list[str]):
         super().__init__(data)
-        # Extraire l'ID du joueur (premier caractère) et la couleur (reste de la chaîne)
         self.colors = [(data[i][0], data[i][1:]) for i in range(len(data))]
 
     def handle(self):
-        l.game.setPlayersColor(self.data)  # Utiliser directement data car setPlayersColor s'attend déjà à ce format
+        l.game.setPlayersColor(self.data)
 
 # game packet
 class ClientBoundGameHandPacket(ClientBoundDataPacket):
     def __init__(self, data: list[str]):
         super().__init__(data)
         print("Debug - Receiving cards:", self.data)
-        # Créer directement les cartes avec l'ID numérique
         self.cards = [int(card_id) for card_id in self.data]
 
     def handle(self):
@@ -126,7 +121,7 @@ clientBoundPacketList = [
     ClientBoundMessagePacket,
     ClientBoundPlayerListPacket,
     ClientBoundGameStartPacket,
-    ClientBoundColorsPacket,  # Vérifier que c'est dans le même ordre
+    ClientBoundColorsPacket,
     ClientBoundGameEndPacket,
     ClientBoundGameHandPacket,
     ClientBoundShowCardPacket,

@@ -52,24 +52,22 @@ class TextInput(Element, EventHandler):
     def __init__(self, x: int, y: int, condition=lambda: True):
         Element.__init__(self, x, y, condition)
         EventHandler.__init__(self,0)
-        self.bg_color = (255, 255, 255)  # Couleur de fond blanche
-        self.border_color = (200, 200, 200)  # Couleur de bordure grise
-        self.active_border_color = (0, 0, 0)  # Couleur de bordure noire quand active
+        self.bg_color = (255, 255, 255)
+        self.border_color = (200, 200, 200)
+        self.active_border_color = (0, 0, 0)
         self.text = ''
         self.texte_affiché = ''
-        self.last_valid_text = ''  # Attribut pour stocker le dernier texte validé
+        self.last_valid_text = ''
         self.font = pygame.font.Font(None, 32)
         self.active = False
         self.width = 500
         self.height = 40
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.topleft = self.pos
-        
-        # Nouvelles variables pour la suppression continue
         self.backspace_held = False
         self.backspace_timer = 0
-        self.initial_delay = 500  # Délai initial avant répétition (en ms)
-        self.repeat_delay = 50    # Délai entre chaque répétition (en ms)
+        self.initial_delay = 500
+        self.repeat_delay = 50
 
     def onEvent(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -83,7 +81,7 @@ class TextInput(Element, EventHandler):
                 if event.key == pygame.K_RETURN:
                     print(f'Texte validé : {self.text}')
                     self.last_valid_text = self.text
-                    self.active = False  # Désactiver le champ de texte
+                    self.active = False
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                     self.last_valid_text = self.text
@@ -99,15 +97,13 @@ class TextInput(Element, EventHandler):
 
     def clear(self):
         self.text = ''
-        self.last_valid_text = ''  # Réinitialiser le dernier texte validé
+        self.last_valid_text = ''
 
     def get_text(self):
         return self.last_valid_text
 
     def affiche(self, surface):
         if not self.condition(): return
-        
-        # Gestion de la suppression continue
         if self.backspace_held and self.active and self.isAffiche():
             current_time = pygame.time.get_ticks()
             time_held = current_time - self.backspace_timer
@@ -117,8 +113,6 @@ class TextInput(Element, EventHandler):
                     self.text = self.text[:-1]
                     self.last_valid_text = self.text
                     self.backspace_timer = current_time - (self.initial_delay - self.repeat_delay)
-
-        # Affichage normal
         pygame.draw.rect(surface, self.bg_color, self.rect)
         border_color = self.active_border_color if self.active else self.border_color
         pygame.draw.rect(surface, border_color, self.rect, 2)
@@ -258,7 +252,7 @@ class Chat(GroupElement, EventHandler):
         return "[" + l.reseau.name + "] : " + message
 
     def sendMessages(self, message):
-        if message and l.reseau:  # Utilise directement l.reseau au lieu d'une référence stockée
+        if message and l.reseau:
             l.reseau.send(ServerBoundMessagePacket(message))
 
     def onEvent(self, event):
@@ -284,7 +278,7 @@ class Chat(GroupElement, EventHandler):
 
 class CardListElement(GroupElement):
     def onEvent(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Clic gauche
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             card_index = self.handle_click(event.pos)
             if card_index is not None:
                 # TODO: Implémenter la logique de sélection de carte

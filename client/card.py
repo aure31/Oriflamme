@@ -1,7 +1,7 @@
 import pygame as p
 from classes import Element
 
-colors = ["jaune", "rouge", "bleu", "vert", "violet"]  # Assurez-vous que cette liste correspond aux couleurs du jeu
+colors = ["jaune", "rouge", "bleu", "vert", "violet"]
 memo_import = {}
 
 class Type:
@@ -30,7 +30,7 @@ class HandCard(Element):
         self.type = HandCard.__types__[id]
         if color is None:
             print(f"Warning - No color specified for card {id}")
-            color = "gris"  # Couleur par défaut
+            color = "gris"
         self.color = color.lower()
         print(f"Debug - Creating card: type={self.type.path}, color={self.color}")
         self.img = self.getImg()
@@ -47,14 +47,10 @@ class HandCard(Element):
         return memo_import[self.color]
 
     def getImg(self):
-        # Construire le chemin de l'image
         path = f"client/assets/cartes/{self.type.path}/{self.type.path}_{self.color}.png"
-        print(f"Debug - Attempting to load image: {path}")  # Debug log
-        
         if not (self.type.id, self.color) in memo_import:
             try:
                 memo_import[(self.type.id, self.color)] = p.image.load(path)
-                print(f"Debug - Successfully loaded image: {path}")  # Debug log
             except Exception as e:
                 print(f"Error loading image {path}: {str(e)}")
                 raise
@@ -64,7 +60,6 @@ class HandCard(Element):
         return PlayCard(self)
 
     def affiche(self, window, pos):
-        # Redimensionner l'image aux dimensions spécifiées (200x365 pixels)
         scaled_img = p.transform.scale(self.img, (200, 365))
         window.blit(scaled_img, pos)
     
@@ -94,5 +89,3 @@ class PlayCard(HandCard):
     
     def affiche(self,window,pos):
         window.blit(self.getImg(),pos)
-    
-    

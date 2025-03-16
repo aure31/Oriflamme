@@ -22,12 +22,9 @@ class Menu:
         return self
 
     def affiche(self):
-        # Afficher d'abord tous les éléments qui ne sont pas le chat
         for name, element in self.elements.items():
             if name != "chat":
                 element.affiche(l.window)
-        
-        # Afficher le chat en dernier s'il existe
         if "chat" in self.elements:
             self.elements["chat"].affiche(l.window)
 
@@ -236,7 +233,7 @@ class MenuList(enum.Enum):
         .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("cartes", CardListElement())\
-        .addElement("chat", l.chat)  # Déplacer le chat après les cartes
+        .addElement("chat", l.chat)
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))
