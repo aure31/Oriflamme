@@ -7,15 +7,24 @@ from menu import MenuList
 class Game():
     def __init__(self,id:int,name:str):
         self.itself = Joueur(id,name)
-        self.joueurs : dict[int,Joueur] = {}
+        self.itself.couleur = None  # Initialisation explicite
+        self.joueurs = {}
         self.cartes = []
-        self.file_influence : list[list[PlayCard]] = []
+        self.file_influence = []
         self.tour = 0
         l.game = self
 
-    def setPlayersColor(self,colors:list[str]):
+    def setPlayersColor(self, colors: list[str]):
+        print(f"Debug - Setting colors: {colors}")  # Debug log
         for data in colors:
-            self.joueurs[int(data[0])].couleur = data[1:]
+            player_id = int(data[0])
+            color = data[1:]
+            if player_id == self.itself.id:
+                print(f"Debug - Setting own color to: {color}")  # Debug log
+                self.itself.couleur = color
+            if player_id in self.joueurs:
+                print(f"Debug - Setting player {player_id} color to: {color}")  # Debug log
+                self.joueurs[player_id].couleur = color
 
     def setPlayerList(self,playerlist:list[str]):
         MenuList.ATTENTE.value.getElement("playerList").setText([e[1:] for e in playerlist])
@@ -30,10 +39,25 @@ class Game():
                 return joueur
         return None
 
-    def setHand(self,hand:list[str]):
-        if self.itself.couleur is None:
-            raise ValueError("client : need to set color before setting the hand")
-        self.cartes = [HandCard(int(e[0]),self.itself.couleur) for e in hand]
+    def setHand(self, cards):
+        print(f"Debug - Setting hand with {len(cards)} cards")
+        print(f"Debug - Player color: {self.itself.couleur}")
+        
+        self.cartes = []
+        x_start = 400
+        y_position = 800
+        spacing = 120
+        
+        for i, card_id in enumerate(cards):
+            try:
+                # Utiliser directement l'ID reçu
+                new_card = HandCard(card_id, self.itself.couleur)
+                new_card.rect = new_card.img.get_rect()
+                new_card.rect.x = x_start + (i * spacing)
+                new_card.rect.y = y_position
+                self.cartes.append(new_card)
+            except Exception as e:
+                print(f"Error creating card {i+1}: {str(e)}")
 
 # Actions dans le jeu
     def addCardFile(self, id_carte : int, pos : int , id_joueur : int = None) -> PlayCard:

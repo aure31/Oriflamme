@@ -280,3 +280,12 @@ class Chat(GroupElement, EventHandler):
             if message[i] in l.mots_bannis:
                 return True
         return False
+
+
+class CardListElement(GroupElement):
+    def onEvent(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Clic gauche
+            card_index = self.handle_click(event.pos)
+            if card_index is not None:
+                # TODO: Implémenter la logique de sélection de carte
+                print(f"Carte sélectionnée : {card_index}")

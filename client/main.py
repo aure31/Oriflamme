@@ -29,13 +29,13 @@ def main():
         
 def stop_game():
     l.is_running = False
-    if l.reseau:
-        l.reseau.disconect()
-    l.reseau = None
-    if l.server:
-        l.server.stop()
-    p.quit()
-    sys.exit()
+    try:
+        if l.reseau:
+            l.reseau.disconect()
+            l.reseau = None
+    finally:
+        p.quit()
+        sys.exit(0)
 
 if __name__ == "__main__":
     p.mixer.music.load("client/assets/musiques/fond_sonore.mp3")

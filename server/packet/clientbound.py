@@ -47,9 +47,11 @@ class ClientBoundPlayerListPacket(ClientBoundDataListPacket):
 class ClientBoundGameStartPacket(ClientBoundPacket):
     pass
 
-class ClientBoundColorsPacket(ClientBoundDataListPacket):
-    def __init__(self,datas:list[tuple[int,str]]):
-        super().__init__([str(data[0])+data[1] for data in datas])
+class ClientBoundColorsPacket(ClientBoundDataPacket):  # Changé de ClientBoundDataListPacket à ClientBoundDataPacket
+    def __init__(self, datas: list[tuple[int, str]]):
+        # Convertir directement en strings, sans encoder
+        formatted_data = [str(data[0]) + data[1] for data in datas]
+        super().__init__(*formatted_data)  # Utiliser *formatted_data au lieu de formatted_data comme liste
 
 # game packet
 class ClientBoundGameEndPacket(ClientBoundDataPacket):
@@ -96,10 +98,11 @@ clientBoundPacketList = [
     ClientBoundMessagePacket,
     ClientBoundPlayerListPacket,
     ClientBoundGameStartPacket,
+    ClientBoundColorsPacket,
     ClientBoundGameEndPacket,
     ClientBoundGameHandPacket,
     ClientBoundShowCardPacket,
     ClientBoundPlayCardPacket,
-    ClientBoundChoseToShowPacket,
-    ClientBoundChoseToPlayPacket
+    ClientBoundChoseToPlayPacket,
+    ClientBoundChoseToShowPacket
 ]

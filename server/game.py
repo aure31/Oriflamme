@@ -14,11 +14,12 @@ class Game:
         self.state = "waiting"
         self.event = th.Event()
         self.first_player = -1
-        self.colors = colors.copy()
+        self.colors = colors.copy()  # C'est déjà correct
         self.tour = 0
 
     def random_color(self):
-        return self.color.pop(random.randint(0,len(self.color)-1))
+        # Correction ici : self.color -> self.colors
+        return self.colors.pop(random.randint(0,len(self.colors)-1))
     
     def colorSelector(self):
         datas = []
@@ -33,10 +34,15 @@ class Game:
             self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
             print(f"{joueur.nom} à rejoint la partie.")
 
-    def left_player(self,idPlayer:int):
+    def left_player(self, idPlayer: int):
         print(f"{self.get_player(idPlayer).nom} à quitté la partie.")
         self.players.pop(idPlayer)
         self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
+        
+        # Si plus aucun joueur, arrêter le serveur
+        if len(self.players) == 0:
+            print("Plus aucun joueur connecté, arrêt du serveur...")
+            self.server.stop()
 
     def start_game(self):
         self.colorSelector()

@@ -58,20 +58,20 @@ class Server :
                 print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
-        self.stopevent.set()
-        # Vérifier si le socket est encore valide et connecté
         try:
-            # Vérifie si le socket est connecté en essayant de récupérer son état
-            self.soket.shutdown(socket.SHUT_RDWR)
-        except (OSError, socket.error):
-            # Ignore les erreurs si le socket n'est pas connecté
-            print("Server : Socket not connected")
+            self.stopevent.set()
+            for thread in self.threadlist:
+                if thread.is_alive():
+                    thread.join(timeout=1.0)
+            if self.soket:
+                self.soket.close()
+        except:
+            pass
         finally:
-            self.soket.close()
-        for t in self.threadlist:
-            t.join()
-        self.connectionthread.join()
-        self.threadlist = []
-        print("Server stopped")
+            for t in self.threadlist:
+                t.join()
+            self.connectionthread.join()
+            self.threadlist = []
+            print("Server stopped")
 
 

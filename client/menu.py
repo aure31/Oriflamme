@@ -1,3 +1,4 @@
+import time
 import enum
 from client.network import Network, is_port
 import loader as l
@@ -21,8 +22,14 @@ class Menu:
         return self
 
     def affiche(self):
-        for element in self.elements.values():
-            element.affiche(l.window)
+        # Afficher d'abord tous les éléments qui ne sont pas le chat
+        for name, element in self.elements.items():
+            if name != "chat":
+                element.affiche(l.window)
+        
+        # Afficher le chat en dernier s'il existe
+        if "chat" in self.elements:
+            self.elements["chat"].affiche(l.window)
 
     def getElement(self, name: str) -> Element:
         return self.elements[name]
@@ -76,7 +83,7 @@ class JoinBoutton(Bouton):
             l.menu = MenuList.REJOINDRE.value
 
 
-class NewGameBoutton(Bouton):
+class CreerCreerBoutton(Bouton):
 
     def __init__(self):
         super().__init__("client/assets/new_button/new_game.png",
@@ -84,29 +91,22 @@ class NewGameBoutton(Bouton):
                          pygame.Vector2(900, 250))
 
     def onClique(self):
-        name: TextInput = self.menus[0].getElement("name")
+        name: TextInput = MenuList.ACCUEIL.value.getElement("name")
         error = None
-        erreur = e.pseudo_error(name.get_text())
-        if erreur != None:
-            error = erreur
-        else:
-            l.error = None
+        try:
             l.server = s.Server()
-            # Add a small delay to ensure server is ready
-            import time
-            time.sleep(0.1)  # 100ms delay
-            try:
-                l.reseau = Network(l.server.ip, l.server.port, name.get_text())
-                l.menu = MenuList.ATTENTE.value
-                l.menu.init()
-                l.chat.sendMessages("@"+l.reseau.name+" a créé la partie")
-                l.chat.addMessage("@"+l.reseau.name+" a créé la partie")
-            except ConnectionRefusedError:
-                error = e.ErrorList.SERVER
-                if l.server:
-                    l.server.stop()
-                    l.server = None
-
+            time.sleep(0.1)
+            l.reseau = Network(l.server.ip, l.server.port, name.get_text())
+            l.menu = MenuList.ATTENTE.value
+            l.menu.init()
+        except ConnectionRefusedError:
+            error = e.ErrorList.SERVER
+            if l.reseau:
+                l.reseau.disconect()
+                l.reseau = None
+            if l.server:
+                l.server.stop()
+                l.server = None
         l.error = error
 
 
@@ -160,19 +160,20 @@ class RejoindreJoinBoutton(Bouton):
     def onClique(self):
         ask_ip_join: TextInput = self.menus[0].getElement("ask_ip_join")
         ask_port_join: TextInput = self.menus[0].getElement("ask_port_join")
-        if  is_port(ask_port_join.get_text()):
+        if is_port(ask_port_join.get_text()):
             l.error = None
             try:
                 name: TextInput = MenuList.ACCUEIL.value.getElement("name")
                 l.reseau = Network(ask_ip_join.get_text(),
-                                   int(ask_port_join.get_text()),
-                                   name.get_text())
+                               int(ask_port_join.get_text()),
+                               name.get_text())
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
-                l.chat.sendMessages("@"+l.reseau.name+" a rejoint la partie")
-                l.chat.addMessage("@"+l.reseau.name+" a rejoint la partie")
             except:
                 print("client : Connexion échouée")
+                if l.reseau:
+                    l.reseau.disconect()
+                    l.reseau = None
                 l.error = e.ErrorList.SERVER
         else:
             l.error = e.ErrorList.VALUE
@@ -196,22 +197,13 @@ class AttenteLaunchBoutton(Bouton):
 
 
 class AttenteBackBoutton(BackBoutton):
-
     def __init__(self):
         super().__init__()
 
     def onClique(self):
-        print("client : Retour")
-        l.chat.sendMessages("@"+l.reseau.name+" a quitté la partie")
-        l.chat.addMessage("@"+l.reseau.name+" a quitté la partie")
-        print("disconect")
-        l.reseau.disconect()
-        if l.server is not None:
-            print("server : Fermeture du serveur")
-            print("server : " + str(l.server.ip) + ":" + str(l.server.port))
-            l.server.stop()
-            l.server = None
-        l.reseau = None
+        if l.reseau:
+            l.reseau.disconect()
+            l.reseau = None
         l.menu = MenuList.ACCUEIL.value
 
 #------- Jeu Menu Elements -----------
@@ -223,7 +215,7 @@ class MenuList(enum.Enum):
         .addElement("name",TextInput(170, 500))\
         .addElement("pseudo",Texte("Votre nom :",170, 420, (254, 215, 32), None, 50, "client/assets/Algerian.ttf"))\
         .addElement("join",JoinBoutton())\
-        .addElement("new_game",NewGameBoutton())\
+        .addElement("new_game",CreerCreerBoutton())\
         .addElement("settings",SettingsBoutton())\
         .addElement("credits",CreditsBoutton())\
         .addElement("quitter",QuitterBoutton())
@@ -243,8 +235,8 @@ class MenuList(enum.Enum):
         .addElement("playerList", DynamicTextList((1150, 120), 30, (0, 255, 0)))\
         .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
-        .addElement("chat", l.chat)\
-        .addElement("cartes", CardListElement())
+        .addElement("cartes", CardListElement())\
+        .addElement("chat", l.chat)  # Déplacer le chat après les cartes
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))

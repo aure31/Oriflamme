@@ -22,23 +22,26 @@ class Client:
         return getServerBoundPacket(self.conn.recv(2048))
     
     def paketListener(self):
-        while not self.stopevent.is_set():
-            print("server packet : listening player :",self.id)
-            data = self.conn.recv(2048)
-            if not data:
-                print("server packet : connection closed ",self.id)
-                self.server.game.left_player(self.id)
-                break
-                
-            
-            packet = getServerBoundPacket(data)
-            print("packet : handeled",packet.get_id())
+        try:
+            while not self.stopevent.is_set():
+                try:
+                    print("server packet : listening player :", self.id)
+                    data = self.conn.recv(2048)
+                    if not data:
+                        print(f"server packet : connection closed {self.id}")
+                        break
+                    
+                    packet = getServerBoundPacket(data)
+                    print("packet : handeled", packet.get_id())
+                    packet.handle(self)
+                except ConnectionResetError:
+                    print(f"server packet : connection reset by client {self.id}")
+                    break
+                except Exception as e:
+                    print(f"packet : error handling: {e}")
+        finally:
             try:
-                packet.handle(self)
-            except Exception as e:
-                print("packet : error handeling",e)
-            if packet.get_id() == 0:
-                print("packet 0")
-            else:
-                print("packet : ",packet.get_id())
-        print("packet : stoped")
+                self.server.game.left_player(self.id)
+                self.conn.close()
+            except:
+                pass
