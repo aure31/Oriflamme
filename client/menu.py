@@ -96,7 +96,6 @@ class CreerCreerBoutton(Bouton):
             l.reseau = Network(l.server.ip, l.server.port, name.get_text())
             l.menu = MenuList.ATTENTE.value
             l.menu.init()
-            l.chat.sendMessages("#"+name.get_text()+" a créé le serveur")
             l.chat.addMessage("#Vous avez créé le serveur !")
         except ConnectionRefusedError:
             error = e.ErrorList.SERVER
@@ -169,7 +168,7 @@ class RejoindreJoinBoutton(Bouton):
                 l.menu = MenuList.ATTENTE.value
                 l.menu.init()
                 l.chat.addMessage("#Vous avez rejoint le serveur !")
-                l.chat.sendMessages("#"+name.get_text()+" a rejoint la partie")
+                l.chat.sendMessages("@"+name.get_text()+" a rejoint la partie")
             except:
                 print("client : Connexion échouée")
                 if l.reseau:
