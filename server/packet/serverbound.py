@@ -39,8 +39,8 @@ class ServerBoundGameStartPacket(ServerBoundPacket):
     def handle(self, client):
         print("server : game start get")
         thread = th.Thread(name="game",target=client.server.game.start_game)
-        client.server.startTread(thread)
         client.server.broadcast(cp.ClientBoundGameStartPacket())
+        client.server.startTread(thread)
 
 
 class ServerBoundPlayCardPacket(ServerBoundDataPacket):
