@@ -29,10 +29,14 @@ def main():
         
 def stop_game():
     l.is_running = False
+    #DO NOT TUCHE PLEASE
     try:
         if l.reseau:
             l.reseau.disconect()
             l.reseau = None
+        if l.server:
+            l.server.stop()
+            l.server = None
     finally:
         p.quit()
         sys.exit(0)

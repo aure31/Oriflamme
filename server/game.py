@@ -37,9 +37,6 @@ class Game:
         print(f"{self.get_player(idPlayer).nom} à quitté la partie.")
         self.players.pop(idPlayer)
         self.server.broadcast(cb.ClientBoundPlayerListPacket(self.players.values()))
-        if len(self.players) == 0:
-            print("Plus aucun joueur connecté, arrêt du serveur...")
-            self.server.stop()
 
     def start_game(self):
         self.colorSelector()
@@ -76,6 +73,9 @@ class Game:
     def get_card(self,index) -> Carte :
         return self.file_influence[index][-1]
     
+    def stop(self):
+        self.event.set()
+    
     def phase_un(self):
         self.tour +=1
         for p in self.players.values():
@@ -83,6 +83,8 @@ class Game:
             p.client.send(cb.ClientBoundChoseToPlayPacket())
             self.event.wait()
             self.event.clear()
+        if self.server.stopevent.is_set():
+            return
         self.phase_deux()
             
     def phase_deux(self):
@@ -103,7 +105,7 @@ class Game:
             self.end_partie()
         else:
             print("----- Fin du tour " +str(self.tour) + "-----")
-            self.placement()
+            self.phase_un()
 
     def end_partie(self):
         print("end")

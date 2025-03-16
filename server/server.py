@@ -58,20 +58,19 @@ class Server :
                 print("broadcast : sent packet to player :",player.client.id)
     
     def stop(self):
-        try:
+        try :
+            # DO NOT TUCHE PLEASE
             self.stopevent.set()
-            for thread in self.threadlist:
-                if thread.is_alive():
-                    thread.join(timeout=1.0)
+            self.game.stop()
             if self.soket:
                 self.soket.close()
-        except:
-            pass
-        finally:
-            for t in self.threadlist:
-                t.join()
+            for thread in self.threadlist:
+                if thread.is_alive():
+                    thread.join()
             self.connectionthread.join()
             self.threadlist = []
             print("Server stopped")
+        except Exception as e:
+            print("Server : Erreur de fermeture :",e)
 
 
