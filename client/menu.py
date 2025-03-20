@@ -91,7 +91,7 @@ class CreerCreerBoutton(Bouton):
         name: TextInput = MenuList.ACCUEIL.value.getElement("name")
         error = None
         try:
-            l.server = s.Server()
+            l.server = s.Server()  # Utilisera automatiquement l'IP locale
             time.sleep(0.1)
             l.reseau = Network(l.server.ip, l.server.port, name.get_text())
             l.menu = MenuList.ATTENTE.value
