@@ -7,8 +7,8 @@ from .game import Game
 from .client import Client
 
 def get_local_ip():
+    #ON NE TOUCHE PAS
     try:
-        # Crée une connexion temporaire pour obtenir l'adresse IP locale
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
@@ -20,6 +20,7 @@ def get_local_ip():
 class Server:
     used_ports = []
     def __init__(self, port:int =5555, ip:str = None):
+        #ON NE TOUCHE PAS
         self.port = port if port not in Server.used_ports else 5555+len(Server.used_ports)
         self.ip = ip if ip else get_local_ip()
         self.soket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -82,5 +83,3 @@ class Server:
             print("Server stopped")
         except Exception as e:
             print("Server : Erreur de fermeture :",e)
-
-
