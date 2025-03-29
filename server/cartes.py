@@ -116,7 +116,7 @@ class Seigneur(Types):
     
 class Assassinat(Types):
     def __init__(self):
-        super().__init__(6, "Assassinat", "Eliminez une carte n'importe pù dans la File. Défaussez l'Assassinat")
+        super().__init__(6, "Assassinat", "Eliminez une carte n'importe où dans la File. Défaussez l'Assassinat")
 
     def capacite(self,Player,Game, Carte):
         rndCardPos = Player.choiceCard()

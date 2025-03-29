@@ -93,20 +93,42 @@ class ClientBoundPlayCardPacket(ClientBoundDataPacket):
         super().__init__(data)
         self.id = int(data[0])
         self.pos = int(data[1])
-        self.card = data[2]
-        self.player = data[3]
+        self.player = int(data[3])
 
     def handle(self):
-        # Mettre à jour l'état du jeu côté client quand une carte est jouée
-        if int(self.player) != l.game.itself.id:  # Si ce n'est pas nous qui avons joué
-            joueur = l.game.joueurs[int(self.player)]
-            card = HandCard(self.id, joueur.couleur)
-            l.game.addCardFile(card.type.id, self.pos, int(self.player))
+        l.game.addCardFile(self.id,self.pos,self.player)
 
+class ClientBoundSetPlayerPtsPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.pts = int(data[0])
+        self.player = int(data[1])
+
+    def handle(self):
+        l.game.getPlayer(self.player).ptsinflu = self.pts
+
+
+class ClientBoundAddCardPtsInfluPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.pts = int(data[0])
+        self.pos = int(data[1])
+
+    def handle(self):
+        l.game.file_influence[self.pos][-1].ptsinflu = self.pts
+
+class ClientBoundDiscardCardPacket(ClientBoundDataPacket):
+    def __init__(self,data:list[str]):
+        super().__init__(data)
+        self.pos = int(data[0])
+
+    def handle(self):
+        l.game.removeCardFile(self.pos)
+    
 # interaction packet
 class ClientBoundChoseToShowPacket(ClientBoundPacket):
     def handle(self):
-        pass
+        l.game.showCard()
 
 class ClientBoundChoseToPlayPacket(ClientBoundPacket):
     def handle(self):
@@ -133,6 +155,9 @@ clientBoundPacketList = [
     ClientBoundGameHandPacket,
     ClientBoundShowCardPacket,
     ClientBoundPlayCardPacket,
+    ClientBoundSetPlayerPtsPacket,
+    ClientBoundAddCardPtsInfluPacket,
+    ClientBoundDiscardCardPacket,
     ClientBoundChoseToPlayPacket,
     ClientBoundChoseToShowPacket
 ]

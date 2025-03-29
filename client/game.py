@@ -1,7 +1,7 @@
 from card import HandCard,PlayCard
 import loader as l
 from joueur import Joueur
-from packet.serverbound import ServerBoundPlayCardPacket
+from packet.serverbound import ServerBoundPlayCardPacket,ServerBoundShowCardPacket
 from menu import MenuList
 
 class Game():
@@ -10,7 +10,7 @@ class Game():
         self.itself.couleur = None
         self.joueurs = {}
         self.cartes = []
-        self.file_influence = []
+        self.file_influence: list[list[PlayCard]] = []
         self.tour = 0
         l.game = self
 
@@ -70,11 +70,16 @@ class Game():
     def removeCardFile(self, pos : int):
         self.file_influence.pop(pos)
 
+    def showCard(self,pos : int, shown : bool):
+        if shown :
+            self.file_influence[pos][-1].setShown(True)
+            ServerBoundShowCardPacket(pos).send(l.network)
+
     def playCard(self,hand_pos : int, new_pos : int):
         card = self.cartes[hand_pos]
         self.insertFile(new_pos,card.toPlayCard())
         self.cartes.pop(hand_pos)
-        ServerBoundPlayCardPacket(card.type.id,str(new_pos)).send(l.network)
+        ServerBoundPlayCardPacket(hand_pos,str(new_pos)).send(l.network)
 
 
     def parsePos(self,pos:int) -> int:

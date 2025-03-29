@@ -64,19 +64,34 @@ class ClientBoundGameHandPacket(ClientBoundDataListPacket):
         self.card = card
 
 class ClientBoundShowCardPacket(ClientBoundDataPacket):
-    def __init__(self,id:int, card:str,player:str):
-        super().__init__(id,card,player)
+    def __init__(self,id:int,player:str):
+        super().__init__(id,player)
         self.id = id
-        self.card = card
         self.player = player
+
+class ClientBoundSetPlayerPtsPacket(ClientBoundDataPacket):
+    def __init__(self,pts:int,player:str):
+        super().__init__(pts,player)
+        self.pts = pts
+        self.player = player
+
+class ClientBoundAddCardPtsInfluPacket(ClientBoundDataPacket):
+    def __init__(self,pts:int,pos:int):
+        super().__init__(pts,pos)
+        self.pts = pts
+        self.pos = pos
+
+class ClientBoundDiscardCardPacket(ClientBoundDataPacket):
+    def __init__(self,pos:int):
+        super().__init__(pos)
+        self.pos = pos
 
 class ClientBoundPlayCardPacket(ClientBoundDataPacket):
     def __init__(self,id:int, pos:int, card:str, player:str):
         super().__init__(id,pos,card,player)
-        self.id = id
+        self.card_id = id
         self.pos = pos
-        self.card = card
-        self.player = player
+        self.playerid = player
 
 # interaction packet
 class ClientBoundChoseToPlayPacket(ClientBoundPacket):
@@ -103,6 +118,9 @@ clientBoundPacketList = [
     ClientBoundGameHandPacket,
     ClientBoundShowCardPacket,
     ClientBoundPlayCardPacket,
+    ClientBoundSetPlayerPtsPacket,
+    ClientBoundAddCardPtsInfluPacket,
+    ClientBoundDiscardCardPacket,
     ClientBoundChoseToPlayPacket,
     ClientBoundChoseToShowPacket
 ]

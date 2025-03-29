@@ -94,13 +94,7 @@ class Game:
                 card.capacite(self)
                 continue
             player = self.get_player(card.idPlayer)
-            act = player.action()
-            if act:
-                card.shown = True
-                card.capacite(self)
-                player.ptsinflu += card.ptsinflu
-            else :
-                card.ptsinflu+=1
+            player.retourner()
         if self.tour == 6:
             self.end_partie()
         else:
@@ -118,6 +112,19 @@ class Game:
 
     def get_player(self,idPlayer) -> Joueur:
         return self.players[idPlayer]
+    
+    def show_card(self,cardPos : int,shown : bool):
+        card = self.get_card(cardPos)
+        player = self.get_player(card.idPlayer)
+        if shown:
+            self.server.broadcast(cb.ClientBoundShowCardPacket(cardPos,player.id),[player.id])
+            card.shown = True
+            card.capacite(self)
+            player.ptsinflu += card.ptsinflu
+            self.server.broadcast(cb.ClientBoundSetPlayerPtsPacket(player.ptsinflu,player.id))
+        else :
+            card.ptsinflu+=1
+
 
     def discard(self, cardPos : int):
         #print(cardPos)
@@ -127,9 +134,11 @@ class Game:
             card = self.file_influence.pop(cardPos)[0]
         else :
             card = self.file_influence[cardPos].pop()
+        self.server.broadcast(cb.ClientBoundDiscardCardPacket(cardPos))
         player = self.get_player(card.idPlayer)
         player.defausse.append(card)
-        if(card.type.id == 8): Carte.type.onDeath(Game.get_player(card.idPlayer), Game, Carte, card)
+        if(card.type.id == 8): 
+            Carte.type.onDeath(Game.get_player(card.idPlayer), Game, Carte, card)
 
     def gen_deck(self,player:Joueur):
         out = full_deck(player)

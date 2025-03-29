@@ -1,14 +1,7 @@
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import packet.serverbound as sb
 from .cartes import Carte
 from .client import Client
 import random
-import pygame
-
-pygame.init()
 
 
 class Action:
@@ -22,8 +15,8 @@ class Joueur:
         self.couleur = None
         self.id = client.id
         self.cartes : list[Carte] = []
-        self.defausse = []
         self.ptsinflu = 1
+        self.defausse = []
         
     def get_name(self):
         return self.nom
@@ -36,9 +29,10 @@ class Joueur:
         slot = eval(input("Plateau : \n"+"\n".join(cards)+"\n" + "Choisissez la position entre -2 et -1 (Gauche / Droite)"+ "\n"))
         return carte,slot
 
-    def retourner(self):
-        input_rdm = bool(input("Voulez vous la retourner ? (true or false) : ")) 
-        return input_rdm
+    def retourner(self,index:int):
+        self.client.send(sb.ServerBoundShowCardPacket(index)) 
+        self.client.server.game.event.wait()
+        self.client.server.game.event.clear()
     
     def choix_adj(self):
         return random.choice[-1, 1] 

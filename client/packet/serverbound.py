@@ -60,4 +60,5 @@ serverBoundPacketList = [
     ServerBoundShowCardPacket
 ]
 
+# generate the list of packet that need to be parsed
 utils.ServerBoundList = [issubclass(packet,ServerBoundDataPacket) for packet in serverBoundPacketList]

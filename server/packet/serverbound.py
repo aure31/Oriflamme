@@ -1,6 +1,5 @@
-import socket
 import utils.utils as utils
-import server.packet.clientbound as cp
+import server.packet.clientbound as cb
 import threading as th
 
 
@@ -32,13 +31,13 @@ class ServerBoundMessagePacket(ServerBoundDataPacket):
 
     def handle(self, client):
         print("server : message get :",self.message, flush=True)
-        client.server.broadcast(cp.ClientBoundMessagePacket(self.message),[client.id])
+        client.server.broadcast(cb.ClientBoundMessagePacket(self.message),[client.id])
     
 class ServerBoundGameStartPacket(ServerBoundPacket):
     def handle(self, client):
         print("server : game start get")
         thread = th.Thread(name="game",target=client.server.game.start_game)
-        client.server.broadcast(cp.ClientBoundGameStartPacket())
+        client.server.broadcast(cb.ClientBoundGameStartPacket())
         client.server.startTread(thread)
 
 
@@ -52,19 +51,21 @@ class ServerBoundPlayCardPacket(ServerBoundDataPacket):
         player = client.server.game.get_player(client.id)
         # TODO gere les operation
         client.server.game.event.set()
-        client.server.broadcast(cp.ClientBoundPlayCardPacket(self.id,self.pos,player.cartes[self.id].type.nom,player.id))
+        client.server.broadcast(cb.ClientBoundPlayCardPacket(player.cartes[self.id].type.id,self.pos,player.id))
         client.server.game.add_card(client.id,player.cartes[self.id],self.pos)
+        player.cartes.pop(self.id)
         print("server : play card get :",self.card, flush=True)
 
 class ServerBoundShowCardPacket(ServerBoundDataPacket):
     def __init__(self,data:list[str]):
         super().__init__(data)
         self.id = int(data[0])
-        self.card = data[1]
-        self.player = data[2]
+        self.state = bool(int(data[1]))
 
     def handle(self, client):
-        print("server : show card get :",self.card, flush=True)
+        client.server.game.show_card(self.id,self.state)
+        client.server.game.event.set()
+
 
 def getServerBoundPacket(data:bytes) -> list[ServerBoundPacket]:
     print("server : serverboundget :",data)
