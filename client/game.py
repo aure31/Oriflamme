@@ -53,11 +53,19 @@ class Game():
                 print(f"Error creating card {i+1}: {str(e)}")
 
 # Actions dans le jeu
+    #quand un autre joueur joue une carte
     def addCardFile(self, id_carte : int, pos : int , id_joueur : int = None) -> PlayCard:
         joueur = self.getPlayer(id_joueur)
         carte = HandCard(id_carte,joueur.couleur).toPlayCard(joueur.id)
         self.insertFile(pos,carte)
         return carte
+    
+    #quand on joue une carte
+    def playCard(self,hand_pos : int, new_pos : int):
+        card = self.cartes[hand_pos]
+        self.insertFile(new_pos,card.toPlayCard())
+        self.cartes.pop(hand_pos)
+        ServerBoundPlayCardPacket(hand_pos,str(new_pos)).send(l.network)
     
     def insertFile(self, pos:int, card:PlayCard):
         if pos == -1 or pos == -2:
@@ -74,12 +82,6 @@ class Game():
         if shown :
             self.file_influence[pos][-1].setShown(True)
             ServerBoundShowCardPacket(pos).send(l.network)
-
-    def playCard(self,hand_pos : int, new_pos : int):
-        card = self.cartes[hand_pos]
-        self.insertFile(new_pos,card.toPlayCard())
-        self.cartes.pop(hand_pos)
-        ServerBoundPlayCardPacket(hand_pos,str(new_pos)).send(l.network)
 
 
     def parsePos(self,pos:int) -> int:

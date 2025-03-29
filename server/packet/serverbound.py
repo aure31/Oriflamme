@@ -51,7 +51,7 @@ class ServerBoundPlayCardPacket(ServerBoundDataPacket):
         player = client.server.game.get_player(client.id)
         # TODO gere les operation
         client.server.game.event.set()
-        client.server.broadcast(cb.ClientBoundPlayCardPacket(player.cartes[self.id].type.id,self.pos,player.id))
+        client.server.broadcast(cb.ClientBoundPlayCardPacket(player.cartes[self.id].type.id,self.pos,player.id),[client.id])
         client.server.game.add_card(client.id,player.cartes[self.id],self.pos)
         player.cartes.pop(self.id)
         print("server : play card get :",self.card, flush=True)
