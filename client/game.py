@@ -59,10 +59,12 @@ class Game():
         self.insertFile(pos,carte)
         return carte
     
-    def insertFile(self,pos:int,card:PlayCard):
+    def insertFile(self, pos:int, card:PlayCard):
         if pos == -1 or pos == -2:
-            self.file_influence.insert(self.parsePos(pos),[card])
+            print(f"Ajout d'une carte en position {pos}")
+            self.file_influence.insert(self.parsePos(pos), [card])
         else:
+            print(f"Ajout d'une carte à la pile {pos}")
             self.file_influence[pos].append(card)
 
     def removeCardFile(self, pos : int):

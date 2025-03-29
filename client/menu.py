@@ -6,7 +6,7 @@ import error as e
 import server.server as s
 from classes import Element, Bouton, TextInput, Texte
 import pygame
-from groupelement import DynamicTextList, GroupElement, CardListElement
+from groupelement import DynamicTextList, GroupElement, CardListElement, InfluenceFileElement
 import packet.serverbound as sb
 
 
@@ -236,6 +236,7 @@ class MenuList(enum.Enum):
         .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("cartes", CardListElement())\
+        .addElement("influence_file", InfluenceFileElement())\
         .addElement("chat", l.chat)\
         .addElement("tour_indicator", Texte("Tour: 1", 20, 20, (255, 255, 255), None, 45, "client/assets/Algerian.ttf"))\
         .addElement("points_indicator", Texte("Points: 1", 20, 70, (255, 255, 255), None, 45, "client/assets/Algerian.ttf"))\

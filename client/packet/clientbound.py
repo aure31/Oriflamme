@@ -97,7 +97,11 @@ class ClientBoundPlayCardPacket(ClientBoundDataPacket):
         self.player = data[3]
 
     def handle(self):
-        pass
+        # Mettre à jour l'état du jeu côté client quand une carte est jouée
+        if int(self.player) != l.game.itself.id:  # Si ce n'est pas nous qui avons joué
+            joueur = l.game.joueurs[int(self.player)]
+            card = HandCard(self.id, joueur.couleur)
+            l.game.addCardFile(card.type.id, self.pos, int(self.player))
 
 # interaction packet
 class ClientBoundChoseToShowPacket(ClientBoundPacket):

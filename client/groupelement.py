@@ -106,3 +106,27 @@ class CardListElement(GroupElement):
             if card_rect.collidepoint(pos):
                 return i
         return None
+
+
+class InfluenceFileElement(GroupElement):
+    def __init__(self):
+        super().__init__("influence_file")
+        self.card_width = 100
+        self.card_height = 182
+        self.margin = 10
+        self.y_position = 400
+
+    def affiche(self, window):
+        if not l.game or not l.game.file_influence:
+            return
+        total_width = (len(l.game.file_influence) * self.card_width) + ((len(l.game.file_influence) - 1) * self.margin)
+        start_x = (window.get_width() - total_width) // 2
+
+        for i, pile in enumerate(l.game.file_influence):
+            x = start_x + (i * (self.card_width + self.margin))
+            y = self.y_position
+            
+            if pile:
+                top_card = pile[-1]
+                scaled_img = pygame.transform.scale(top_card.getImg(), (self.card_width, self.card_height))
+                window.blit(scaled_img, (x, y))
