@@ -236,7 +236,10 @@ class MenuList(enum.Enum):
         .addElement("chat", l.chat)
     JEU = Menu("Jeu")\
         .addElement("cartes", CardListElement())\
-        .addElement("chat", l.chat)
+        .addElement("chat", l.chat)\
+        .addElement("tour_indicator", Texte("Tour: 1", 20, 20, (255, 255, 255), None, 45, "client/assets/Algerian.ttf"))\
+        .addElement("points_indicator", Texte("Points: 1", 20, 70, (255, 255, 255), None, 45, "client/assets/Algerian.ttf"))\
+        .addElement("current_player", Texte("Au tour de: ...", 20, 120, (255, 255, 255), None, 45, "client/assets/Algerian.ttf"))
     PARAMETRE = Menu("Parametre")\
         .addElement("back",BackBoutton())\
         .addElement("Musique",Texte("Musique : ", 850, 200, (0,0,0), None, 65, "client/assets/Algerian.ttf"))
